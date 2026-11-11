@@ -85,6 +85,12 @@ describe('LiveXClient.getConversation', () => {
     expect(calls[0].url).toContain('dm_event.fields=')
   })
 
+  it('asks X for only the latest events when a max is given', async () => {
+    const { client, calls } = clientWith(() => json(200, { meta: { result_count: 0 } }))
+    await client.getConversation('200', 1)
+    expect(new URL(calls[0].url).searchParams.get('max_results')).toBe('1')
+  })
+
   it('returns an empty list when there is no conversation yet', async () => {
     const { client } = clientWith(() => json(200, { meta: { result_count: 0 } }))
     expect(await client.getConversation('200')).toEqual([])

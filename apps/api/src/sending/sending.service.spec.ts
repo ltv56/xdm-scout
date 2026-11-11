@@ -108,7 +108,7 @@ describe('processAttempt', () => {
     await service.processAttempt(attemptId)
     const attempt = await ds.getRepository(SendAttempt).findOneByOrFail({ id: attemptId })
     expect(attempt.status).toBe('failed')
-    expect(attempt.error).toContain('not accepting')
+    expect(attempt.error).toContain("doesn't accept DMs from this account")
     const contact = await ds.getRepository(Contact).findOneByOrFail({ id: draft.contactId })
     expect(contact.activeAttemptId).toBeNull()
   })
