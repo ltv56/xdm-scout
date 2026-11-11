@@ -10,7 +10,8 @@ import { DraftsController } from './sending/drafts.controller'
 import { SendingService } from './sending/sending.service'
 import { Worker } from './sending/worker'
 import { FakeXClient } from './x/fake-x-client'
-import { X_CLIENT } from './x/x-client'
+import { LiveXClient } from './x/live-x-client'
+import { X_CLIENT, XClient } from './x/x-client'
 
 @Module({
   imports: [
@@ -33,7 +34,12 @@ import { X_CLIENT } from './x/x-client'
         tokenKey: config.get('TOKEN_KEY', ''),
       }),
     },
-    { provide: X_CLIENT, useClass: FakeXClient },
+    {
+      provide: X_CLIENT,
+      inject: [ConfigService, AuthService],
+      useFactory: (config: ConfigService, auth: AuthService): XClient =>
+        config.get('X_MODE', 'fake') === 'live' ? new LiveXClient(() => auth.session()) : new FakeXClient(),
+    },
   ],
 })
 export class AppModule {}
