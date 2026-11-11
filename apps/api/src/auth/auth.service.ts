@@ -74,23 +74,37 @@ export class AuthService {
   }
 
   async session(now = new Date()): Promise<XSession> {
-    const repo = this.ds.getRepository(SenderAccount)
-    const account = await repo.findOne({ where: {}, order: { id: 'ASC' } })
+    const account = await this.ds.getRepository(SenderAccount).findOne({ where: {}, order: { id: 'ASC' } })
     if (!account?.accessTokenEnc || !account.refreshTokenEnc) throw new Error('No X account connected')
+    const fresh = this.freshSession(account, account.accessTokenEnc, now)
+    if (fresh) return fresh
 
-    const key = this.cfg.tokenKey
-    const expiresAt = account.tokenExpiresAt?.getTime() ?? 0
-    if (expiresAt - now.getTime() > REFRESH_MARGIN_MS) {
-      return { userId: account.xUserId, token: decryptToken(account.accessTokenEnc, key) }
-    }
-    const tokens = await this.tokenRequest({
-      grant_type: 'refresh_token',
-      refresh_token: decryptToken(account.refreshTokenEnc, key),
-      client_id: this.cfg.clientId,
+    // API and worker both call X; the row lock makes one of them refresh and the other reuse the result.
+    return this.ds.transaction(async (em) => {
+      const locked = await em
+        .createQueryBuilder(SenderAccount, 'a')
+        .setLock('pessimistic_write')
+        .orderBy('a.id', 'ASC')
+        .getOne()
+      if (!locked?.accessTokenEnc || !locked.refreshTokenEnc) throw new Error('No X account connected')
+      const refreshedMeanwhile = this.freshSession(locked, locked.accessTokenEnc, now)
+      if (refreshedMeanwhile) return refreshedMeanwhile
+
+      const tokens = await this.tokenRequest({
+        grant_type: 'refresh_token',
+        refresh_token: decryptToken(locked.refreshTokenEnc, this.cfg.tokenKey),
+        client_id: this.cfg.clientId,
+      })
+      this.applyTokens(locked, tokens)
+      await em.save(locked)
+      return { userId: locked.xUserId, token: tokens.access_token }
     })
-    this.applyTokens(account, tokens)
-    await repo.save(account)
-    return { userId: account.xUserId, token: tokens.access_token }
+  }
+
+  private freshSession(account: SenderAccount, accessTokenEnc: string, now: Date): XSession | null {
+    const expiresAt = account.tokenExpiresAt?.getTime() ?? 0
+    if (expiresAt - now.getTime() <= REFRESH_MARGIN_MS) return null
+    return { userId: account.xUserId, token: decryptToken(accessTokenEnc, this.cfg.tokenKey) }
   }
 
   private applyTokens(account: SenderAccount, tokens: z.infer<typeof tokenResponse>) {

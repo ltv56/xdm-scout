@@ -93,6 +93,14 @@ describe('AuthService', () => {
     expect((await service.session()).token).toBe('access-2')
   })
 
+  it('two callers refreshing at once (api and worker) make one refresh call and share the new token', async () => {
+    await connect()
+    await ds.getRepository(SenderAccount).update({ xUserId: '100' }, { tokenExpiresAt: new Date(Date.now() + 30_000) })
+    const [a, b] = await Promise.all([service.session(), service.session()])
+    expect([a.token, b.token]).toEqual(['access-2', 'access-2'])
+    expect(calls.filter((c) => c.body.includes('grant_type=refresh_token'))).toHaveLength(1)
+  })
+
   it('fails clearly when no account is connected', async () => {
     await expect(service.session()).rejects.toThrow('No X account connected')
   })
