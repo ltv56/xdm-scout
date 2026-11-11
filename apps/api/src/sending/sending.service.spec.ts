@@ -70,6 +70,24 @@ describe('approveAndSend', () => {
     await ds.getRepository(DoNotContact).save({ xUserId: '200', reason: 'asked to stop', source: 'test' })
     await expect(service.approveAndSend(draft.id, sha(draft.content))).rejects.toThrow('Do not contact')
   })
+
+  it('test 18: a person who never messaged first cannot be sent by API', async () => {
+    const draft = await seed(ds, '200', 'Hi there', { recipientPermission: 'none', invitationEventId: null, invitationAt: null })
+    await expect(service.approveAndSend(draft.id, sha(draft.content))).rejects.toThrow('messaged you first')
+    expect(await ds.getRepository(SendAttempt).count()).toBe(0)
+  })
+
+  it('requested_dm without the invitation DM on record is not enough', async () => {
+    const draft = await seed(ds, '200', 'Hi there', { invitationEventId: null })
+    await expect(service.approveAndSend(draft.id, sha(draft.content))).rejects.toThrow('messaged you first')
+    expect(await ds.getRepository(SendAttempt).count()).toBe(0)
+  })
+
+  it('an invitation older than 30 days moves the person to sending by hand', async () => {
+    const draft = await seed(ds, '200', 'Hi there', { invitationAt: new Date(Date.now() - 31 * 86_400_000) })
+    await expect(service.approveAndSend(draft.id, sha(draft.content))).rejects.toThrow('older than 30 days')
+    expect(await ds.getRepository(SendAttempt).count()).toBe(0)
+  })
 })
 
 describe('processAttempt', () => {

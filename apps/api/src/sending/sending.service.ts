@@ -10,6 +10,18 @@ export const hashContent = (content: string) => createHash('sha256').update(cont
 const STALE_SENDING_MS = 60_000
 const RECONCILE_EVERY_MS = 60_000
 const RECONCILE_GIVE_UP_MS = 10 * 60_000
+const INVITATION_MAX_AGE_MS = 30 * 86_400_000
+
+// X allows automated DMs only to people who asked for them, so the API path needs a confirmed, recent invitation.
+export function apiSendBlock(contact: Contact, now: Date): string | null {
+  if (contact.recipientPermission !== 'requested_dm' || !contact.invitationEventId || !contact.invitationAt) {
+    return "API sending is limited to people who messaged you first. This person hasn't."
+  }
+  if (now.getTime() - contact.invitationAt.getTime() > INVITATION_MAX_AGE_MS) {
+    return 'Their invitation is older than 30 days. Send it yourself in X.'
+  }
+  return null
+}
 
 @Injectable()
 export class SendingService {
@@ -28,6 +40,8 @@ export class SendingService {
       if (await em.exists(DoNotContact, { where: { xUserId: contact.xUserId } })) {
         throw new ForbiddenException('Recipient is on Do not contact')
       }
+      const blocked = apiSendBlock(contact, new Date())
+      if (blocked) throw new ForbiddenException(blocked)
       const contentHash = hashContent(draft.content)
       if (contentHash !== seenHash) throw new ConflictException('Draft changed after you reviewed it')
 
@@ -59,6 +73,8 @@ export class SendingService {
     if (await this.ds.getRepository(DoNotContact).existsBy({ xUserId: contact.xUserId })) {
       return this.release(attempt, contact.id, 'cancelled', 'Recipient is on Do not contact')
     }
+    const blocked = apiSendBlock(contact, now)
+    if (blocked) return this.release(attempt, contact.id, 'cancelled', blocked)
     let existing: number
     try {
       existing = (await this.x.getConversation(contact.xUserId)).length

@@ -165,6 +165,17 @@ describe('send outcomes', () => {
     expect((await contactOf(attempt.contactId)).activeAttemptId).toBeNull()
   })
 
+  it('an invitation that expires between approve and send stops the send', async () => {
+    const { attemptId } = await approve()
+    const later = new Date(Date.now() + 31 * 86_400_000)
+    await worker.tick(later)
+    const attempt = await attemptOf(attemptId)
+    expect(attempt.status).toBe('cancelled')
+    expect(attempt.error).toContain('older than 30 days')
+    expect(x.sendCalls).toBe(0)
+    expect((await contactOf(attempt.contactId)).activeAttemptId).toBeNull()
+  })
+
   it('test 10: Do not contact added after approve blocks the send', async () => {
     const { attemptId } = await approve()
     await ds.getRepository(DoNotContact).save({ xUserId: '200', reason: 'asked to stop', source: 'test' })
