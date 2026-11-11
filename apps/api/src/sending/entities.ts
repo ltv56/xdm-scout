@@ -12,6 +12,17 @@ export class SenderAccount {
   @Column({ type: 'varchar', length: 64 })
   handle!: string
 
+  @Column({ type: 'text', nullable: true })
+  accessTokenEnc!: string | null
+
+  @Column({ type: 'text', nullable: true })
+  refreshTokenEnc!: string | null
+
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  tokenExpiresAt!: Date | null
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  scope!: string | null
 }
 
 @Entity('x_users')
