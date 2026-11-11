@@ -66,6 +66,22 @@ docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT id, status, error, x
 - If the latest message is one you sent by hand in X: `failed`, `Someone already replied outside xdm-scout`, and nothing is sent.
 - If the worker stops after X accepted the DM but before the result is saved, the attempt stays `sending`. On the next worker start it becomes `unknown`, and about a minute later reconciliation finds the message on X and sets `sent`.
 
+## 6. Discovery from a handle list (fake mode)
+
+Start the API and the worker with `X_MODE=fake`. Profiles come from `fixtures/profiles.json`.
+
+```
+curl -XPOST localhost:3001/api/campaigns -H 'content-type: application/json' \
+  -d '{"name":"robotics demo","keywords":["robotics","llm","embodied"],"handles":["mina_builds","@tomas_agents","lena_embodied","robotco","private_dev","pasta_daily","nobody_here"]}'
+curl -XPOST localhost:3001/api/campaigns/1/discover
+curl localhost:3001/api/campaigns/1/prospects
+```
+
+- Prospects: `mina_builds`, `tomas_agents`, `lena_embodied`.
+- Skipped: `robotco` (organization), `private_dev` (protected), `pasta_daily` (bio has no keyword), `nobody_here` (not found).
+- A body without `name`, `keywords` or `handles`: `400`.
+- Profiles fetched less than 7 days ago are not fetched again.
+
 ## Automated tests
 
 ```

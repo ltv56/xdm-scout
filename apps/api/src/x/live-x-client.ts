@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { DmMessage, SendDmResult, XClient, XNotAcceptingDmError, XRateLimitError, XUncertainError } from './x-client'
+import { DmMessage, SendDmResult, XClient, XProfile, XNotAcceptingDmError, XRateLimitError, XUncertainError } from './x-client'
 
 const BASE = 'https://api.x.com'
 const TIMEOUT_MS = 15_000
@@ -15,6 +15,23 @@ const eventsResponse = z.object({
         created_at: z.string(),
         dm_conversation_id: z.string(),
         event_type: z.string(),
+      }),
+    )
+    .optional(),
+})
+
+const usersResponse = z.object({
+  data: z
+    .array(
+      z.object({
+        id: z.string(),
+        username: z.string(),
+        name: z.string(),
+        description: z.string().optional(),
+        protected: z.boolean().optional(),
+        verified_type: z.string().optional(),
+        receives_your_dm: z.boolean().optional(),
+        public_metrics: z.object({ followers_count: z.number() }).optional(),
       }),
     )
     .optional(),
@@ -51,6 +68,30 @@ export class LiveXClient implements XClient {
         createdAt: new Date(e.created_at),
       }))
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+  }
+
+  async lookupUsers(handles: string[]): Promise<XProfile[]> {
+    const out: XProfile[] = []
+    for (let i = 0; i < handles.length; i += 100) {
+      const query = new URLSearchParams({
+        usernames: handles.slice(i, i + 100).join(','),
+        'user.fields': 'description,protected,public_metrics,verified_type,receives_your_dm',
+      })
+      const parsed = usersResponse.parse(await (await this.call(`/2/users/by?${query}`, 'GET')).json())
+      for (const u of parsed.data ?? []) {
+        out.push({
+          id: u.id,
+          handle: u.username,
+          name: u.name,
+          bio: u.description ?? '',
+          followers: u.public_metrics?.followers_count ?? 0,
+          isProtected: u.protected ?? false,
+          orgType: u.verified_type === 'business' || u.verified_type === 'government' ? u.verified_type : null,
+          receivesYourDm: u.receives_your_dm ?? false,
+        })
+      }
+    }
+    return out
   }
 
   private async call(path: string, method: 'GET' | 'POST', body?: unknown): Promise<Response> {

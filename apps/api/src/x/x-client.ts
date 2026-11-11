@@ -8,6 +8,17 @@ export type DmMessage = {
   createdAt: Date
 }
 
+export type XProfile = {
+  id: string
+  handle: string
+  name: string
+  bio: string
+  followers: number
+  isProtected: boolean
+  orgType: 'business' | 'government' | null
+  receivesYourDm: boolean
+}
+
 export class XRateLimitError extends Error {
   constructor(readonly retryAt: Date) {
     super('rate limited')
@@ -27,6 +38,7 @@ export interface XClient {
   sendDm(recipientId: string, text: string): Promise<SendDmResult>
   // Newest first. X bills each event read, so callers pass the smallest max they need.
   getConversation(recipientId: string, max?: number): Promise<DmMessage[]>
+  lookupUsers(handles: string[]): Promise<XProfile[]>
 }
 
 export const X_CLIENT = Symbol('X_CLIENT')

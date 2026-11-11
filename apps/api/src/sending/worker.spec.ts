@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import { afterAll, beforeEach, describe, expect, it } from 'vitest'
+import { DiscoveryService } from '../discovery/discovery.service'
 import { Job } from '../jobs/job.entity'
 import { JobsService } from '../jobs/jobs.service'
 import { createTestDataSource } from '../test/db'
@@ -24,7 +25,7 @@ beforeEach(async () => {
   x = new FakeXClient()
   const jobs = new JobsService(ds)
   service = new SendingService(ds, x, jobs)
-  worker = new Worker(jobs, service)
+  worker = new Worker(jobs, service, new DiscoveryService(ds, x))
 })
 
 afterAll(async () => {
@@ -53,7 +54,7 @@ describe('worker', () => {
 
   it('two workers racing on one job send one DM', async () => {
     await approve()
-    const other = new Worker(new JobsService(ds), service)
+    const other = new Worker(new JobsService(ds), service, new DiscoveryService(ds, x))
     await Promise.all([worker.tick(new Date()), other.tick(new Date())])
     expect(x.sent).toHaveLength(1)
   })

@@ -1,0 +1,8 @@
+[
+  { "id": "9001", "handle": "mina_builds", "name": "Mina Park", "bio": "Building open-source robotics foundation models. Previously ML at a self-driving startup.", "followers": 4200 },
+  { "id": "9002", "handle": "tomas_agents", "name": "Tomas Reyes", "bio": "Founder. LLM agents and developer tools for infra teams.", "followers": 880 },
+  { "id": "9003", "handle": "lena_embodied", "name": "Lena Ito", "bio": "Researcher, embodied AI and manipulation.", "followers": 15000 },
+  { "id": "9004", "handle": "robotco", "name": "RoboCo", "bio": "Robotics platform for warehouses.", "followers": 52000, "orgType": "business" },
+  { "id": "9005", "handle": "private_dev", "name": "P. Dev", "bio": "AI engineer.", "followers": 90, "isProtected": true },
+  { "id": "9006", "handle": "pasta_daily", "name": "Pasta Daily", "bio": "Recipes every day.", "followers": 310 }
+]

@@ -1,9 +1,12 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import {
   DmMessage,
   SendDmResult,
   XClient,
   XNotAcceptingDmError,
   XRateLimitError,
+  XProfile,
   XUncertainError,
 } from './x-client'
 
@@ -13,10 +16,12 @@ export class FakeXClient implements XClient {
   nextSend: FakeSendOutcome = 'ok'
   retryAt = new Date(Date.now() + 15 * 60_000)
   sendCalls = 0
+  lookupCalls = 0
   conversationError: Error | null = null
   readonly sent: { recipientId: string; text: string }[] = []
   readonly conversationReads: { recipientId: string; max?: number }[] = []
   private readonly messages: (DmMessage & { recipientId: string; seq: number })[] = []
+  private readonly profiles = new Map<string, XProfile>()
   private counter = 0
 
   async sendDm(recipientId: string, text: string): Promise<SendDmResult> {
@@ -46,6 +51,31 @@ export class FakeXClient implements XClient {
       .filter((m) => m.recipientId === recipientId)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime() || b.seq - a.seq)
     return newestFirst.slice(0, max ?? newestFirst.length)
+  }
+
+  static fromFixtures(file = join(process.cwd(), '../../fixtures/profiles.json')) {
+    const client = new FakeXClient()
+    for (const p of JSON.parse(readFileSync(file, 'utf8')) as (Partial<XProfile> & Pick<XProfile, 'id' | 'handle'>)[]) {
+      client.addProfile(p)
+    }
+    return client
+  }
+
+  addProfile(p: Partial<XProfile> & Pick<XProfile, 'id' | 'handle'>) {
+    this.profiles.set(p.handle.toLowerCase(), {
+      name: p.handle,
+      bio: '',
+      followers: 0,
+      isProtected: false,
+      orgType: null,
+      receivesYourDm: false,
+      ...p,
+    })
+  }
+
+  async lookupUsers(handles: string[]): Promise<XProfile[]> {
+    this.lookupCalls += 1
+    return handles.flatMap((h) => this.profiles.get(h.toLowerCase()) ?? [])
   }
 
   priorMessage(recipientId: string, text: string, createdAt = new Date(0)) {

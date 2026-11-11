@@ -12,7 +12,7 @@ export class Job {
   type!: string
 
   @Column({ type: 'json' })
-  payload!: { attemptId: number }
+  payload!: Record<string, number>
 
   @Column({ type: 'datetime', precision: 3 })
   runAt!: Date
