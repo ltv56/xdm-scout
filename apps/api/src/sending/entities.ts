@@ -107,6 +107,12 @@ export class SendAttempt {
   @Column({ type: 'varchar', length: 32, nullable: true })
   xEventId!: string | null
 
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  runAt!: Date | null
+
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  unknownAt!: Date | null
+
   @Column({ type: 'text', nullable: true })
   error!: string | null
 
