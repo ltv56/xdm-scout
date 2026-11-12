@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { DataSource, In } from 'typeorm'
 import { Prospect, XPost } from '../discovery/entities'
 import { Evidence } from '../fit/entities'
-import { Contact, Draft, SenderAccount, XUser } from '../sending/entities'
+import { Contact, Draft, SendAttempt, SenderAccount, XUser } from '../sending/entities'
 import { apiSendBlock, hashContent } from '../sending/sending.service'
 import { Setting } from '../setting.entity'
 import { runChecks, StoredSentence } from './checks'
@@ -21,6 +21,7 @@ type Context = {
   evidence: Map<string, Evidence>
   posts: Map<string, XPost[]>
   texts: Map<number, string>
+  manualSent: Set<number>
 }
 
 export const composeUrl = (xUserId: string, text: string) => `https://x.com/messages/compose?recipient_id=${xUserId}&text=${encodeURIComponent(text)}`
@@ -78,7 +79,7 @@ export class ReviewService {
     return {
       draftId: draft.id,
       contentHash: hashContent(draft.content),
-      status: draft.status,
+      status: draft.status === 'approved' && ctx.manualSent.has(draft.id) ? 'sent_manually' : draft.status,
       sendPath: draft.sendPath,
       kind: draft.kind,
       editedByReviewer: draft.editedByReviewer,
@@ -141,6 +142,7 @@ export class ReviewService {
       contacts: new Map((drafts.length ? await this.ds.getRepository(Contact).findBy({ id: In(drafts.map((d) => d.contactId)) }) : []).map((c) => [c.id, c])),
       evidence: new Map((evidenceIds.length ? await this.ds.getRepository(Evidence).findBy({ id: In(evidenceIds) }) : []).map((e) => [e.id, e])),
       posts: postsBy,
+      manualSent: new Set((drafts.length ? await this.ds.getRepository(SendAttempt).findBy({ draftId: In(drafts.map((d) => d.id)), route: 'manual', status: In(['manual_unverified', 'sent']) }) : []).map((a) => a.draftId)),
       texts: new Map(live.map((d) => [d.id, (d.sentences ?? []).map((s) => s.text).join(' ') || d.content])),
     }
   }
@@ -176,7 +178,7 @@ function weakestPoint(sentences: StoredSentence[], evidence: { item: EvidenceIte
   const parts: string[] = []
   if (dates.length) {
     const days = Math.floor((now.getTime() - Math.min(...dates)) / DAY)
-    parts.push(`Rests on ${posts.length === 1 ? 'one post' : `${posts.length} posts`} from ${days} days ago`)
+    parts.push(`Rests on ${posts.length === 1 ? 'one post' : `${posts.length} posts`} from ${days} ${days === 1 ? 'day' : 'days'} ago`)
   }
   if (unknown) parts.push(`${unknown} ${unknown === 1 ? 'criterion' : 'criteria'} unknown`)
   return parts.length ? `${parts.join('; ')}.` : 'Nothing backs this draft except the profile.'

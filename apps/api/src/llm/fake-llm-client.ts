@@ -4,7 +4,7 @@ type EvidenceItem = { id: string; text: string; date: string | null }
 type DraftInput = { opening: { evidence_id: string; summary: string | null; text: string }; profile: { intro: string; offers: string[]; signer: string } }
 
 function cannedDraft({ opening, profile }: DraftInput) {
-  const topic = (opening.summary || opening.text).replace(/\s+/g, ' ').slice(0, 120)
+  const topic = (opening.summary || opening.text).replace(/\s+/g, ' ').replace(/[.!?\s]+$/, '').slice(0, 120)
   return {
     sentences: [
       { text: `Saw your post: ${topic}.`, source: { type: 'evidence', evidence_id: opening.evidence_id } },

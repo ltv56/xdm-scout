@@ -123,6 +123,10 @@ export class Draft {
 
   @Column({ type: 'boolean', default: false })
   editedByReviewer!: boolean
+
+  // What the model wrote, kept when the reviewer edits it.
+  @Column({ type: 'text', nullable: true })
+  originalContent!: string | null
 }
 
 export type AttemptStatus =

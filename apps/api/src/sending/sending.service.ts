@@ -128,6 +128,18 @@ export class SendingService {
     for (const attempt of stale) await this.markUnknown(attempt.id, now)
   }
 
+  // The reviewer said they sent it by hand. Upgrade to sent when our message is in the conversation; never downgrade.
+  async verifyManual(attemptId: number): Promise<void> {
+    const attempt = await this.ds.getRepository(SendAttempt).findOneByOrFail({ id: attemptId })
+    if (attempt.route !== 'manual' || attempt.status !== 'manual_unverified') return
+    const draft = await this.ds.getRepository(Draft).findOneByOrFail({ id: attempt.draftId })
+    const contact = await this.ds.getRepository(Contact).findOneByOrFail({ id: attempt.contactId })
+    const messages = await this.x.getConversation(contact.xUserId, RECONCILE_READ_MAX)
+    const since = Math.floor(attempt.createdAt.getTime() / 1000) * 1000
+    const found = messages.find((m) => m.fromMe && m.text === draft.content && m.createdAt.getTime() >= since)
+    if (found) await this.ds.getRepository(SendAttempt).update(attemptId, { status: 'sent', xConversationId: found.conversationId, xEventId: found.eventId })
+  }
+
   async reconcile(attemptId: number, now: Date): Promise<void> {
     const attempt = await this.ds.getRepository(SendAttempt).findOneByOrFail({ id: attemptId })
     if (attempt.status !== 'unknown') return
