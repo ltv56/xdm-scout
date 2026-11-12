@@ -36,6 +36,15 @@ describe('campaigns API', () => {
     expect(await ds.getRepository(Job).countBy({ type: 'discover' })).toBe(1)
   })
 
+  it('lists campaigns, newest first, with id and name only', async () => {
+    const a = await controller.create({ name: 'a', keywords: ['ai'], handles: ['alice'] })
+    const b = await controller.create({ name: 'b', keywords: ['ai'], handles: ['bob'] })
+    expect(await controller.listCampaigns()).toEqual([
+      { id: b.id, name: 'b' },
+      { id: a.id, name: 'a' },
+    ])
+  })
+
   it('returns the campaign with its last discovery run', async () => {
     const campaign = await controller.create({ name: 'c', keywords: ['ai'], handles: ['alice'] })
     expect(await controller.get(campaign.id)).toMatchObject({ id: campaign.id, name: 'c', lastDiscovery: null })

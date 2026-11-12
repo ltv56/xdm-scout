@@ -29,6 +29,11 @@ export class CampaignsController {
     private readonly prospects: ProspectsService,
   ) {}
 
+  @Get()
+  listCampaigns() {
+    return this.ds.getRepository(Campaign).find({ select: { id: true, name: true }, order: { id: 'DESC' } })
+  }
+
   @Post()
   create(@Body() body: unknown) {
     const parsed = createBody.safeParse(body)
