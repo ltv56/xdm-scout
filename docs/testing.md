@@ -88,7 +88,33 @@ docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT campaignId, kind, co
 - `budgetUsd` on the campaign (default 1) caps the spend. Discovery stops when the next profile reads or a full 15-post read does not fit, keeps what it has, and the skipped handles get reason `budget`.
 - Prospects: `mina_builds`, `tomas_agents`, `lena_embodied`.
 - Skipped: `robotco` (organization), `private_dev` (protected), `pasta_daily` (bio has no keyword), `nobody_here` (not found).
-- A body without `name`, `keywords` or `handles`: `400`.
+- A body without `name` or `keywords`, or with no `handles`, `seeds` or `queries`: `400`.
+
+From seed accounts (fake mode, `fixtures/following.json`):
+
+```
+curl -XPOST localhost:3001/api/campaigns -H 'content-type: application/json' \
+  -d '{"name":"seeds demo","keywords":["robotics","llm","embodied"],"seeds":["sea_robotics_lab","ai_builders_sg"]}'
+curl localhost:3001/api/campaigns/<id>/estimate
+curl -XPOST localhost:3001/api/campaigns/<id>/discover
+curl localhost:3001/api/campaigns/<id>/prospects
+```
+
+- Prospects are the people the seeds follow, `relationship` `adjacent`, with `seedCount`: `mina_builds` and `tomas_agents` 2, `lena_embodied` 1. Seeds themselves are not prospects.
+- `pasta_daily` and `robotco` are skipped (bio, organization).
+- Following reads cost about $0.01 per user returned and stop at 200 per seed or at the budget. The estimate gives the upper bound (`maxFollowing`); posts of people found through seeds are not in the estimate and are capped by the budget.
+
+From recent search (fake mode, `fixtures/search.json`; X search covers the last 7 days):
+
+```
+curl -XPOST localhost:3001/api/campaigns -H 'content-type: application/json' \
+  -d '{"name":"search demo","keywords":["robotics","embodied"],"queries":["(\"robot arm\" OR manipulation) (open-sourced OR released) -is:retweet"]}'
+curl -XPOST localhost:3001/api/campaigns/<id>/discover
+curl localhost:3001/api/campaigns/<id>/prospects
+```
+
+- Prospects: `mina_builds`, `lena_embodied` (`relationship` `cold`); `pasta_daily` skipped (bio).
+- Each query reads up to 50 posts; posts and authors are billed (`api_usage` kinds `search` and `profile`). A query is skipped when the budget cannot pay for 10 results.
 - Profiles fetched less than 7 days ago are not fetched again.
 
 ## 7. Fit scoring (fake mode)

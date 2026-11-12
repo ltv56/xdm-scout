@@ -6,12 +6,18 @@ import { DiscoveryService } from './discovery.service'
 import { Campaign, Prospect } from './entities'
 import { ProspectsService } from './prospects.service'
 
-const createBody = z.object({
-  name: z.string().min(1).max(128),
-  keywords: z.array(z.string().min(1)).min(1),
-  handles: z.array(z.string().min(1)).min(1),
-  budgetUsd: z.number().positive().max(100).optional(),
-})
+const createBody = z
+  .object({
+    name: z.string().min(1).max(128),
+    keywords: z.array(z.string().min(1)).min(1),
+    handles: z.array(z.string().min(1)).default([]),
+    seeds: z.array(z.string().min(1)).max(10).default([]),
+    queries: z.array(z.string().min(1).max(512)).max(10).default([]),
+    budgetUsd: z.number().positive().max(100).optional(),
+  })
+  .refine((b) => b.handles.length + b.seeds.length + b.queries.length > 0, {
+    message: 'Give at least one handle, seed account or search query',
+  })
 
 @Controller('campaigns')
 export class CampaignsController {

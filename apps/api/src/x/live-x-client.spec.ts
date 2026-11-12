@@ -101,3 +101,42 @@ describe('LiveXClient.getConversation', () => {
     await expect(client.getConversation('200')).rejects.toBeInstanceOf(XUncertainError)
   })
 })
+
+const user = (id: string, username: string) => ({ id, username, name: username, description: 'robotics', public_metrics: { followers_count: 5 } })
+
+describe('LiveXClient discovery reads', () => {
+  it('pages following until max and asks only for what is left', async () => {
+    const { client, calls } = clientWith((call) =>
+      call.url.includes('pagination_token')
+        ? json(200, { data: [user('3', 'c'), user('4', 'd')] })
+        : json(200, { data: [user('1', 'a'), user('2', 'b')], meta: { next_token: 'T' } }),
+    )
+    const result = await client.getFollowing('9', 3)
+    expect(result.map((p) => p.handle)).toEqual(['a', 'b', 'c'])
+    expect(new URL(calls[0].url).pathname).toBe('/2/users/9/following')
+    expect(new URL(calls[0].url).searchParams.get('max_results')).toBe('3')
+    expect(new URL(calls[1].url).searchParams.get('max_results')).toBe('1')
+  })
+
+  it('searches recent posts with author expansion and returns posts and authors', async () => {
+    const { client, calls } = clientWith(() =>
+      json(200, {
+        data: [
+          { id: 'p1', text: 'robot arm', created_at: '2026-11-11T00:00:00Z', author_id: '1' },
+          { id: 'p2', text: 'robot arm v2', created_at: '2026-11-11T01:00:00Z', author_id: '1' },
+        ],
+        includes: { users: [user('1', 'a')] },
+      }),
+    )
+    const result = await client.searchRecent('"robot arm" -is:retweet', 50)
+    expect(result.posts.map((p) => [p.id, p.userId])).toEqual([
+      ['p1', '1'],
+      ['p2', '1'],
+    ])
+    expect(result.authors.map((a) => a.handle)).toEqual(['a'])
+    const url = new URL(calls[0].url)
+    expect(url.pathname).toBe('/2/tweets/search/recent')
+    expect(url.searchParams.get('query')).toBe('"robot arm" -is:retweet')
+    expect(url.searchParams.get('expansions')).toBe('author_id')
+  })
+})

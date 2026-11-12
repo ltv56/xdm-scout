@@ -15,6 +15,7 @@ export class ProspectsService {
     const prospects = (await this.ds.getRepository(Prospect).find({ where: { campaignId } })).sort(
       (a, b) =>
         (a.fit ? FIT_RANK[a.fit] : 9) - (b.fit ? FIT_RANK[b.fit] : 9) ||
+        b.seedCount - a.seedCount ||
         (b.openingDate?.getTime() ?? 0) - (a.openingDate?.getTime() ?? 0) ||
         a.id - b.id,
     )
@@ -40,6 +41,7 @@ export class ProspectsService {
         bio: user?.bio ?? '',
         followers: user?.followers ?? 0,
         relationship: p.relationship,
+        seedCount: p.seedCount,
         status: p.status,
         fit: p.fit,
         role: p.role,

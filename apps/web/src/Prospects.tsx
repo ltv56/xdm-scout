@@ -13,6 +13,7 @@ interface Prospect {
   name: string
   bio: string
   followers: number
+  seedCount: number
   fit: 'strong' | 'possible' | 'weak' | 'not_a_fit' | null
   role: string | null
   areas: string[]
@@ -62,7 +63,10 @@ export default function Prospects({ campaignId }: { campaignId: number }) {
                 {a.replace('_', ' ')}
               </span>
             ))}
-            <span className="ml-auto text-xs text-neutral-500">{p.followers.toLocaleString()} followers</span>
+            <span className="ml-auto text-xs text-neutral-500">
+              {p.seedCount > 0 && `followed by ${p.seedCount} seed${p.seedCount > 1 ? 's' : ''} · `}
+              {p.followers.toLocaleString()} followers
+            </span>
           </div>
           {p.identityWarning && <p className="mt-1 text-xs text-amber-700">Identity not confirmed</p>}
           <p className="mt-1 text-sm text-neutral-700">{p.bio}</p>
