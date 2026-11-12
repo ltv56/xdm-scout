@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { DmMessage, SendDmResult, XClient, XProfile, XNotAcceptingDmError, XRateLimitError, XUncertainError } from './x-client'
+import { DmMessage, SendDmResult, XClient, XPost, XProfile, XNotAcceptingDmError, XRateLimitError, XUncertainError } from './x-client'
 
 const BASE = 'https://api.x.com'
 const TIMEOUT_MS = 15_000
@@ -37,6 +37,10 @@ const usersResponse = z.object({
     .optional(),
 })
 
+const postsResponse = z.object({
+  data: z.array(z.object({ id: z.string(), text: z.string(), created_at: z.string() })).optional(),
+})
+
 export class LiveXClient implements XClient {
   constructor(
     private readonly getSession: () => Promise<{ userId: string; token: string }>,
@@ -68,6 +72,16 @@ export class LiveXClient implements XClient {
         createdAt: new Date(e.created_at),
       }))
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+  }
+
+  async getRecentPosts(userId: string, max: number): Promise<XPost[]> {
+    const query = new URLSearchParams({
+      max_results: String(Math.max(5, max)),
+      'tweet.fields': 'created_at',
+      exclude: 'retweets',
+    })
+    const parsed = postsResponse.parse(await (await this.call(`/2/users/${userId}/tweets?${query}`, 'GET')).json())
+    return (parsed.data ?? []).slice(0, max).map((p) => ({ id: p.id, userId, text: p.text, createdAt: new Date(p.created_at) }))
   }
 
   async lookupUsers(handles: string[]): Promise<XProfile[]> {

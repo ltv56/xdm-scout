@@ -77,6 +77,15 @@ curl -XPOST localhost:3001/api/campaigns/1/discover
 curl localhost:3001/api/campaigns/1/prospects
 ```
 
+Cost estimate before running, and spend after:
+
+```
+curl localhost:3001/api/campaigns/1/estimate
+docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT campaignId, kind, count, costMicros FROM api_usage"
+```
+
+- `costMicros` is in millionths of a dollar. Prices are in `apps/api/src/discovery/pricing.ts`.
+- `budgetUsd` on the campaign (default 1) caps the spend. Discovery stops when the next profile reads or a full 15-post read does not fit, keeps what it has, and the skipped handles get reason `budget`.
 - Prospects: `mina_builds`, `tomas_agents`, `lena_embodied`.
 - Skipped: `robotco` (organization), `private_dev` (protected), `pasta_daily` (bio has no keyword), `nobody_here` (not found).
 - A body without `name`, `keywords` or `handles`: `400`.

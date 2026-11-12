@@ -3,12 +3,14 @@ import { DataSource } from 'typeorm'
 import { z } from 'zod'
 import { JobsService } from '../jobs/jobs.service'
 import { XUser } from '../sending/entities'
+import { DiscoveryService } from './discovery.service'
 import { Campaign, Prospect } from './entities'
 
 const createBody = z.object({
   name: z.string().min(1).max(128),
   keywords: z.array(z.string().min(1)).min(1),
   handles: z.array(z.string().min(1)).min(1),
+  budgetUsd: z.number().positive().max(100).optional(),
 })
 
 @Controller('campaigns')
@@ -16,13 +18,20 @@ export class CampaignsController {
   constructor(
     private readonly ds: DataSource,
     private readonly jobs: JobsService,
+    private readonly discovery: DiscoveryService,
   ) {}
 
   @Post()
   create(@Body() body: unknown) {
     const parsed = createBody.safeParse(body)
     if (!parsed.success) throw new BadRequestException(parsed.error.issues.map((i) => i.message).join('; '))
-    return this.ds.getRepository(Campaign).save(parsed.data)
+    const { budgetUsd, ...rest } = parsed.data
+    return this.ds.getRepository(Campaign).save({ ...rest, ...(budgetUsd && { budgetMicros: Math.round(budgetUsd * 1_000_000) }) })
+  }
+
+  @Get(':id/estimate')
+  async estimate(@Param('id', ParseIntPipe) id: number) {
+    return { ...(await this.discovery.estimate(id)), note: 'estimate at the prices in discovery/pricing.ts' }
   }
 
   @Post(':id/discover')

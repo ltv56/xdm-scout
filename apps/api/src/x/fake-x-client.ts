@@ -6,6 +6,7 @@ import {
   XClient,
   XNotAcceptingDmError,
   XRateLimitError,
+  XPost,
   XProfile,
   XUncertainError,
 } from './x-client'
@@ -22,6 +23,7 @@ export class FakeXClient implements XClient {
   readonly conversationReads: { recipientId: string; max?: number }[] = []
   private readonly messages: (DmMessage & { recipientId: string; seq: number })[] = []
   private readonly profiles = new Map<string, XProfile>()
+  private readonly posts = new Map<string, XPost[]>()
   private counter = 0
 
   async sendDm(recipientId: string, text: string): Promise<SendDmResult> {
@@ -53,10 +55,13 @@ export class FakeXClient implements XClient {
     return newestFirst.slice(0, max ?? newestFirst.length)
   }
 
-  static fromFixtures(file = join(process.cwd(), '../../fixtures/profiles.json')) {
+  static fromFixtures(dir = join(process.cwd(), '../../fixtures')) {
     const client = new FakeXClient()
-    for (const p of JSON.parse(readFileSync(file, 'utf8')) as (Partial<XProfile> & Pick<XProfile, 'id' | 'handle'>)[]) {
-      client.addProfile(p)
+    const profiles = JSON.parse(readFileSync(join(dir, 'profiles.json'), 'utf8')) as (Partial<XProfile> & Pick<XProfile, 'id' | 'handle'>)[]
+    for (const p of profiles) client.addProfile(p)
+    const posts = JSON.parse(readFileSync(join(dir, 'posts.json'), 'utf8')) as Record<string, { id: string; text: string; createdAt: string }[]>
+    for (const [userId, list] of Object.entries(posts)) {
+      client.addPosts(userId, list.map((p) => ({ ...p, userId, createdAt: new Date(p.createdAt) })))
     }
     return client
   }
@@ -71,6 +76,14 @@ export class FakeXClient implements XClient {
       receivesYourDm: false,
       ...p,
     })
+  }
+
+  addPosts(userId: string, posts: XPost[]) {
+    this.posts.set(userId, posts)
+  }
+
+  async getRecentPosts(userId: string, max: number): Promise<XPost[]> {
+    return (this.posts.get(userId) ?? []).slice(0, max)
   }
 
   async lookupUsers(handles: string[]): Promise<XProfile[]> {
