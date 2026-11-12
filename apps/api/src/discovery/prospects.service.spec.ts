@@ -4,7 +4,7 @@ import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 import { Claim, Evidence } from '../fit/entities'
 import { XUser } from '../sending/entities'
 import { createTestDataSource } from '../test/db'
-import { Campaign, Prospect } from './entities'
+import { Campaign, Prospect, XPost } from './entities'
 import { ProspectsService } from './prospects.service'
 
 let ds: DataSource
@@ -56,6 +56,22 @@ describe('prospects list', () => {
     expect(row.claims).toEqual([
       { side: 'for', text: 'Shipped a product', status: 'verified', evidence: [{ id: 'post:7', url: 'https://x.com/u1/status/7' }] },
     ])
+  })
+
+  it('shows fund criteria and the date of the latest stored post', async () => {
+    const criteria = [{ text: 'Based in or building for Southeast Asia', status: 'met' as const, evidenceIds: ['bio:1'] }]
+    await addProspect('1', { fit: 'strong', criteria })
+    await ds.getRepository(XPost).save([
+      { postId: 'a', xUserId: '1', text: '', postedAt: daysAgo(9), fetchedAt: now },
+      { postId: 'b', xUserId: '1', text: '', postedAt: daysAgo(2), fetchedAt: now },
+    ])
+    await addProspect('2')
+
+    const [first, second] = await new ProspectsService(ds).list(1, now)
+    expect(first.criteria).toEqual(criteria)
+    expect(first.lastPostAt).toEqual(daysAgo(2))
+    expect(second.criteria).toEqual([])
+    expect(second.lastPostAt).toBeNull()
   })
 
   it('warns that identity is not confirmed for parody or fan accounts', async () => {

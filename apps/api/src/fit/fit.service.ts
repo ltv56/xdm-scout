@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { DataSource } from 'typeorm'
-import { Prospect, XPost } from '../discovery/entities'
+import { Campaign, CriterionResult, Prospect, XPost } from '../discovery/entities'
 import { LLM_CLIENT, LlmClient } from '../llm/llm-client'
 import { XUser } from '../sending/entities'
 import { Claim, ClaimSide, ClaimStatus, Evidence } from './entities'
@@ -31,8 +31,12 @@ export class FitService {
     await this.ds.getRepository(Evidence).save(evidence)
     const byId = new Map(evidence.map((e) => [e.id, e]))
 
-    const fit = await this.askFit(evidence)
+    const campaign = await this.ds.getRepository(Campaign).findOneBy({ id: prospect.campaignId })
+    const criteriaText = campaign?.criteria ?? []
+
+    const fit = await this.askFit(evidence, criteriaText)
     const claims = await this.checkClaims(prospectId, fit, byId)
+    const criteria = await this.checkCriteria(criteriaText, fit, byId)
     const opening = fit.opening.type !== 'none' && fit.opening.evidence_id ? byId.get(fit.opening.evidence_id) : undefined
 
     await this.ds.transaction(async (em) => {
@@ -46,13 +50,27 @@ export class FitService {
         openingSummary: opening ? fit.opening.summary : null,
         openingEvidenceId: opening ? opening.id : null,
         openingDate: opening?.postedAt ?? null,
+        criteria,
         scoredAt: now,
       })
     })
   }
 
-  private async askFit(evidence: Evidence[]): Promise<FitResult> {
-    const user = JSON.stringify({ evidence: evidence.map((e) => ({ id: e.id, text: e.excerpt, date: e.postedAt?.toISOString() ?? null })) })
+  // Met or not met needs evidence that exists and passes the same second check as claims.
+  private async checkCriteria(texts: string[], fit: FitResult, byId: Map<string, Evidence>): Promise<CriterionResult[]> {
+    const out: CriterionResult[] = []
+    for (const [i, text] of texts.entries()) {
+      const answer = fit.criteria[i]
+      const claim = answer?.status === 'not_met' ? `It is not the case that: ${text}` : text
+      const checked = answer && answer.status !== 'unknown' && (await this.verify(claim, answer.evidence_ids, byId)) === 'verified'
+      out.push(checked ? { text, status: answer.status, evidenceIds: answer.evidence_ids } : { text, status: 'unknown', evidenceIds: [] })
+    }
+    return out
+  }
+
+  private async askFit(evidence: Evidence[], criteria: string[]): Promise<FitResult> {
+    const items = evidence.map((e) => ({ id: e.id, text: e.excerpt, date: e.postedAt?.toISOString() ?? null }))
+    const user = JSON.stringify(criteria.length ? { evidence: items, criteria } : { evidence: items })
     let lastError = ''
     for (let attempt = 0; attempt < 2; attempt++) {
       const parsed = fitSchema.safeParse(await this.llm.completeJson({ task: 'fit', system: FIT_SYSTEM, user }))

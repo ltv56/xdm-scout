@@ -128,7 +128,9 @@ curl localhost:3001/api/campaigns/1/prospects
 
 - `score` returns `{"queued":N}` for prospects without a score; a second call returns `{"queued":0}`.
 - Each prospect has `fit`, `role`, `areas`, `opening` (`type`, `summary`, `freshness` fresh/stale/expired, `url`) and `claims` with `status` verified/inferred and evidence links.
-- Order: Fit (strong, possible, weak, not a fit, not scored), then newest opening.
+- Each prospect also has `lastPostAt` (latest stored post) and `criteria`: the campaign's own lines, each `met`, `not_met` or `unknown`. Met and not met need cited evidence that passes the second check; the canned stand-in leaves every line `unknown`.
+- Campaign criteria are set at creation, up to 5 lines: `"criteria":["Based in or building for Southeast Asia","Ships code or papers"]`.
+- Order: Fit (strong, possible, weak, not a fit, not scored), then how many seeds follow them, then newest opening.
 - The web app shows the same list: `npm run dev -w apps/web`, campaign number in the box.
 
 With a real model, set in `.env`:

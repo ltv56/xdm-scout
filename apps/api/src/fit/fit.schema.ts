@@ -20,6 +20,7 @@ export const fitSchema = z.object({
     evidence_id: z.string().nullable(),
     date: z.string().nullable(),
   }),
+  criteria: z.array(z.object({ status: z.enum(['met', 'not_met', 'unknown']), evidence_ids: z.array(z.string()) })).default([]),
 })
 
 export const verifySchema = z.object({ supported: z.boolean() })
