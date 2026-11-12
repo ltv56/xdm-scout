@@ -14,6 +14,8 @@ interface Prospect {
   bio: string
   followers: number
   seedCount: number
+  lastPostAt: string | null
+  criteria: { text: string; status: 'met' | 'not_met' | 'unknown'; evidenceIds: string[] }[]
   fit: 'strong' | 'possible' | 'weak' | 'not_a_fit' | null
   role: string | null
   areas: string[]
@@ -28,6 +30,18 @@ const FIT_STYLE = {
   possible: 'bg-blue-100 text-blue-800',
   weak: 'bg-amber-100 text-amber-800',
   not_a_fit: 'bg-neutral-200 text-neutral-700',
+}
+
+const CRITERION_LABEL = { met: 'met', not_met: 'not met', unknown: 'unknown' }
+const CRITERION_STYLE = {
+  met: 'bg-green-100 text-green-800',
+  not_met: 'bg-red-100 text-red-800',
+  unknown: 'bg-neutral-100 text-neutral-600',
+}
+
+function daysAgo(iso: string) {
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / 86_400_000)
+  return days <= 0 ? 'today' : `${days}d ago`
 }
 
 export default function Prospects({ campaignId }: { campaignId: number }) {
@@ -66,6 +80,7 @@ export default function Prospects({ campaignId }: { campaignId: number }) {
             <span className="ml-auto text-xs text-neutral-500">
               {p.seedCount > 0 && `followed by ${p.seedCount} seed${p.seedCount > 1 ? 's' : ''} · `}
               {p.followers.toLocaleString()} followers
+              {p.lastPostAt && ` · last post ${daysAgo(p.lastPostAt)}`}
             </span>
           </div>
           {p.identityWarning && <p className="mt-1 text-xs text-amber-700">Identity not confirmed</p>}
@@ -87,6 +102,16 @@ export default function Prospects({ campaignId }: { campaignId: number }) {
                 <span className="text-neutral-600">No reason to reach out yet</span>
               )}
             </p>
+          )}
+
+          {p.criteria.length > 0 && (
+            <ul className="mt-2 flex flex-wrap gap-2 text-xs">
+              {p.criteria.map((c) => (
+                <li key={c.text} className={`rounded px-2 py-0.5 ${CRITERION_STYLE[c.status]}`}>
+                  {c.text}: {CRITERION_LABEL[c.status]}
+                </li>
+              ))}
+            </ul>
           )}
 
           {p.claims.length > 0 && (

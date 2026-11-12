@@ -9,6 +9,7 @@ Answer with one JSON object only, with these keys:
 - reasons_for, reasons_against: arrays of {"claim": string, "evidence_ids": string[]}. Cite only ids that appear in the evidence. A claim without evidence must have an empty evidence_ids array.
 - unknowns: array of strings for what you cannot tell
 - opening: {"type": one of ${OPENING_TYPES.join(', ')}, "summary": one sentence, "evidence_id": id or null, "date": YYYY-MM-DD or null}. Use "none" when nothing recent and specific gives a reason to write now.
+- criteria: one entry per item of the "criteria" list in the user message, same order: {"status": "met", "not_met" or "unknown", "evidence_ids": ids}. The criteria come from the fund, not from the account. Use "unknown" unless the evidence clearly shows it; never guess location or funding.
 Do not infer or mention health, politics, religion, gender, finances or criminal history.`
 
 export const VERIFY_SYSTEM = `You check one claim against quoted excerpts.

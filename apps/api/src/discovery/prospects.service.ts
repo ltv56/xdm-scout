@@ -3,7 +3,7 @@ import { DataSource, In } from 'typeorm'
 import { Claim, Evidence } from '../fit/entities'
 import { openingFreshness } from '../fit/fit.service'
 import { XUser } from '../sending/entities'
-import { Prospect } from './entities'
+import { Prospect, XPost } from './entities'
 
 const FIT_RANK = { strong: 0, possible: 1, weak: 2, not_a_fit: 3 }
 
@@ -22,6 +22,7 @@ export class ProspectsService {
     const users = new Map((await this.ds.getRepository(XUser).findBy({ xUserId: In(prospects.map((p) => p.xUserId)) })).map((u) => [u.xUserId, u]))
     const claims = await this.ds.getRepository(Claim).findBy({ prospectId: In(prospects.map((p) => p.id)) })
     const evidence = new Map((await this.ds.getRepository(Evidence).find()).map((e) => [e.id, e]))
+    const lastPosts = await this.lastPostDates(prospects.map((p) => p.xUserId))
 
     const rows = prospects.map((p) => {
       const user = users.get(p.xUserId)
@@ -40,6 +41,8 @@ export class ProspectsService {
         name: user?.name ?? '',
         bio: user?.bio ?? '',
         followers: user?.followers ?? 0,
+        lastPostAt: lastPosts.get(p.xUserId) ?? null,
+        criteria: p.criteria ?? [],
         relationship: p.relationship,
         seedCount: p.seedCount,
         status: p.status,
@@ -63,5 +66,18 @@ export class ProspectsService {
     })
 
     return rows
+  }
+
+  private async lastPostDates(xUserIds: string[]) {
+    if (!xUserIds.length) return new Map<string, Date>()
+    const rows = await this.ds
+      .getRepository(XPost)
+      .createQueryBuilder('p')
+      .select('p.xUserId', 'xUserId')
+      .addSelect('MAX(p.postedAt)', 'last')
+      .where('p.xUserId IN (:...ids)', { ids: xUserIds })
+      .groupBy('p.xUserId')
+      .getRawMany<{ xUserId: string; last: Date }>()
+    return new Map(rows.map((r) => [r.xUserId, new Date(r.last)]))
   }
 }

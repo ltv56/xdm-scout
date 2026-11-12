@@ -111,6 +111,52 @@ describe('fit scoring', () => {
   })
 })
 
+describe('fund criteria', () => {
+  const criteria = ['Based in or building for Southeast Asia', 'Ships code or papers', 'Raised a seed round']
+
+  it('asks about each campaign criterion and keeps met or not met only with real, checked evidence', async () => {
+    await ds.getRepository(Campaign).update(1, { criteria })
+    const llm = llmWith(
+      () => ({
+        ...goodFit,
+        criteria: [
+          { status: 'met', evidence_ids: ['bio:9001'] },
+          { status: 'met', evidence_ids: ['post:999999'] },
+          { status: 'met', evidence_ids: ['post:910002'] },
+        ],
+      }),
+      (claim) => claim !== 'Raised a seed round',
+    )
+    await new FitService(ds, llm).score(prospectId, now)
+
+    const p = await ds.getRepository(Prospect).findOneByOrFail({ id: prospectId })
+    expect(p.criteria).toEqual([
+      { text: 'Based in or building for Southeast Asia', status: 'met', evidenceIds: ['bio:9001'] },
+      { text: 'Ships code or papers', status: 'unknown', evidenceIds: [] },
+      { text: 'Raised a seed round', status: 'unknown', evidenceIds: [] },
+    ])
+    expect(JSON.parse(llm.calls.find((c) => c.task === 'fit')!.user).criteria).toEqual(criteria)
+  })
+
+  it('keeps not met when the second check supports the negation', async () => {
+    await ds.getRepository(Campaign).update(1, { criteria: criteria.slice(0, 1) })
+    const llm = llmWith(
+      () => ({ ...goodFit, criteria: [{ status: 'not_met', evidence_ids: ['bio:9001'] }] }),
+      (claim) => claim === 'It is not the case that: Based in or building for Southeast Asia' || !claim.includes('Southeast'),
+    )
+    await new FitService(ds, llm).score(prospectId, now)
+    const p = await ds.getRepository(Prospect).findOneByOrFail({ id: prospectId })
+    expect(p.criteria).toEqual([{ text: 'Based in or building for Southeast Asia', status: 'not_met', evidenceIds: ['bio:9001'] }])
+  })
+
+  it('marks criteria the model skipped as unknown', async () => {
+    await ds.getRepository(Campaign).update(1, { criteria: criteria.slice(0, 1) })
+    await new FitService(ds, llmWith(() => goodFit)).score(prospectId, now)
+    const p = await ds.getRepository(Prospect).findOneByOrFail({ id: prospectId })
+    expect(p.criteria).toEqual([{ text: 'Based in or building for Southeast Asia', status: 'unknown', evidenceIds: [] }])
+  })
+})
+
 describe('opening freshness', () => {
   it('is fresh up to 30 days, stale up to 90 and expired after', () => {
     const at = (days: number) => new Date(now.getTime() - days * DAY)
