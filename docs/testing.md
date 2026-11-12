@@ -160,6 +160,22 @@ The worker sweeps on start and every hour:
 docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT xUserId, LEFT(text, 20) FROM x_posts; SELECT id, LEFT(excerpt, 20) FROM evidence"
 ```
 
+## Review screens with fixed data
+
+Set `REVIEW_STUB=1` in `.env` and restart the API. The review routes then return six fixed drafts (one per screen state) kept in memory; a restart resets them. The real `POST /api/drafts/:id/approve` is off in this mode. Shapes: `apps/api/src/review/contract.ts`.
+
+```
+B=http://localhost:3001/api
+curl -s $B/campaigns
+curl -s "$B/review-queue?campaignId=1"
+H=$(curl -s "$B/review-queue?campaignId=1" | node -e "console.log(JSON.parse(require('fs').readFileSync(0)).items[0].contentHash)")
+curl -s -XPOST $B/drafts/101/approve -H 'content-type: application/json' -d "{\"contentHash\":\"$H\"}"
+curl -s -XPOST $B/drafts/101/manual -H 'content-type: application/json' -d '{"outcome":"sent"}'
+curl -s -XPATCH $B/drafts/105 -H 'content-type: application/json' -d '{"text":"Saw your GPU post. We are a small fund. No worries if not."}'
+curl -s -XPOST $B/drafts/102/skip -H 'content-type: application/json' -d '{"reason":"bored"}'   # 400, reason not in the list
+curl -s $B/sender-profile
+```
+
 ## Automated tests
 
 ```
