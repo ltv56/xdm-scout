@@ -176,6 +176,31 @@ curl -s -XPOST $B/drafts/102/skip -H 'content-type: application/json' -d '{"reas
 curl -s $B/sender-profile
 ```
 
+## Review with real data (fake X, canned LLM)
+
+Start the API and the worker with `X_MODE=fake` and `REVIEW_STUB=0`. Without `LLM_API_KEY` the draft text is a fixed template built from the person's opening post, so no model is called.
+
+```
+B=http://localhost:3001/api; J='content-type: application/json'
+curl -XPUT $B/sender-profile -H "$J" -d '{"intro":"GenAI Fund backs early AI founders in Southeast Asia.","offers":["Intro to investors"],"signer":"Vinh","sampleMessages":[]}'
+# create a campaign, discover and score as in section 6 and 7, then:
+curl -XPOST $B/campaigns/1/drafts            # {"queued":N}; the worker writes the drafts
+curl "$B/review-queue?campaignId=1"          # drafts with checks, evidence, weakest point, Open in X link
+curl -XPATCH $B/drafts/1 -H "$J" -d '{"text":"Saw your post. We met at the meetup. No worries if not."}'   # unbacked sentence: warn to confirm
+curl -XPOST $B/drafts/1/approve -H "$J" -d '{"contentHash":"<contentHash from the queue>","confirmedUnbacked":true}'
+curl -XPOST $B/drafts/1/manual -H "$J" -d '{"outcome":"sent"}'     # after you sent it in X
+curl -XPOST $B/drafts/2/skip -H "$J" -d '{"reason":"weak_opening"}'
+curl -XPOST $B/drafts/2/skip -H "$J" -d '{"reason":"bored"}'       # 400, not in the list
+```
+
+- A person who has not messaged first gets `sendPath: HUMAN_HANDOFF`: approving opens a manual attempt (`manual_pending`) and nothing is queued for the API. "I sent it" marks it `manual_unverified`; the worker upgrades it to `sent` once the message shows in the conversation.
+- A stale `contentHash` answers `409`; a draft with a blocking check (no source, no opt-out line, "big fan") answers `409` until it is edited.
+- Every approve, skip, regenerate and Do not contact adds a row to `review_signals` (no handle):
+
+```
+docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT action, reason, note FROM review_signals"
+```
+
 ## Automated tests
 
 ```

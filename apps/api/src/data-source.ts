@@ -4,6 +4,7 @@ import { Contact, DoNotContact, Draft, SendAttempt, SenderAccount, XUser } from 
 import { ApiUsage, Campaign, Prospect, XPost } from './discovery/entities'
 import { Claim, Evidence } from './fit/entities'
 import { Job } from './jobs/job.entity'
+import { ReviewSignal } from './review/review-signal.entity'
 import { Setting } from './setting.entity'
 
 config({ path: '../../.env', quiet: true })
@@ -11,7 +12,7 @@ config({ path: '../../.env', quiet: true })
 export const dataSourceOptions = {
   type: 'mysql' as const,
   url: process.env.DATABASE_URL,
-  entities: [Setting, SenderAccount, XUser, Contact, Draft, SendAttempt, DoNotContact, Job, Campaign, Prospect, XPost, ApiUsage, Evidence, Claim],
+  entities: [Setting, SenderAccount, XUser, Contact, Draft, SendAttempt, DoNotContact, Job, Campaign, Prospect, XPost, ApiUsage, Evidence, Claim, ReviewSignal],
   migrations: [__dirname + '/migrations/*.{ts,js}'],
   synchronize: false,
 }

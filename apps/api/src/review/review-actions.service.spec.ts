@@ -40,7 +40,7 @@ async function seedDraft(handle = 'mai') {
 beforeEach(async () => {
   ds = await createTestDataSource()
   const jobs = new JobsService(ds)
-  actions = new ReviewActionsService(ds, new ReviewService(ds), new SendingService(ds, new FakeXClient(), jobs))
+  actions = new ReviewActionsService(ds, new ReviewService(ds), new SendingService(ds, new FakeXClient(), jobs), new DraftService(ds, new FakeLlmClient(cannedHandler), jobs), jobs)
 })
 
 afterAll(async () => {
