@@ -83,6 +83,13 @@ describe('approveAndSend', () => {
     expect(await ds.getRepository(SendAttempt).count()).toBe(0)
   })
 
+  it('rejects a draft that was skipped or replaced', async () => {
+    const draft = await seedDraft()
+    await ds.getRepository(Draft).update(draft.id, { status: 'skipped' })
+    await expect(service.approveAndSend(draft.id, sha(draft.content))).rejects.toThrow('no longer')
+    expect(await ds.getRepository(SendAttempt).count()).toBe(0)
+  })
+
   it('an invitation older than 30 days moves the person to sending by hand', async () => {
     const draft = await seed(ds, '200', 'Hi there', { invitationAt: new Date(Date.now() - 31 * 86_400_000) })
     await expect(service.approveAndSend(draft.id, sha(draft.content))).rejects.toThrow('older than 30 days')
@@ -99,6 +106,29 @@ describe('processAttempt', () => {
     expect(attempt.status).toBe('sent')
     expect(attempt.xEventId).toBeTruthy()
     expect(x.sent).toEqual([{ recipientId: '200', text: 'Hi there' }])
+  })
+
+  it('never sends text that differs from the approved hash', async () => {
+    const draft = await seedDraft()
+    const { attemptId } = await service.approveAndSend(draft.id, sha(draft.content))
+    await ds.getRepository(Draft).update(draft.id, { content: 'Edited after approval' })
+    await service.processAttempt(attemptId)
+    const attempt = await ds.getRepository(SendAttempt).findOneByOrFail({ id: attemptId })
+    expect(attempt.status).toBe('cancelled')
+    expect(attempt.error).toContain('changed after approval')
+    expect(x.sendCalls).toBe(0)
+    expect((await ds.getRepository(Contact).findOneByOrFail({ id: draft.contactId })).activeAttemptId).toBeNull()
+  })
+
+  it('a definite error from X fails the attempt and frees the send right', async () => {
+    const draft = await seedDraft()
+    x.nextSend = 'rejected'
+    const { attemptId } = await service.approveAndSend(draft.id, sha(draft.content))
+    await service.processAttempt(attemptId)
+    const attempt = await ds.getRepository(SendAttempt).findOneByOrFail({ id: attemptId })
+    expect(attempt.status).toBe('failed')
+    expect(attempt.error).toContain('X returned 400')
+    expect((await ds.getRepository(Contact).findOneByOrFail({ id: draft.contactId })).activeAttemptId).toBeNull()
   })
 
   it('test 8: recipient not accepting DMs -> failed, send right released', async () => {

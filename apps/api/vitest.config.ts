@@ -1,10 +1,11 @@
 import { config } from 'dotenv'
 import swc from 'unplugin-swc'
 import { defineConfig } from 'vitest/config'
+import { testDatabaseUrl } from './src/test/test-db-url'
 
 config({ path: '../../.env', quiet: true })
 
-const testUrl = (process.env.DATABASE_URL ?? '').replace(/\/xdm(\?|$)/, '/xdm_test$1')
+const testUrl = testDatabaseUrl(process.env.DATABASE_URL ?? '')
 
 export default defineConfig({
   plugins: [swc.vite()],
