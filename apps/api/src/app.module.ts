@@ -13,6 +13,7 @@ import { JobsService } from './jobs/jobs.service'
 import { cannedHandler, FakeLlmClient } from './llm/fake-llm-client'
 import { AnthropicLlmClient, OpenAiCompatibleLlmClient } from './llm/http-llm-clients'
 import { LLM_CLIENT, LlmClient } from './llm/llm-client'
+import { RetentionService } from './retention/retention.service'
 import { DraftsController } from './sending/drafts.controller'
 import { SendingService } from './sending/sending.service'
 import { Worker } from './sending/worker'
@@ -44,6 +45,7 @@ import { X_CLIENT, XClient } from './x/x-client'
       }),
     },
     FitService,
+    RetentionService,
     {
       provide: LLM_CLIENT,
       inject: [ConfigService],

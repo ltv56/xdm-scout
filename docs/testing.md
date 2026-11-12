@@ -114,6 +114,18 @@ LLM_MODEL=...
 LLM_API_KEY=...
 ```
 
+## 8. Retention of X data
+
+The worker sweeps on start and every hour:
+
+- Post text in `x_posts` is cleared once every prospect of that person is scored; id and date stay. Discovery reads the posts again if needed.
+- Post evidence that no claim or opening cites is deleted.
+- After 7 days, `x_users` name, bio and followers and `evidence` excerpts are cleared unless the person has a `pending` or `approved` draft; ids, handle and links stay.
+
+```
+docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT xUserId, LEFT(text, 20) FROM x_posts; SELECT id, LEFT(excerpt, 20) FROM evidence"
+```
+
 ## Automated tests
 
 ```

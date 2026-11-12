@@ -4,7 +4,7 @@ import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 import { Contact, DoNotContact, SendAttempt, SenderAccount, XUser } from '../sending/entities'
 import { createTestDataSource } from '../test/db'
 import { FakeXClient } from '../x/fake-x-client'
-import { Campaign, Prospect } from './entities'
+import { Campaign, Prospect, XPost } from './entities'
 import { DiscoveryService } from './discovery.service'
 
 let ds: DataSource
@@ -68,6 +68,16 @@ describe('discovery from a handle list', () => {
     await discovery.run(campaign.id, new Date(now.getTime() + 8 * DAY))
     expect(x.lookupCalls).toBe(2)
     expect(await ds.getRepository(Prospect).count()).toBe(2)
+  })
+
+  it('reads posts again when the stored text was cleared after scoring', async () => {
+    x.addPosts('1', [{ id: 'p1', userId: '1', text: 'shipped a robot arm', createdAt: new Date(now.getTime() - DAY) }])
+    await discovery.run((await newCampaign(['alice'])).id, now)
+    await ds.getRepository(XPost).update({ xUserId: '1' }, { text: '' })
+
+    await discovery.run((await newCampaign(['alice'])).id, now)
+
+    expect((await ds.getRepository(XPost).findOneByOrFail({ postId: 'p1' })).text).toBe('shipped a robot arm')
   })
 
   it('reports handles X does not know', async () => {

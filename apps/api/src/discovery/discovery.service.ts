@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common'
-import { DataSource, In } from 'typeorm'
+import { DataSource, In, Not } from 'typeorm'
 import { Contact, DoNotContact, SendAttempt, XUser } from '../sending/entities'
 import { X_CLIENT, XClient, XProfile } from '../x/x-client'
 import { ApiUsage, Campaign, Prospect, XPost } from './entities'
@@ -104,7 +104,7 @@ export class DiscoveryService {
   }
 
   private hasPosts(xUserId: string) {
-    return this.ds.getRepository(XPost).existsBy({ xUserId })
+    return this.ds.getRepository(XPost).existsBy({ xUserId, text: Not('') })
   }
 
   private async spent(campaignId: number) {
