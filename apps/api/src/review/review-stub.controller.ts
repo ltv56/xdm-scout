@@ -6,9 +6,11 @@ import { hashContent } from '../sending/sending.service'
 import {
   approveBody,
   CheckResult,
+  Decision,
   DraftSentence,
   editBody,
   manualBody,
+  MetricsSnapshot,
   regenerateBody,
   ReviewItem,
   SenderProfile,
@@ -48,11 +50,52 @@ function stubChecks(sentences: DraftSentence[], text: string, reviewerWrote: boo
   return out
 }
 
+// Stand-in for the code-computed snapshot and the decision model; real values replace these when scoring feeds the queue.
+function stubDecisions(item: Pick<ReviewItem, 'kind' | 'sentences' | 'checks'>): Decision[] {
+  const blocked = item.checks.some((k) => k.level === 'block')
+  const unbacked = item.sentences.some((s) => s.source === null)
+  const out: Decision[] = []
+  if (item.kind === 'reply') out.push({ code: 'invitation', question: 'Is their message an invitation to reply?', probability: 0.97, model: 'fixture' })
+  out.push({ code: 'policy', question: 'Does this message follow the X rules?', probability: blocked ? 0.34 : item.checks.length ? 0.86 : 0.96, model: 'fixture' })
+  out.push({ code: 'claims', question: 'Is every personal claim backed by a post?', probability: unbacked ? 0.12 : 0.94, model: 'fixture' })
+  return out
+}
+
+const AS_OF = '2026-11-12T08:00:00Z'
+const snap = (s: Omit<MetricsSnapshot, 'asOf'>): MetricsSnapshot => ({ asOf: AS_OF, ...s })
+
+const PEOPLE: Record<string, Pick<ReviewItem['prospect'], 'snapshot' | 'criteria'>> = {
+  mai_builds: {
+    snapshot: snap({ sampleSize: 15, followers: 3400, postsPerWeek: 4.5, engagementMedian: 62, contribution: 'builder', fundTies: 2 }),
+    criteria: [{ text: 'Based in or building for Southeast Asia', status: 'met' }, { text: 'Shipped something in the last 90 days', status: 'met' }],
+  },
+  agentops_ken: {
+    snapshot: snap({ sampleSize: 15, followers: 8100, postsPerWeek: 2, engagementMedian: 140, contribution: 'commentator', fundTies: 0 }),
+    criteria: [{ text: 'Based in or building for Southeast Asia', status: 'met' }, { text: 'Shipped something in the last 90 days', status: 'unknown' }],
+  },
+  linh_ml: {
+    snapshot: snap({ sampleSize: 9, followers: 1200, postsPerWeek: 1.5, engagementMedian: 18, contribution: 'founder', fundTies: 1 }),
+    criteria: [{ text: 'Based in or building for Southeast Asia', status: 'met' }],
+  },
+  datathanh: {
+    snapshot: snap({ sampleSize: 6, followers: 640, postsPerWeek: 0.4, engagementMedian: 9, contribution: 'researcher', fundTies: 0 }),
+    criteria: [{ text: 'Based in or building for Southeast Asia', status: 'met' }, { text: 'Active in the last 30 days', status: 'not_met' }],
+  },
+  quang_infra: {
+    snapshot: snap({ sampleSize: 15, followers: 2300, postsPerWeek: 5, engagementMedian: 41, contribution: 'builder', fundTies: 3 }),
+    criteria: [{ text: 'Based in or building for Southeast Asia', status: 'met' }, { text: 'Shipped something in the last 90 days', status: 'met' }],
+  },
+  hoa_agents: {
+    snapshot: snap({ sampleSize: 4, followers: 450, postsPerWeek: 1, engagementMedian: null, contribution: 'founder', fundTies: 0 }),
+    criteria: [{ text: 'Based in or building for Southeast Asia', status: 'met' }, { text: 'Shipped something in the last 90 days', status: 'unknown' }],
+  },
+}
+
 interface Seed {
   draftId: number
   sendPath: ReviewItem['sendPath']
   kind: ReviewItem['kind']
-  prospect: ReviewItem['prospect']
+  prospect: Omit<ReviewItem['prospect'], 'snapshot' | 'criteria'>
   evidence: ReviewItem['evidence']
   sentences: DraftSentence[]
   extraChecks?: CheckResult[]
@@ -158,6 +201,7 @@ const SENDER = { senderName: 'GenAI Fund', senderHandle: 'genaifund' }
 function build(seed: Seed): ReviewItem {
   const text = seed.sentences.map((s) => s.text).join(' ')
   const first = seed.evidence[0]
+  const checks = [...stubChecks(seed.sentences, text, seed.editedByReviewer ?? false), ...(seed.extraChecks ?? [])]
   return {
     draftId: seed.draftId,
     contentHash: hashContent(text),
@@ -165,11 +209,12 @@ function build(seed: Seed): ReviewItem {
     sendPath: seed.sendPath,
     kind: seed.kind,
     editedByReviewer: seed.editedByReviewer ?? false,
-    prospect: seed.prospect,
+    prospect: { ...seed.prospect, ...PEOPLE[seed.prospect.handle] },
     text,
     sentences: seed.sentences,
     evidence: seed.evidence,
-    checks: [...stubChecks(seed.sentences, text, seed.editedByReviewer ?? false), ...(seed.extraChecks ?? [])],
+    checks,
+    decisions: stubDecisions({ kind: seed.kind, sentences: seed.sentences, checks }),
     weakestPoint: seed.weakestPoint,
     recipientPreview: {
       ...SENDER,
@@ -183,6 +228,7 @@ function build(seed: Seed): ReviewItem {
 
 function withText(item: ReviewItem, sentences: DraftSentence[], reviewerWrote: boolean): ReviewItem {
   const text = sentences.map((s) => s.text).join(' ')
+  const checks = stubChecks(sentences, text, reviewerWrote)
   return {
     ...item,
     status: 'pending',
@@ -190,7 +236,8 @@ function withText(item: ReviewItem, sentences: DraftSentence[], reviewerWrote: b
     text,
     sentences,
     contentHash: hashContent(text),
-    checks: stubChecks(sentences, text, reviewerWrote),
+    checks,
+    decisions: stubDecisions({ kind: item.kind, sentences, checks }),
     recipientPreview: { ...item.recipientPreview, firstLine: text.slice(0, 60) },
     openInXUrl: item.sendPath === 'HUMAN_HANDOFF' ? composeUrl(item.prospect.xUserId, text) : null,
   }

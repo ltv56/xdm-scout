@@ -24,6 +24,19 @@ describe('review stub', () => {
     expect(items.some((i) => i.sentences.some((s) => s.source === null))).toBe(true)
   })
 
+  it('carries a dated metrics snapshot, criteria and decision probabilities for every draft', () => {
+    const items = reviewQueue.parse(c.queue('1')).items
+    for (const i of items) {
+      expect(i.prospect.snapshot.sampleSize).toBeGreaterThan(0)
+      expect(i.prospect.snapshot.asOf).toMatch(/^\d{4}-\d{2}-\d{2}T/)
+      expect(i.decisions.map((d) => d.code)).toEqual(expect.arrayContaining(['policy', 'claims']))
+      for (const d of i.decisions) expect(d.probability).toBeGreaterThanOrEqual(0)
+    }
+    expect(items.filter((i) => i.kind === 'reply').every((i) => i.decisions.some((d) => d.code === 'invitation'))).toBe(true)
+    expect(items.some((i) => i.prospect.criteria.some((k) => k.status === 'unknown'))).toBe(true)
+    expect(() => reviewItem.parse({ ...items[0], decisions: [{ code: 'policy', question: 'q', probability: 1.4, model: 'fixture' }] })).toThrow()
+  })
+
   it('rejects a bad campaign id', () => {
     expect(() => c.queue('x')).toThrow(BadRequestException)
   })

@@ -46,6 +46,27 @@ export const checkResult = z.object({
   needsConfirm: z.boolean(),
 })
 
+// Counts from the posts we read, never merged into one score. asOf and sampleSize always travel with them.
+export const metricsSnapshot = z.object({
+  asOf: z.string(),
+  sampleSize: z.number().int().positive(),
+  followers: z.number().int().nonnegative(),
+  postsPerWeek: z.number().nullable(),
+  engagementMedian: z.number().nullable(),
+  contribution: z.enum(['builder', 'founder', 'researcher', 'commentator', 'other']),
+  fundTies: z.number().int().nonnegative(),
+})
+
+export const criterionResult = z.object({ text: z.string(), status: z.enum(['met', 'not_met', 'unknown']) })
+
+// A yes/no answer from the decision model: a probability, never text. model says who answered (jev, llm or fixture).
+export const decision = z.object({
+  code: z.enum(['invitation', 'policy', 'claims']),
+  question: z.string(),
+  probability: z.number().min(0).max(1),
+  model: z.string(),
+})
+
 export const reviewItem = z.object({
   draftId: z.number(),
   contentHash: z.string().length(64),
@@ -61,11 +82,14 @@ export const reviewItem = z.object({
     relationship: z.enum(['messaged_us', 'follower', 'engaged', 'adjacent', 'cold']),
     permissionNote: z.string(),
     daysSinceActive: z.number().nullable(),
+    snapshot: metricsSnapshot,
+    criteria: z.array(criterionResult),
   }),
   text: z.string(),
   sentences: z.array(draftSentence),
   evidence: z.array(evidenceItem),
   checks: z.array(checkResult),
+  decisions: z.array(decision),
   weakestPoint: z.string(),
   recipientPreview: z.object({
     senderName: z.string(),
@@ -96,6 +120,8 @@ export type EvidenceItem = z.infer<typeof evidenceItem>
 export type DraftSentence = z.infer<typeof draftSentence>
 export type CheckResult = z.infer<typeof checkResult>
 export type ReviewItem = z.infer<typeof reviewItem>
+export type MetricsSnapshot = z.infer<typeof metricsSnapshot>
+export type Decision = z.infer<typeof decision>
 export type ReviewQueue = z.infer<typeof reviewQueue>
 export type SkipReason = z.infer<typeof skipReason>
 export type ApproveBody = z.input<typeof approveBody>
