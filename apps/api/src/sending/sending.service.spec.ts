@@ -1,13 +1,12 @@
 import 'reflect-metadata'
-import { createHash } from 'node:crypto'
 import { DataSource } from 'typeorm'
 import { afterAll, beforeEach, describe, expect, it } from 'vitest'
+import { JobsService } from '../jobs/jobs.service'
 import { createTestDataSource } from '../test/db'
+import { seedDraft as seed, sha } from '../test/seed'
 import { FakeXClient } from '../x/fake-x-client'
-import { Contact, Draft, DoNotContact, SendAttempt, SenderAccount, XUser } from './entities'
+import { Contact, DoNotContact, Draft, SendAttempt } from './entities'
 import { SendingService } from './sending.service'
-
-const sha = (s: string) => createHash('sha256').update(s).digest('hex')
 
 let ds: DataSource
 let x: FakeXClient
@@ -16,23 +15,14 @@ let service: SendingService
 beforeEach(async () => {
   ds = await createTestDataSource()
   x = new FakeXClient()
-  service = new SendingService(ds, x)
+  service = new SendingService(ds, x, new JobsService(ds))
 })
 
 afterAll(async () => {
   if (ds?.isInitialized) await ds.destroy()
 })
 
-async function seedDraft(xUserId = '200', content = 'Hi there') {
-  await ds.getRepository(SenderAccount).save({ id: 1, xUserId: '100', handle: 'a' })
-  await ds.getRepository(XUser).save({ xUserId, handle: `u${xUserId}` })
-  const contact = await ds.getRepository(Contact).save({
-    senderAccountId: 1,
-    xUserId,
-    recipientPermission: 'requested_dm',
-  })
-  return ds.getRepository(Draft).save({ contactId: contact.id, content })
-}
+const seedDraft = (xUserId = '200', content = 'Hi there') => seed(ds, xUserId, content)
 
 describe('approveAndSend', () => {
   it('creates one queued attempt and holds the send right', async () => {
