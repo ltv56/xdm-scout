@@ -4,7 +4,7 @@ import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 import { Contact, DoNotContact, SendAttempt, SenderAccount, XUser } from '../sending/entities'
 import { createTestDataSource } from '../test/db'
 import { FakeXClient } from '../x/fake-x-client'
-import { Campaign, Prospect } from './entities'
+import { Campaign, Prospect, XPost } from './entities'
 import { DiscoveryService } from './discovery.service'
 
 let ds: DataSource
@@ -65,9 +65,61 @@ describe('discovery from a handle list', () => {
     await discovery.run(campaign.id, new Date(now.getTime() + 6 * DAY))
     expect(x.lookupCalls).toBe(1)
 
+    x.addProfile({ id: '1', handle: 'alice', name: 'Alice', bio: 'Now building robot hands', followers: 1200 })
     await discovery.run(campaign.id, new Date(now.getTime() + 8 * DAY))
     expect(x.lookupCalls).toBe(2)
     expect(await ds.getRepository(Prospect).count()).toBe(2)
+    expect(await ds.getRepository(XUser).findOneByOrFail({ xUserId: '1' })).toMatchObject({ bio: 'Now building robot hands', followers: 1200 })
+  })
+
+  it('does not keep a stale profile that X no longer returns', async () => {
+    await discovery.run((await newCampaign(['alice'])).id, now)
+    x.removeProfile('alice')
+
+    const result = await discovery.run((await newCampaign(['alice'])).id, new Date(now.getTime() + 8 * DAY))
+
+    expect(result.skipped).toEqual([{ handle: 'alice', reason: 'not-found' }])
+    expect(await ds.getRepository(Prospect).count()).toBe(1)
+  })
+
+  it('treats anyone with a live or unresolved attempt as already contacted', async () => {
+    await ds.getRepository(SenderAccount).save({ id: 1, xUserId: '100', handle: 'a' })
+    for (const [xUserId, status] of [['1', 'queued'], ['2', 'needs_decision']] as const) {
+      const contact = await ds.getRepository(Contact).save({ senderAccountId: 1, xUserId })
+      await ds.getRepository(SendAttempt).save({ contactId: contact.id, draftId: 1, status, contentHash: 'h'.repeat(64) })
+    }
+    const result = await discovery.run((await newCampaign(['alice', 'bob'])).id, now)
+    expect(result.skipped.map((s) => s.reason)).toEqual(['already-contacted', 'already-contacted'])
+  })
+
+  it('lets two discovery jobs fetch the same new profile at once', async () => {
+    const [a, b] = await Promise.all([newCampaign(['alice']), newCampaign(['alice'])])
+    await Promise.all([discovery.run(a.id, now), discovery.run(b.id, now)])
+    expect(await ds.getRepository(Prospect).count()).toBe(2)
+  })
+
+  it('stores the last run with skipped handles and reasons on the campaign', async () => {
+    const campaign = await newCampaign(['alice', 'chef', 'ghost'])
+    await discovery.run(campaign.id, now)
+    const saved = await ds.getRepository(Campaign).findOneByOrFail({ id: campaign.id })
+    expect(saved.lastDiscovery).toMatchObject({
+      at: now.toISOString(),
+      added: 1,
+      skipped: [
+        { handle: 'ghost', reason: 'not-found' },
+        { handle: 'chef', reason: 'off-topic' },
+      ],
+    })
+  })
+
+  it('reads posts again when the stored text was cleared after scoring', async () => {
+    x.addPosts('1', [{ id: 'p1', userId: '1', text: 'shipped a robot arm', createdAt: new Date(now.getTime() - DAY) }])
+    await discovery.run((await newCampaign(['alice'])).id, now)
+    await ds.getRepository(XPost).update({ xUserId: '1' }, { text: '' })
+
+    await discovery.run((await newCampaign(['alice'])).id, now)
+
+    expect((await ds.getRepository(XPost).findOneByOrFail({ postId: 'p1' })).text).toBe('shipped a robot arm')
   })
 
   it('reports handles X does not know', async () => {

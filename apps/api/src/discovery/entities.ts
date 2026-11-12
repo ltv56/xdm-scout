@@ -15,6 +15,19 @@ export class Campaign {
   @Column({ type: 'json' })
   handles!: string[]
 
+  @Column({ type: 'json', nullable: true })
+  seeds!: string[] | null
+
+  @Column({ type: 'json', nullable: true })
+  queries!: string[] | null
+
+  // The fund's own lines, e.g. "Based in or building for Southeast Asia".
+  @Column({ type: 'json', nullable: true })
+  criteria!: string[] | null
+
+  @Column({ type: 'json', nullable: true })
+  lastDiscovery!: DiscoveryRun | null
+
   @Column({ type: 'int', default: 1_000_000 })
   budgetMicros!: number
 }
@@ -48,7 +61,7 @@ export class ApiUsage {
   campaignId!: number
 
   @Column({ type: 'varchar', length: 16 })
-  kind!: 'profile' | 'post'
+  kind!: 'profile' | 'post' | 'following' | 'search'
 
   @Column({ type: 'int' })
   count!: number
@@ -79,4 +92,46 @@ export class Prospect {
 
   @Column({ type: 'varchar', length: 16, default: 'new' })
   status!: ProspectStatus
+
+  // How many campaign seeds follow this person; more seeds rank first.
+  @Column({ type: 'int', default: 0 })
+  seedCount!: number
+
+  @Column({ type: 'varchar', length: 16, nullable: true })
+  fit!: 'strong' | 'possible' | 'weak' | 'not_a_fit' | null
+
+  @Column({ type: 'varchar', length: 16, nullable: true })
+  role!: string | null
+
+  @Column({ type: 'json', nullable: true })
+  areas!: string[] | null
+
+  @Column({ type: 'varchar', length: 16, nullable: true })
+  openingType!: string | null
+
+  @Column({ type: 'varchar', length: 512, nullable: true })
+  openingSummary!: string | null
+
+  @Column({ type: 'varchar', length: 48, nullable: true })
+  openingEvidenceId!: string | null
+
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  openingDate!: Date | null
+
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  scoredAt!: Date | null
+
+  @Column({ type: 'json', nullable: true })
+  criteria!: CriterionResult[] | null
 }
+
+export type DiscoveryRun = {
+  at: string
+  added: number
+  skipped: { handle: string; reason: string }[]
+  spentMicros: number
+  stoppedByBudget: boolean
+  postsPending: number
+}
+
+export type CriterionResult = { text: string; status: 'met' | 'not_met' | 'unknown'; evidenceIds: string[] }

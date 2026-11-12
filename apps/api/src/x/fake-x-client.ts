@@ -19,11 +19,16 @@ export class FakeXClient implements XClient {
   sendCalls = 0
   lookupCalls = 0
   conversationError: Error | null = null
+  // Thrown once by the next profile lookup.
+  readError: Error | null = null
   readonly sent: { recipientId: string; text: string }[] = []
   readonly conversationReads: { recipientId: string; max?: number }[] = []
   private readonly messages: (DmMessage & { recipientId: string; seq: number })[] = []
   private readonly profiles = new Map<string, XProfile>()
   private readonly posts = new Map<string, XPost[]>()
+  private readonly following = new Map<string, string[]>()
+  private readonly searches = new Map<string, string[]>()
+  readonly searchCalls: { query: string; max: number }[] = []
   private counter = 0
 
   async sendDm(recipientId: string, text: string): Promise<SendDmResult> {
@@ -65,7 +70,15 @@ export class FakeXClient implements XClient {
     for (const [userId, list] of Object.entries(posts)) {
       client.addPosts(userId, list.map((p) => ({ ...p, userId, createdAt: new Date(p.createdAt) })))
     }
+    const following = JSON.parse(readFileSync(join(dir, 'following.json'), 'utf8')) as Record<string, string[]>
+    for (const [userId, handles] of Object.entries(following)) client.addFollowing(userId, handles)
+    const searches = JSON.parse(readFileSync(join(dir, 'search.json'), 'utf8')) as Record<string, string[]>
+    for (const [query, handles] of Object.entries(searches)) client.addSearch(query, handles)
     return client
+  }
+
+  removeProfile(handle: string) {
+    this.profiles.delete(handle.toLowerCase())
   }
 
   addProfile(p: Partial<XProfile> & Pick<XProfile, 'id' | 'handle'>) {
@@ -84,12 +97,36 @@ export class FakeXClient implements XClient {
     this.posts.set(userId, posts)
   }
 
+  addFollowing(userId: string, handles: string[]) {
+    this.following.set(userId, handles)
+  }
+
+  async getFollowing(userId: string, max: number): Promise<XProfile[]> {
+    const handles = (this.following.get(userId) ?? []).slice(0, max)
+    return handles.flatMap((h) => this.profiles.get(h.toLowerCase()) ?? [])
+  }
+
+  // One fake post per handle in the list, in that order.
+  addSearch(query: string, authorHandles: string[]) {
+    this.searches.set(query, authorHandles)
+  }
+
+  async searchRecent(query: string, max: number) {
+    this.searchCalls.push({ query, max })
+    const authors = (this.searches.get(query) ?? []).slice(0, max).flatMap((h) => this.profiles.get(h.toLowerCase()) ?? [])
+    const posts = authors.map((a, i) => ({ id: `s-${i}-${a.id}`, userId: a.id, text: `${query} by ${a.handle}`, createdAt: new Date() }))
+    return { posts, authors: [...new Map(authors.map((a) => [a.id, a])).values()] }
+  }
+
   async getRecentPosts(userId: string, max: number): Promise<XPost[]> {
     return (this.posts.get(userId) ?? []).slice(0, max)
   }
 
   async lookupUsers(handles: string[]): Promise<XProfile[]> {
     this.lookupCalls += 1
+    const err = this.readError
+    this.readError = null
+    if (err) throw err
     return handles.flatMap((h) => this.profiles.get(h.toLowerCase()) ?? [])
   }
 

@@ -2,11 +2,15 @@ import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 import { DiscoveryService } from '../discovery/discovery.service'
+import { Campaign, Prospect } from '../discovery/entities'
+import { FitService } from '../fit/fit.service'
 import { Job } from '../jobs/job.entity'
+import { cannedHandler, FakeLlmClient } from '../llm/fake-llm-client'
 import { JobsService } from '../jobs/jobs.service'
 import { createTestDataSource } from '../test/db'
 import { seedDraft, sha } from '../test/seed'
 import { FakeXClient } from '../x/fake-x-client'
+import { XRateLimitError } from '../x/x-client'
 import { Contact, DoNotContact, SendAttempt } from './entities'
 import { SendingService } from './sending.service'
 import { Worker } from './worker'
@@ -25,7 +29,7 @@ beforeEach(async () => {
   x = new FakeXClient()
   const jobs = new JobsService(ds)
   service = new SendingService(ds, x, jobs)
-  worker = new Worker(jobs, service, new DiscoveryService(ds, x))
+  worker = new Worker(jobs, service, new DiscoveryService(ds, x), new FitService(ds, new FakeLlmClient(cannedHandler)))
 })
 
 afterAll(async () => {
@@ -54,9 +58,42 @@ describe('worker', () => {
 
   it('two workers racing on one job send one DM', async () => {
     await approve()
-    const other = new Worker(new JobsService(ds), service, new DiscoveryService(ds, x))
+    const other = new Worker(new JobsService(ds), service, new DiscoveryService(ds, x), new FitService(ds, new FakeLlmClient(cannedHandler)))
     await Promise.all([worker.tick(new Date()), other.tick(new Date())])
     expect(x.sent).toHaveLength(1)
+  })
+
+  it('runs a job again when a crashed worker left it running', async () => {
+    const campaign = await ds.getRepository(Campaign).save({ name: 'c', keywords: ['robotics'], handles: ['alice'] })
+    const job = await ds.getRepository(Job).save({ type: 'discover', payload: { campaignId: campaign.id }, runAt: t0, status: 'running' })
+    await worker.recover(t0)
+    expect((await ds.getRepository(Job).findOneByOrFail({ id: job.id })).status).toBe('pending')
+  })
+
+  it('fails a job of an unknown type instead of marking it done', async () => {
+    const job = await ds.getRepository(Job).save({ type: 'nope', payload: {}, runAt: t0 })
+    await worker.tick(t0)
+    const after = await ds.getRepository(Job).findOneByOrFail({ id: job.id })
+    expect(after.status).toBe('failed')
+    expect(after.error).toContain('Unknown job type')
+  })
+
+  it('retries a rate-limited discovery job at the reset time', async () => {
+    x.addProfile({ id: '1', handle: 'alice', bio: 'robotics' })
+    const reset = plus(t0, 15 * MIN)
+    x.readError = new XRateLimitError(reset)
+    const campaign = await ds.getRepository(Campaign).save({ name: 'c', keywords: ['robotics'], handles: ['alice'] })
+    await ds.getRepository(Job).save({ type: 'discover', payload: { campaignId: campaign.id }, runAt: t0 })
+
+    await worker.tick(t0)
+    const retried = await ds.getRepository(Job).findOneByOrFail({ type: 'discover' })
+    expect(retried.status).toBe('pending')
+    expect(retried.runAt).toEqual(reset)
+
+    expect(await worker.tick(plus(t0, MIN))).toBe(false)
+    await worker.tick(reset)
+    expect((await ds.getRepository(Job).findOneByOrFail({ type: 'discover' })).status).toBe('done')
+    expect(await ds.getRepository(Prospect).count()).toBe(1)
   })
 
   it('marks finished jobs done', async () => {

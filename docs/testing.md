@@ -74,8 +74,14 @@ Start the API and the worker with `X_MODE=fake`. Profiles come from `fixtures/pr
 curl -XPOST localhost:3001/api/campaigns -H 'content-type: application/json' \
   -d '{"name":"robotics demo","keywords":["robotics","llm","embodied"],"handles":["mina_builds","@tomas_agents","lena_embodied","robotco","private_dev","pasta_daily","nobody_here"]}'
 curl -XPOST localhost:3001/api/campaigns/1/discover
+# the worker picks the job up within a few seconds; wait until lastDiscovery is set
+curl localhost:3001/api/campaigns/1
 curl localhost:3001/api/campaigns/1/prospects
 ```
+
+- `GET /api/campaigns/1` returns the campaign with `lastDiscovery`: time, `added`, `skipped` (handle and reason), `spentMicros`, `stoppedByBudget`, `postsPending`.
+- A second `discover` while one is pending or running: `{"queued":false,"reason":"Discovery is already running for this campaign"}`.
+- An unknown campaign id: `404`.
 
 Cost estimate before running, and spend after:
 
@@ -88,8 +94,87 @@ docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT campaignId, kind, co
 - `budgetUsd` on the campaign (default 1) caps the spend. Discovery stops when the next profile reads or a full 15-post read does not fit, keeps what it has, and the skipped handles get reason `budget`.
 - Prospects: `mina_builds`, `tomas_agents`, `lena_embodied`.
 - Skipped: `robotco` (organization), `private_dev` (protected), `pasta_daily` (bio has no keyword), `nobody_here` (not found).
-- A body without `name`, `keywords` or `handles`: `400`.
+- A body without `name` or `keywords`, or with no `handles`, `seeds` or `queries`: `400`.
+
+From seed accounts (fake mode, `fixtures/following.json`):
+
+```
+curl -XPOST localhost:3001/api/campaigns -H 'content-type: application/json' \
+  -d '{"name":"seeds demo","keywords":["robotics","llm","embodied"],"seeds":["sea_robotics_lab","ai_builders_sg"]}'
+curl localhost:3001/api/campaigns/<id>/estimate
+curl -XPOST localhost:3001/api/campaigns/<id>/discover
+curl localhost:3001/api/campaigns/<id>/prospects
+```
+
+- Prospects are the people the seeds follow, `relationship` `adjacent`, with `seedCount`: `mina_builds` and `tomas_agents` 2, `lena_embodied` 1. Seeds themselves are not prospects.
+- `pasta_daily` and `robotco` are skipped (bio, organization).
+- Following reads cost about $0.01 per user returned and stop at 200 per seed or at the budget. The estimate gives the upper bound (`maxFollowing`); posts of people found through seeds are not in the estimate and are capped by the budget.
+
+From recent search (fake mode, `fixtures/search.json`; X search covers the last 7 days):
+
+```
+curl -XPOST localhost:3001/api/campaigns -H 'content-type: application/json' \
+  -d '{"name":"search demo","keywords":["robotics","embodied"],"queries":["(\"robot arm\" OR manipulation) (open-sourced OR released) -is:retweet"]}'
+curl -XPOST localhost:3001/api/campaigns/<id>/discover
+curl localhost:3001/api/campaigns/<id>/prospects
+```
+
+- Prospects: `mina_builds`, `lena_embodied` (`relationship` `cold`); `pasta_daily` skipped (bio).
+- Each query reads up to 50 posts; posts and authors are billed (`api_usage` kinds `search` and `profile`). A query is skipped when the budget cannot pay for 10 results.
 - Profiles fetched less than 7 days ago are not fetched again.
+
+## 7. Fit scoring (fake mode)
+
+Needs a campaign with prospects from section 6 and the worker running. Without `LLM_API_KEY` and `LLM_MODEL` in `.env` a canned stand-in answers: every Fit is `possible`, the opening is the latest stored post.
+
+```
+curl -XPOST localhost:3001/api/campaigns/1/score
+curl localhost:3001/api/campaigns/1/prospects
+```
+
+- `score` returns `{"queued":N}` for prospects without a score; a second call returns `{"queued":0}`.
+- Each prospect has `fit`, `role`, `areas`, `opening` (`type`, `summary`, `freshness` fresh/stale/expired, `url`) and `claims` with `status` verified/inferred and evidence links.
+- Each prospect also has `lastPostAt` (latest stored post) and `criteria`: the campaign's own lines, each `met`, `not_met` or `unknown`. Met and not met need cited evidence that passes the second check; the canned stand-in leaves every line `unknown`.
+- Campaign criteria are set at creation, up to 5 lines: `"criteria":["Based in or building for Southeast Asia","Ships code or papers"]`.
+- Order: Fit (strong, possible, weak, not a fit, not scored), then how many seeds follow them, then newest opening.
+- The web app shows the same list: `npm run dev -w apps/web`, campaign number in the box.
+
+With a real model, set in `.env`:
+
+```
+LLM_PROVIDER=openai        # or anthropic
+LLM_BASE_URL=https://...   # OpenAI-compatible base URL, ignored for anthropic
+LLM_MODEL=...
+LLM_API_KEY=...
+```
+
+## 8. Retention of X data
+
+The worker sweeps on start and every hour:
+
+- Post text in `x_posts` is cleared once every prospect of that person is scored; id and date stay. Discovery reads the posts again if needed.
+- Post evidence that no claim or opening cites is deleted.
+- After 7 days, `x_users` name, bio and followers and `evidence` excerpts are cleared unless the person has a `pending` or `approved` draft; ids, handle and links stay.
+
+```
+docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT xUserId, LEFT(text, 20) FROM x_posts; SELECT id, LEFT(excerpt, 20) FROM evidence"
+```
+
+## Review screens with fixed data
+
+Set `REVIEW_STUB=1` in `.env` and restart the API. The review routes then return six fixed drafts (one per screen state) kept in memory; a restart resets them. The real `POST /api/drafts/:id/approve` is off in this mode. Shapes: `apps/api/src/review/contract.ts`.
+
+```
+B=http://localhost:3001/api
+curl -s $B/campaigns
+curl -s "$B/review-queue?campaignId=1"
+H=$(curl -s "$B/review-queue?campaignId=1" | node -e "console.log(JSON.parse(require('fs').readFileSync(0)).items[0].contentHash)")
+curl -s -XPOST $B/drafts/101/approve -H 'content-type: application/json' -d "{\"contentHash\":\"$H\"}"
+curl -s -XPOST $B/drafts/101/manual -H 'content-type: application/json' -d '{"outcome":"sent"}'
+curl -s -XPATCH $B/drafts/105 -H 'content-type: application/json' -d '{"text":"Saw your GPU post. We are a small fund. No worries if not."}'
+curl -s -XPOST $B/drafts/102/skip -H 'content-type: application/json' -d '{"reason":"bored"}'   # 400, reason not in the list
+curl -s $B/sender-profile
+```
 
 ## Automated tests
 

@@ -1,17 +1,24 @@
-import { BadRequestException, Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common'
-import { DataSource } from 'typeorm'
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Post } from '@nestjs/common'
+import { DataSource, IsNull } from 'typeorm'
 import { z } from 'zod'
 import { JobsService } from '../jobs/jobs.service'
-import { XUser } from '../sending/entities'
 import { DiscoveryService } from './discovery.service'
 import { Campaign, Prospect } from './entities'
+import { ProspectsService } from './prospects.service'
 
-const createBody = z.object({
-  name: z.string().min(1).max(128),
-  keywords: z.array(z.string().min(1)).min(1),
-  handles: z.array(z.string().min(1)).min(1),
-  budgetUsd: z.number().positive().max(100).optional(),
-})
+const createBody = z
+  .object({
+    name: z.string().min(1).max(128),
+    keywords: z.array(z.string().min(1)).min(1),
+    handles: z.array(z.string().min(1)).default([]),
+    seeds: z.array(z.string().min(1)).max(10).default([]),
+    queries: z.array(z.string().min(1).max(512)).max(10).default([]),
+    criteria: z.array(z.string().min(1).max(200)).max(5).default([]),
+    budgetUsd: z.number().positive().max(100).optional(),
+  })
+  .refine((b) => b.handles.length + b.seeds.length + b.queries.length > 0, {
+    message: 'Give at least one handle, seed account or search query',
+  })
 
 @Controller('campaigns')
 export class CampaignsController {
@@ -19,7 +26,13 @@ export class CampaignsController {
     private readonly ds: DataSource,
     private readonly jobs: JobsService,
     private readonly discovery: DiscoveryService,
+    private readonly prospects: ProspectsService,
   ) {}
+
+  @Get()
+  listCampaigns() {
+    return this.ds.getRepository(Campaign).find({ select: { id: true, name: true }, order: { id: 'DESC' } })
+  }
 
   @Post()
   create(@Body() body: unknown) {
@@ -29,27 +42,42 @@ export class CampaignsController {
     return this.ds.getRepository(Campaign).save({ ...rest, ...(budgetUsd && { budgetMicros: Math.round(budgetUsd * 1_000_000) }) })
   }
 
+  @Get(':id')
+  get(@Param('id', ParseIntPipe) id: number) {
+    return this.campaign(id)
+  }
+
   @Get(':id/estimate')
   async estimate(@Param('id', ParseIntPipe) id: number) {
+    await this.campaign(id)
     return { ...(await this.discovery.estimate(id)), note: 'estimate at the prices in discovery/pricing.ts' }
   }
 
   @Post(':id/discover')
   async discover(@Param('id', ParseIntPipe) id: number) {
-    await this.ds.getRepository(Campaign).findOneByOrFail({ id })
+    await this.campaign(id)
+    if (await this.jobs.hasOpen('discover', 'campaignId', id)) {
+      return { queued: false, reason: 'Discovery is already running for this campaign' }
+    }
     await this.jobs.enqueue('discover', { campaignId: id }, new Date())
     return { queued: true }
   }
 
+  @Post(':id/score')
+  async score(@Param('id', ParseIntPipe) id: number) {
+    const pending = await this.ds.getRepository(Prospect).findBy({ campaignId: id, scoredAt: IsNull() })
+    for (const p of pending) await this.jobs.enqueue('score', { prospectId: p.id }, new Date())
+    return { queued: pending.length }
+  }
+
   @Get(':id/prospects')
-  async prospects(@Param('id', ParseIntPipe) id: number) {
-    const rows = await this.ds
-      .createQueryBuilder(Prospect, 'p')
-      .innerJoin(XUser, 'u', 'u.xUserId = p.xUserId')
-      .where('p.campaignId = :id', { id })
-      .select(['p.id AS id', 'p.relationship AS relationship', 'p.status AS status', 'u.handle AS handle', 'u.name AS name', 'u.bio AS bio', 'u.followers AS followers'])
-      .orderBy('p.id')
-      .getRawMany()
-    return rows
+  list(@Param('id', ParseIntPipe) id: number) {
+    return this.prospects.list(id)
+  }
+
+  private async campaign(id: number) {
+    const campaign = await this.ds.getRepository(Campaign).findOneBy({ id })
+    if (!campaign) throw new NotFoundException('Campaign not found')
+    return campaign
   }
 }

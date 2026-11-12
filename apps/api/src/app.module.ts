@@ -7,7 +7,14 @@ import { dataSourceOptions } from './data-source'
 import { HealthController } from './health.controller'
 import { CampaignsController } from './discovery/campaigns.controller'
 import { DiscoveryService } from './discovery/discovery.service'
+import { ProspectsService } from './discovery/prospects.service'
+import { FitService } from './fit/fit.service'
 import { JobsService } from './jobs/jobs.service'
+import { cannedHandler, FakeLlmClient } from './llm/fake-llm-client'
+import { AnthropicLlmClient, OpenAiCompatibleLlmClient } from './llm/http-llm-clients'
+import { LLM_CLIENT, LlmClient } from './llm/llm-client'
+import { RetentionService } from './retention/retention.service'
+import { ReviewStubController } from './review/review-stub.controller'
 import { DraftsController } from './sending/drafts.controller'
 import { SendingService } from './sending/sending.service'
 import { Worker } from './sending/worker'
@@ -20,10 +27,12 @@ import { X_CLIENT, XClient } from './x/x-client'
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env', '../../.env'] }),
     TypeOrmModule.forRoot({ ...dataSourceOptions, migrations: [] }),
   ],
-  controllers: [HealthController, DraftsController, AuthController, CampaignsController],
+  // REVIEW_STUB=1 serves fixed review data (see review/contract.ts) instead of the real draft routes.
+  controllers: [HealthController, process.env.REVIEW_STUB === '1' ? ReviewStubController : DraftsController, AuthController, CampaignsController],
   providers: [
     JobsService,
     DiscoveryService,
+    ProspectsService,
     SendingService,
     Worker,
     AuthService,
@@ -36,6 +45,19 @@ import { X_CLIENT, XClient } from './x/x-client'
         redirectUri: config.get('X_REDIRECT_URI', 'http://localhost:3000/api/auth/x/callback'),
         tokenKey: config.get('TOKEN_KEY', ''),
       }),
+    },
+    FitService,
+    RetentionService,
+    {
+      provide: LLM_CLIENT,
+      inject: [ConfigService],
+      useFactory: (config: ConfigService): LlmClient => {
+        const apiKey = config.get('LLM_API_KEY', '')
+        const model = config.get('LLM_MODEL', '')
+        if (!apiKey || !model) return new FakeLlmClient(cannedHandler)
+        if (config.get('LLM_PROVIDER', 'openai') === 'anthropic') return new AnthropicLlmClient({ apiKey, model })
+        return new OpenAiCompatibleLlmClient({ apiKey, model, baseUrl: config.get('LLM_BASE_URL', 'https://api.openai.com/v1') })
+      },
     },
     {
       provide: X_CLIENT,

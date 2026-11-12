@@ -27,6 +27,23 @@ export class JobsService {
     })
   }
 
+  hasOpen(type: string, key: string, value: number) {
+    return this.ds
+      .getRepository(Job)
+      .createQueryBuilder('j')
+      .where("j.type = :type AND j.status IN ('pending', 'running')", { type })
+      .andWhere(`JSON_EXTRACT(j.payload, :path) = :value`, { path: `$.${key}`, value })
+      .getExists()
+  }
+
+  async retry(id: number, runAt: Date) {
+    await this.ds.getRepository(Job).update(id, { status: 'pending', runAt })
+  }
+
+  async requeueRunning() {
+    await this.ds.getRepository(Job).update({ status: 'running' }, { status: 'pending' })
+  }
+
   async finish(id: number, error?: string) {
     await this.ds.getRepository(Job).update(id, error ? { status: 'failed', error } : { status: 'done' })
   }
