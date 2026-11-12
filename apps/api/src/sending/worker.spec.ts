@@ -94,7 +94,7 @@ describe('send outcomes', () => {
 
   it('test 6: stale sending on startup -> unknown -> reconciled to sent', async () => {
     const { attemptId } = await approve()
-    await ds.getRepository(SendAttempt).update(attemptId, { status: 'sending', updatedAt: t0 })
+    await ds.getRepository(SendAttempt).update(attemptId, { status: 'sending', updatedAt: t0, createdAt: t0 })
     x.deliverSilently('200', 'Hi there', plus(t0, 1000))
 
     await service.recoverStale(plus(t0, 2 * MIN))
