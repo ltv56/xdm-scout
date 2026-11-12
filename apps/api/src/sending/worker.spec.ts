@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm'
 import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 import { DiscoveryService } from '../discovery/discovery.service'
 import { Campaign, Prospect } from '../discovery/entities'
+import { DraftService } from '../review/draft.service'
 import { FitService } from '../fit/fit.service'
 import { Job } from '../jobs/job.entity'
 import { cannedHandler, FakeLlmClient } from '../llm/fake-llm-client'
@@ -29,7 +30,7 @@ beforeEach(async () => {
   x = new FakeXClient()
   const jobs = new JobsService(ds)
   service = new SendingService(ds, x, jobs)
-  worker = new Worker(jobs, service, new DiscoveryService(ds, x), new FitService(ds, new FakeLlmClient(cannedHandler)))
+  worker = new Worker(jobs, service, new DiscoveryService(ds, x), new FitService(ds, new FakeLlmClient(cannedHandler)), new DraftService(ds, new FakeLlmClient(cannedHandler), jobs))
 })
 
 afterAll(async () => {
@@ -58,7 +59,7 @@ describe('worker', () => {
 
   it('two workers racing on one job send one DM', async () => {
     await approve()
-    const other = new Worker(new JobsService(ds), service, new DiscoveryService(ds, x), new FitService(ds, new FakeLlmClient(cannedHandler)))
+    const other = new Worker(new JobsService(ds), service, new DiscoveryService(ds, x), new FitService(ds, new FakeLlmClient(cannedHandler)), new DraftService(ds, new FakeLlmClient(cannedHandler), new JobsService(ds)))
     await Promise.all([worker.tick(new Date()), other.tick(new Date())])
     expect(x.sent).toHaveLength(1)
   })
