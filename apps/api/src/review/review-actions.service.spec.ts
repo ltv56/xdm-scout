@@ -50,13 +50,14 @@ afterAll(async () => {
 describe('edit', () => {
   it('keeps the source of sentences the reviewer left alone and marks the new ones as theirs', async () => {
     const d = await seedDraft()
-    const text = `${d.sentences![0].text} We met at the Saigon meetup last year. No worries if not.`
+    // sentences[0] is the greeting made by the app, sentences[1] the one about their post
+    const text = `${d.sentences![0].text} ${d.sentences![1].text} We met at the Saigon meetup last year. No worries if not.`
     const item = await actions.edit(d.id, text, now)
     expect(item.editedByReviewer).toBe(true)
     expect(item.status).toBe('pending')
     expect(item.text).toBe(text)
     expect(item.contentHash).toBe(hashContent(text))
-    expect(item.sentences.map((s) => s.source?.type ?? null)).toEqual(['evidence', null, 'opt_out'])
+    expect(item.sentences.map((s) => s.source?.type ?? null)).toEqual(['greeting', 'evidence', null, 'opt_out'])
     expect(item.checks.find((c) => c.code === 'unbacked_claim')).toMatchObject({ level: 'warn', needsConfirm: true })
   })
 

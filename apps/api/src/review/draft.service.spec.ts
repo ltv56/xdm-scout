@@ -55,8 +55,27 @@ describe('draft generation', () => {
     const draft = await ds.getRepository(Draft).findOneByOrFail({ contactId: 1 })
     expect(draft).toMatchObject({ status: 'pending', kind: 'first_message', sendPath: 'HUMAN_HANDOFF', prospectId: p.id, editedByReviewer: false })
     expect(draft.content).toBe(draft.sentences!.map((s) => s.text).join(' '))
-    expect(draft.sentences![0].source).toEqual({ type: 'evidence', evidenceId: 'post:mai1' })
+    expect(draft.sentences![0]).toMatchObject({ source: { type: 'greeting' } })
+    expect(draft.sentences![0].text).toMatch(/^(Hi|Hello|Hey) .*Mai/)
+    expect(draft.sentences![1].source).toEqual({ type: 'evidence', evidenceId: 'post:mai1' })
     expect(draft.sentences!.at(-1)!.source).toEqual({ type: 'opt_out' })
+  })
+
+  it('opens with a greeting made in code from the X display name, and drops the name when it is not a person', async () => {
+    const p = await seed({ handle: 'acme' })
+    await ds.getRepository(XUser).update({ xUserId: 'u-acme' }, { name: 'Acme Labs' })
+    await service().generate(p.id, now)
+    const draft = await ds.getRepository(Draft).findOneByOrFail({ contactId: 1 })
+    expect(draft.sentences![0].source).toEqual({ type: 'greeting' })
+    expect(draft.sentences![0].text).not.toContain('Acme')
+    expect(draft.sentences![0].text).toMatch(/^(Hi|Hello|Hey)/)
+  })
+
+  it('never lets the model write the greeting: the prompt carries no display name', async () => {
+    const p = await seed()
+    const llm = new FakeLlmClient(cannedHandler)
+    await service(llm).generate(p.id, now)
+    expect(JSON.stringify(llm.calls)).not.toContain('"Mai"')
   })
 
   it('creates the contact with the prospect relationship', async () => {
@@ -82,7 +101,9 @@ describe('draft generation', () => {
       ],
     }))
     await service(llm).generate(p.id, now)
-    expect((await ds.getRepository(Draft).findOneByOrFail({ contactId: 1 })).sentences![0].source).toBeNull()
+    const sentences = (await ds.getRepository(Draft).findOneByOrFail({ contactId: 1 })).sentences!
+    expect(sentences[0].source).toEqual({ type: 'greeting' })
+    expect(sentences[1].source).toBeNull()
   })
 
   it('retries once on invalid model output, then fails', async () => {

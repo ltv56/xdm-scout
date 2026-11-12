@@ -27,6 +27,11 @@ describe('draft checks', () => {
     expect(r.find((c) => c.code === 'unbacked_claim')?.needsConfirm).toBe(false)
   })
 
+  it('counts a greeting made by the app as backed', () => {
+    const r = runChecks({ sentences: [{ text: 'Hi Mai!', source: { type: 'greeting' } }, ...clean], profile, openingDate: new Date('2026-11-08T00:00:00Z'), now, reviewerEdited: false, otherTexts: [] })
+    expect(r.map((c) => c.code)).not.toContain('unbacked_claim')
+  })
+
   it('turns an unbacked sentence into a warn to confirm when the reviewer wrote it', () => {
     const r = run([...clean, { text: 'We met at the meetup.', source: null }], { reviewerEdited: true })
     expect(r.find((c) => c.code === 'unbacked_claim')).toMatchObject({ level: 'warn', needsConfirm: true })
@@ -62,5 +67,11 @@ describe('draft checks', () => {
 
   it('warns when the first sentence says nothing specific about them', () => {
     expect(codes(run([clean[1], clean[0], clean[2], clean[3]]))).toContain('warn:generic_first_line')
+  })
+
+  it('looks past the greeting when it judges the first line', () => {
+    const hi: StoredSentence = { text: 'Hi Mai!', source: { type: 'greeting' } }
+    expect(codes(run([hi, ...clean]))).not.toContain('warn:generic_first_line')
+    expect(codes(run([hi, clean[1], clean[0], clean[2], clean[3]]))).toContain('warn:generic_first_line')
   })
 })

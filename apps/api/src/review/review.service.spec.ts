@@ -69,7 +69,8 @@ describe('review queue', () => {
     expect(item.contentHash).toBe(hashContent(item.text))
     expect(item.prospect).toMatchObject({ handle: 'mai', name: 'MAI', fit: 'strong', relationship: 'cold', daysSinceActive: 4 })
     expect(item.evidence).toEqual([{ id: 1, kind: 'post', text: 'Shipped v2 of our eval harness', url: 'https://x.com/mai/status/1', postedAt: '2026-11-08T00:00:00.000Z' }])
-    expect(item.sentences[0].source).toEqual({ type: 'evidence', evidenceId: 1 })
+    expect(item.sentences[0].source).toEqual({ type: 'greeting' })
+    expect(item.sentences[1].source).toEqual({ type: 'evidence', evidenceId: 1 })
     expect(item.prospect.criteria).toEqual([{ text: 'Based in SEA', status: 'unknown', evidence: [], fact: null }])
   })
 

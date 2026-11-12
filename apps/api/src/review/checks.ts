@@ -4,6 +4,8 @@ export type StoredSource =
   | { type: 'evidence'; evidenceId: string }
   | { type: 'sender_profile'; field: 'intro' | 'program' | 'signer' }
   | { type: 'opt_out' }
+  // Made by the app from the X display name; there is nothing in it to verify.
+  | { type: 'greeting' }
 
 export type StoredSentence = { text: string; source: StoredSource | null }
 
@@ -66,7 +68,8 @@ export function runChecks(input: CheckInput): CheckResult[] {
     const days = Math.floor((now.getTime() - openingDate.getTime()) / 86_400_000)
     if (days > STALE_DAYS) out.push({ code: 'stale_opening', level: 'warn', message: `The post is from ${formatDay(openingDate)} (${days} days ago).`, needsConfirm: false })
   }
-  const first = sentences[0]
+  // The greeting is made by the app, so the first line to judge is the first sentence after it.
+  const first = sentences.find((s) => s.source?.type !== 'greeting')
   if (first && first.source !== null && first.source.type !== 'evidence') {
     out.push({ code: 'generic_first_line', level: 'warn', message: 'The first line says nothing specific about them.', needsConfirm: false })
   }
