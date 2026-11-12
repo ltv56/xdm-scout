@@ -64,7 +64,9 @@ export class DiscoveryService {
     const toFetch = stale.slice(0, affordable)
     if (toFetch.length) {
       const profiles = await this.x.lookupUsers(toFetch)
-      for (const p of profiles) known.set(p.handle.toLowerCase(), await this.ds.getRepository(XUser).save(toUser(p, now)))
+      // A handle X no longer returns is deleted, suspended or renamed: drop its cached profile.
+      for (const h of toFetch) known.delete(h)
+      for (const p of profiles) known.set(p.handle.toLowerCase(), await this.saveUser(p, now))
       await this.recordUsage(campaignId, 'profile', profiles.length, PRICES.profile)
     }
 
@@ -120,7 +122,16 @@ export class DiscoveryService {
       }
     }
 
-    return { added: added.length, skipped, spentMicros: (await this.spent(campaignId)) - startSpent, stoppedByBudget, postsPending }
+    const result = { added: added.length, skipped, spentMicros: (await this.spent(campaignId)) - startSpent, stoppedByBudget, postsPending }
+    await this.ds.getRepository(Campaign).update(campaignId, { lastDiscovery: { at: now.toISOString(), ...result } })
+    return result
+  }
+
+  // Upsert: two jobs may fetch the same new profile at the same time.
+  private async saveUser(p: XProfile, now: Date) {
+    const user = toUser(p, now)
+    await this.ds.getRepository(XUser).upsert(user, ['xUserId'])
+    return user
   }
 
   // Returns false when the budget stopped a read.
@@ -136,7 +147,7 @@ export class DiscoveryService {
       await this.recordUsage(campaign.id, 'following', following.length, PRICES.following)
       for (const p of following) {
         if (seedIds.has(p.id)) continue
-        const user = await this.ds.getRepository(XUser).save(toUser(p, now))
+        const user = await this.saveUser(p, now)
         const seen = candidates.get(p.id)
         if (seen) Object.assign(seen, { relationship: 'adjacent', seedCount: seen.seedCount + 1 })
         else candidates.set(p.id, { handle: p.handle, user, relationship: 'adjacent', seedCount: 1 })
@@ -159,7 +170,7 @@ export class DiscoveryService {
       await this.recordUsage(campaign.id, 'profile', authors.length, PRICES.profile)
       for (const p of authors) {
         if (seedIds.has(p.id) || candidates.has(p.id)) continue
-        const user = await this.ds.getRepository(XUser).save(toUser(p, now))
+        const user = await this.saveUser(p, now)
         candidates.set(p.id, { handle: p.handle, user, relationship: 'cold', seedCount: 0 })
       }
     }
@@ -208,7 +219,7 @@ export class DiscoveryService {
     if (!contacts.length) return false
     return this.ds.getRepository(SendAttempt).existsBy({
       contactId: In(contacts.map((c) => c.id)),
-      status: In(['sent', 'unknown', 'manual_pending', 'manual_unverified']),
+      status: Not(In(['failed', 'cancelled'])),
     })
   }
 }

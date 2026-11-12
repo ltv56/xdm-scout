@@ -74,8 +74,14 @@ Start the API and the worker with `X_MODE=fake`. Profiles come from `fixtures/pr
 curl -XPOST localhost:3001/api/campaigns -H 'content-type: application/json' \
   -d '{"name":"robotics demo","keywords":["robotics","llm","embodied"],"handles":["mina_builds","@tomas_agents","lena_embodied","robotco","private_dev","pasta_daily","nobody_here"]}'
 curl -XPOST localhost:3001/api/campaigns/1/discover
+# the worker picks the job up within a few seconds; wait until lastDiscovery is set
+curl localhost:3001/api/campaigns/1
 curl localhost:3001/api/campaigns/1/prospects
 ```
+
+- `GET /api/campaigns/1` returns the campaign with `lastDiscovery`: time, `added`, `skipped` (handle and reason), `spentMicros`, `stoppedByBudget`, `postsPending`.
+- A second `discover` while one is pending or running: `{"queued":false,"reason":"Discovery is already running for this campaign"}`.
+- An unknown campaign id: `404`.
 
 Cost estimate before running, and spend after:
 

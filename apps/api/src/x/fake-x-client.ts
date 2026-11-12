@@ -19,6 +19,8 @@ export class FakeXClient implements XClient {
   sendCalls = 0
   lookupCalls = 0
   conversationError: Error | null = null
+  // Thrown once by the next profile lookup.
+  readError: Error | null = null
   readonly sent: { recipientId: string; text: string }[] = []
   readonly conversationReads: { recipientId: string; max?: number }[] = []
   private readonly messages: (DmMessage & { recipientId: string; seq: number })[] = []
@@ -75,6 +77,10 @@ export class FakeXClient implements XClient {
     return client
   }
 
+  removeProfile(handle: string) {
+    this.profiles.delete(handle.toLowerCase())
+  }
+
   addProfile(p: Partial<XProfile> & Pick<XProfile, 'id' | 'handle'>) {
     this.profiles.set(p.handle.toLowerCase(), {
       name: p.handle,
@@ -118,6 +124,9 @@ export class FakeXClient implements XClient {
 
   async lookupUsers(handles: string[]): Promise<XProfile[]> {
     this.lookupCalls += 1
+    const err = this.readError
+    this.readError = null
+    if (err) throw err
     return handles.flatMap((h) => this.profiles.get(h.toLowerCase()) ?? [])
   }
 
