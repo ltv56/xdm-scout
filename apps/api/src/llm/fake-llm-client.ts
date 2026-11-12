@@ -1,10 +1,24 @@
 import { LlmClient, LlmRequest } from './llm-client'
 
 type EvidenceItem = { id: string; text: string; date: string | null }
+type DraftInput = { opening: { evidence_id: string; summary: string | null; text: string }; profile: { intro: string; offers: string[]; signer: string } }
+
+function cannedDraft({ opening, profile }: DraftInput) {
+  const topic = (opening.summary || opening.text).replace(/\s+/g, ' ').slice(0, 120)
+  return {
+    sentences: [
+      { text: `Saw your post: ${topic}.`, source: { type: 'evidence', evidence_id: opening.evidence_id } },
+      { text: profile.intro, source: { type: 'sender_profile', field: 'intro' } },
+      { text: `Would it help if we offered: ${profile.offers[0]?.toLowerCase() ?? 'an intro'}?`, source: { type: 'sender_profile', field: 'offers' } },
+      { text: 'No worries if not.', source: { type: 'opt_out' } },
+    ],
+  }
+}
 
 // Stand-in used when no LLM key is set: shows the flow, does not judge anyone.
 export function cannedHandler(req: LlmRequest): unknown {
   if (req.task === 'verify') return { supported: true }
+  if (req.task === 'draft') return cannedDraft(JSON.parse(req.user) as DraftInput)
   const evidence = (JSON.parse(req.user) as { evidence: EvidenceItem[] }).evidence
   const bio = evidence.find((e) => e.id.startsWith('bio:'))
   const post = evidence.find((e) => e.id.startsWith('post:'))

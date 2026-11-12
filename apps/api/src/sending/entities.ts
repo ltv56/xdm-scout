@@ -1,3 +1,4 @@
+import type { StoredSentence } from '../review/checks'
 import { Column, CreateDateColumn, Entity, Index, PrimaryColumn, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm'
 
 @Entity('sender_accounts')
@@ -106,6 +107,22 @@ export class Draft {
 
   @Column({ type: 'char', length: 64, nullable: true })
   approvedHash!: string | null
+
+  @Column({ type: 'int', nullable: true })
+  prospectId!: number | null
+
+  @Column({ type: 'varchar', length: 16, default: 'first_message' })
+  kind!: 'first_message' | 'reply'
+
+  @Column({ type: 'varchar', length: 16, default: 'HUMAN_HANDOFF' })
+  sendPath!: 'API_SEND' | 'HUMAN_HANDOFF'
+
+  // Each sentence with where it came from; null source = nothing backs it.
+  @Column({ type: 'json', nullable: true })
+  sentences!: StoredSentence[] | null
+
+  @Column({ type: 'boolean', default: false })
+  editedByReviewer!: boolean
 }
 
 export type AttemptStatus =
