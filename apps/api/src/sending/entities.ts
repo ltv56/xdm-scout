@@ -32,6 +32,27 @@ export class XUser {
 
   @Column({ type: 'varchar', length: 64 })
   handle!: string
+
+  @Column({ type: 'varchar', length: 128, nullable: true })
+  name!: string | null
+
+  @Column({ type: 'text', nullable: true })
+  bio!: string | null
+
+  @Column({ type: 'int', nullable: true })
+  followers!: number | null
+
+  @Column({ type: 'boolean', default: false })
+  isProtected!: boolean
+
+  @Column({ type: 'varchar', length: 16, nullable: true })
+  orgType!: string | null
+
+  @Column({ type: 'boolean', default: false })
+  receivesYourDm!: boolean
+
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  fetchedAt!: Date | null
 }
 
 export type RelationshipContext = 'messaged_us' | 'follower' | 'engaged' | 'adjacent' | 'cold'

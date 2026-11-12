@@ -1,0 +1,12 @@
+{
+  "9001": [
+    { "id": "910001", "text": "We just open-sourced our robot policy checkpoints and eval harness.", "createdAt": "2026-11-05T14:00:00Z" },
+    { "id": "910002", "text": "Looking for two ML engineers who like real hardware.", "createdAt": "2026-11-09T09:30:00Z" }
+  ],
+  "9002": [
+    { "id": "920001", "text": "Shipped v0.4 of our agent tracing tool today.", "createdAt": "2026-11-10T16:20:00Z" }
+  ],
+  "9003": [
+    { "id": "930001", "text": "New preprint: dexterous manipulation from 50 demonstrations.", "createdAt": "2026-10-28T11:00:00Z" }
+  ]
+}

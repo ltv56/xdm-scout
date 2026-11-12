@@ -5,6 +5,8 @@ import { AuthController } from './auth/auth.controller'
 import { AuthService, X_AUTH_CONFIG, XAuthConfig } from './auth/auth.service'
 import { dataSourceOptions } from './data-source'
 import { HealthController } from './health.controller'
+import { CampaignsController } from './discovery/campaigns.controller'
+import { DiscoveryService } from './discovery/discovery.service'
 import { JobsService } from './jobs/jobs.service'
 import { DraftsController } from './sending/drafts.controller'
 import { SendingService } from './sending/sending.service'
@@ -18,9 +20,10 @@ import { X_CLIENT, XClient } from './x/x-client'
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env', '../../.env'] }),
     TypeOrmModule.forRoot({ ...dataSourceOptions, migrations: [] }),
   ],
-  controllers: [HealthController, DraftsController, AuthController],
+  controllers: [HealthController, DraftsController, AuthController, CampaignsController],
   providers: [
     JobsService,
+    DiscoveryService,
     SendingService,
     Worker,
     AuthService,
@@ -38,7 +41,7 @@ import { X_CLIENT, XClient } from './x/x-client'
       provide: X_CLIENT,
       inject: [ConfigService, AuthService],
       useFactory: (config: ConfigService, auth: AuthService): XClient =>
-        config.get('X_MODE', 'fake') === 'live' ? new LiveXClient(() => auth.session()) : new FakeXClient(),
+        config.get('X_MODE', 'fake') === 'live' ? new LiveXClient(() => auth.session()) : FakeXClient.fromFixtures(),
     },
   ],
 })
