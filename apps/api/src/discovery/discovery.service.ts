@@ -3,7 +3,7 @@ import { DataSource, In, Not } from 'typeorm'
 import { Contact, DoNotContact, RelationshipContext, SendAttempt, XUser } from '../sending/entities'
 import { X_CLIENT, XClient, XProfile } from '../x/x-client'
 import { ApiUsage, Campaign, Prospect, XPost } from './entities'
-import { MAX_FOLLOWING_PER_SEED, MAX_POSTS_PER_USER, PRICES } from './pricing'
+import { MAX_FOLLOWING_PER_SEED, MAX_POSTS_PER_USER, MAX_SEARCH_RESULTS, MIN_SEARCH_RESULTS, PRICES } from './pricing'
 
 const FRESH_MS = 7 * 86_400_000
 
@@ -36,11 +36,17 @@ export class DiscoveryService {
     }
     const maxPosts = needPosts * MAX_POSTS_PER_USER
     const maxFollowing = seeds.length * MAX_FOLLOWING_PER_SEED
+    const maxSearch = (campaign.queries ?? []).length * MAX_SEARCH_RESULTS
     return {
       profiles,
       maxPosts,
       maxFollowing,
-      estimatedMicros: profiles * PRICES.profile + maxPosts * PRICES.post + maxFollowing * PRICES.following,
+      maxSearch,
+      estimatedMicros:
+        profiles * PRICES.profile +
+        maxPosts * PRICES.post +
+        maxFollowing * PRICES.following +
+        maxSearch * (PRICES.post + PRICES.profile),
     }
   }
 
@@ -74,22 +80,8 @@ export class DiscoveryService {
       if (user) candidates.set(user.xUserId, { handle, user, relationship: 'cold', seedCount: 0 })
     }
     const seedIds = new Set(seeds.flatMap((s) => known.get(s)?.xUserId ?? []))
-    for (const seedId of seedIds) {
-      const max = Math.min(MAX_FOLLOWING_PER_SEED, Math.floor((campaign.budgetMicros - (await this.spent(campaignId))) / PRICES.following))
-      if (max <= 0) {
-        stoppedByBudget = true
-        continue
-      }
-      const following = await this.x.getFollowing(seedId, max)
-      await this.recordUsage(campaignId, 'following', following.length, PRICES.following)
-      for (const p of following) {
-        if (seedIds.has(p.id)) continue
-        const user = await this.ds.getRepository(XUser).save(toUser(p, now))
-        const seen = candidates.get(p.id)
-        if (seen) Object.assign(seen, { relationship: 'adjacent', seedCount: seen.seedCount + 1 })
-        else candidates.set(p.id, { handle: p.handle, user, relationship: 'adjacent', seedCount: 1 })
-      }
-    }
+    if (!(await this.addFromSeeds(campaign, seedIds, candidates, now))) stoppedByBudget = true
+    if (!(await this.addFromSearch(campaign, seedIds, candidates, now))) stoppedByBudget = true
 
     const kept: Candidate[] = []
     for (const c of candidates.values()) {
@@ -129,6 +121,53 @@ export class DiscoveryService {
     }
 
     return { added: added.length, skipped, spentMicros: (await this.spent(campaignId)) - startSpent, stoppedByBudget, postsPending }
+  }
+
+  // Returns false when the budget stopped a read.
+  private async addFromSeeds(campaign: Campaign, seedIds: Set<string>, candidates: Map<string, Candidate>, now: Date) {
+    let complete = true
+    for (const seedId of seedIds) {
+      const max = Math.min(MAX_FOLLOWING_PER_SEED, Math.floor((await this.remaining(campaign)) / PRICES.following))
+      if (max <= 0) {
+        complete = false
+        continue
+      }
+      const following = await this.x.getFollowing(seedId, max)
+      await this.recordUsage(campaign.id, 'following', following.length, PRICES.following)
+      for (const p of following) {
+        if (seedIds.has(p.id)) continue
+        const user = await this.ds.getRepository(XUser).save(toUser(p, now))
+        const seen = candidates.get(p.id)
+        if (seen) Object.assign(seen, { relationship: 'adjacent', seedCount: seen.seedCount + 1 })
+        else candidates.set(p.id, { handle: p.handle, user, relationship: 'adjacent', seedCount: 1 })
+      }
+    }
+    return complete
+  }
+
+  // Search bills each post and each author returned.
+  private async addFromSearch(campaign: Campaign, seedIds: Set<string>, candidates: Map<string, Candidate>, now: Date) {
+    let complete = true
+    for (const query of campaign.queries ?? []) {
+      const max = Math.min(MAX_SEARCH_RESULTS, Math.floor((await this.remaining(campaign)) / (PRICES.post + PRICES.profile)))
+      if (max < MIN_SEARCH_RESULTS) {
+        complete = false
+        continue
+      }
+      const { posts, authors } = await this.x.searchRecent(query, max)
+      await this.recordUsage(campaign.id, 'search', posts.length, PRICES.post)
+      await this.recordUsage(campaign.id, 'profile', authors.length, PRICES.profile)
+      for (const p of authors) {
+        if (seedIds.has(p.id) || candidates.has(p.id)) continue
+        const user = await this.ds.getRepository(XUser).save(toUser(p, now))
+        candidates.set(p.id, { handle: p.handle, user, relationship: 'cold', seedCount: 0 })
+      }
+    }
+    return complete
+  }
+
+  private async remaining(campaign: Campaign) {
+    return campaign.budgetMicros - (await this.spent(campaign.id))
   }
 
   private async knownByHandle() {

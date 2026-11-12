@@ -43,6 +43,8 @@ export interface XClient {
   lookupUsers(handles: string[]): Promise<XProfile[]>
   getRecentPosts(userId: string, max: number): Promise<XPost[]>
   getFollowing(userId: string, max: number): Promise<XProfile[]>
+  // Recent posts (7 days) matching the query, with their authors.
+  searchRecent(query: string, max: number): Promise<{ posts: XPost[]; authors: XProfile[] }>
 }
 
 export const X_CLIENT = Symbol('X_CLIENT')

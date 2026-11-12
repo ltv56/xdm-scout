@@ -57,6 +57,12 @@ const postsResponse = z.object({
   data: z.array(z.object({ id: z.string(), text: z.string(), created_at: z.string() })).optional(),
 })
 
+const searchResponse = z.object({
+  data: z.array(z.object({ id: z.string(), text: z.string(), created_at: z.string(), author_id: z.string() })).optional(),
+  includes: z.object({ users: usersResponse.shape.data }).optional(),
+  meta: z.object({ next_token: z.string().optional() }).optional(),
+})
+
 export class LiveXClient implements XClient {
   constructor(
     private readonly getSession: () => Promise<{ userId: string; token: string }>,
@@ -108,6 +114,27 @@ export class LiveXClient implements XClient {
       out.push(...(parsed.data ?? []).map(toProfile))
     }
     return out
+  }
+
+  async searchRecent(query: string, max: number) {
+    const posts: XPost[] = []
+    const authors = new Map<string, XProfile>()
+    let token: string | undefined
+    do {
+      const params = new URLSearchParams({
+        query,
+        max_results: String(Math.min(100, Math.max(10, max - posts.length))),
+        'tweet.fields': 'created_at,author_id',
+        expansions: 'author_id',
+        'user.fields': USER_FIELDS,
+        ...(token && { next_token: token }),
+      })
+      const parsed = searchResponse.parse(await (await this.call(`/2/tweets/search/recent?${params}`, 'GET')).json())
+      for (const p of parsed.data ?? []) posts.push({ id: p.id, userId: p.author_id, text: p.text, createdAt: new Date(p.created_at) })
+      for (const u of parsed.includes?.users ?? []) authors.set(u.id, toProfile(u))
+      token = parsed.meta?.next_token
+    } while (token && posts.length < max)
+    return { posts: posts.slice(0, max), authors: [...authors.values()] }
   }
 
   // X bills each user returned, so stop paging once max is reached.

@@ -42,6 +42,7 @@ describe('discovery budget', () => {
       profiles: 3,
       maxPosts: 45,
       maxFollowing: 0,
+      maxSearch: 0,
       estimatedMicros: 3 * PRICES.profile + 45 * PRICES.post,
     })
 

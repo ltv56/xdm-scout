@@ -25,6 +25,8 @@ export class FakeXClient implements XClient {
   private readonly profiles = new Map<string, XProfile>()
   private readonly posts = new Map<string, XPost[]>()
   private readonly following = new Map<string, string[]>()
+  private readonly searches = new Map<string, string[]>()
+  readonly searchCalls: { query: string; max: number }[] = []
   private counter = 0
 
   async sendDm(recipientId: string, text: string): Promise<SendDmResult> {
@@ -68,6 +70,8 @@ export class FakeXClient implements XClient {
     }
     const following = JSON.parse(readFileSync(join(dir, 'following.json'), 'utf8')) as Record<string, string[]>
     for (const [userId, handles] of Object.entries(following)) client.addFollowing(userId, handles)
+    const searches = JSON.parse(readFileSync(join(dir, 'search.json'), 'utf8')) as Record<string, string[]>
+    for (const [query, handles] of Object.entries(searches)) client.addSearch(query, handles)
     return client
   }
 
@@ -94,6 +98,18 @@ export class FakeXClient implements XClient {
   async getFollowing(userId: string, max: number): Promise<XProfile[]> {
     const handles = (this.following.get(userId) ?? []).slice(0, max)
     return handles.flatMap((h) => this.profiles.get(h.toLowerCase()) ?? [])
+  }
+
+  // One fake post per handle in the list, in that order.
+  addSearch(query: string, authorHandles: string[]) {
+    this.searches.set(query, authorHandles)
+  }
+
+  async searchRecent(query: string, max: number) {
+    this.searchCalls.push({ query, max })
+    const authors = (this.searches.get(query) ?? []).slice(0, max).flatMap((h) => this.profiles.get(h.toLowerCase()) ?? [])
+    const posts = authors.map((a, i) => ({ id: `s-${i}-${a.id}`, userId: a.id, text: `${query} by ${a.handle}`, createdAt: new Date() }))
+    return { posts, authors: [...new Map(authors.map((a) => [a.id, a])).values()] }
   }
 
   async getRecentPosts(userId: string, max: number): Promise<XPost[]> {
