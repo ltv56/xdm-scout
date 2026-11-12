@@ -91,6 +91,29 @@ docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT campaignId, kind, co
 - A body without `name`, `keywords` or `handles`: `400`.
 - Profiles fetched less than 7 days ago are not fetched again.
 
+## 7. Fit scoring (fake mode)
+
+Needs a campaign with prospects from section 6 and the worker running. Without `LLM_API_KEY` and `LLM_MODEL` in `.env` a canned stand-in answers: every Fit is `possible`, the opening is the latest stored post.
+
+```
+curl -XPOST localhost:3001/api/campaigns/1/score
+curl localhost:3001/api/campaigns/1/prospects
+```
+
+- `score` returns `{"queued":N}` for prospects without a score; a second call returns `{"queued":0}`.
+- Each prospect has `fit`, `role`, `areas`, `opening` (`type`, `summary`, `freshness` fresh/stale/expired, `url`) and `claims` with `status` verified/inferred and evidence links.
+- Order: Fit (strong, possible, weak, not a fit, not scored), then newest opening.
+- The web app shows the same list: `npm run dev -w apps/web`, campaign number in the box.
+
+With a real model, set in `.env`:
+
+```
+LLM_PROVIDER=openai        # or anthropic
+LLM_BASE_URL=https://...   # OpenAI-compatible base URL, ignored for anthropic
+LLM_MODEL=...
+LLM_API_KEY=...
+```
+
 ## Automated tests
 
 ```

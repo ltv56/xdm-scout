@@ -1,10 +1,10 @@
 import { BadRequestException, Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common'
-import { DataSource } from 'typeorm'
+import { DataSource, IsNull } from 'typeorm'
 import { z } from 'zod'
 import { JobsService } from '../jobs/jobs.service'
-import { XUser } from '../sending/entities'
 import { DiscoveryService } from './discovery.service'
 import { Campaign, Prospect } from './entities'
+import { ProspectsService } from './prospects.service'
 
 const createBody = z.object({
   name: z.string().min(1).max(128),
@@ -19,6 +19,7 @@ export class CampaignsController {
     private readonly ds: DataSource,
     private readonly jobs: JobsService,
     private readonly discovery: DiscoveryService,
+    private readonly prospects: ProspectsService,
   ) {}
 
   @Post()
@@ -41,15 +42,15 @@ export class CampaignsController {
     return { queued: true }
   }
 
+  @Post(':id/score')
+  async score(@Param('id', ParseIntPipe) id: number) {
+    const pending = await this.ds.getRepository(Prospect).findBy({ campaignId: id, scoredAt: IsNull() })
+    for (const p of pending) await this.jobs.enqueue('score', { prospectId: p.id }, new Date())
+    return { queued: pending.length }
+  }
+
   @Get(':id/prospects')
-  async prospects(@Param('id', ParseIntPipe) id: number) {
-    const rows = await this.ds
-      .createQueryBuilder(Prospect, 'p')
-      .innerJoin(XUser, 'u', 'u.xUserId = p.xUserId')
-      .where('p.campaignId = :id', { id })
-      .select(['p.id AS id', 'p.relationship AS relationship', 'p.status AS status', 'u.handle AS handle', 'u.name AS name', 'u.bio AS bio', 'u.followers AS followers'])
-      .orderBy('p.id')
-      .getRawMany()
-    return rows
+  list(@Param('id', ParseIntPipe) id: number) {
+    return this.prospects.list(id)
   }
 }
