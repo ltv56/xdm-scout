@@ -33,7 +33,12 @@ export class SendingService {
     private readonly jobs: JobsService,
   ) {}
 
-  async approveAndSend(draftId: number, seenHash: string): Promise<{ attemptId: number }> {
+  // The reviewer sends it in X themselves: same send right and approval rules, but nothing goes through the API.
+  approveManual(draftId: number, seenHash: string) {
+    return this.approveAndSend(draftId, seenHash, 'manual')
+  }
+
+  async approveAndSend(draftId: number, seenHash: string, route: 'api' | 'manual' = 'api'): Promise<{ attemptId: number }> {
     return this.ds.transaction(async (em) => {
       const draft = await em.findOne(Draft, { where: { id: draftId } })
       if (!draft) throw new NotFoundException('Draft not found')
@@ -43,12 +48,12 @@ export class SendingService {
       if (await em.exists(DoNotContact, { where: { xUserId: contact.xUserId } })) {
         throw new ForbiddenException('Recipient is on Do not contact')
       }
-      const blocked = apiSendBlock(contact, new Date())
+      const blocked = route === 'api' ? apiSendBlock(contact, new Date()) : null
       if (blocked) throw new ForbiddenException(blocked)
       const contentHash = hashContent(draft.content)
       if (contentHash !== seenHash) throw new ConflictException('Draft changed after you reviewed it')
 
-      const attempt = await em.save(SendAttempt, { contactId: contact.id, draftId, contentHash })
+      const attempt = await em.save(SendAttempt, { contactId: contact.id, draftId, contentHash, route, status: route === 'manual' ? 'manual_pending' : 'queued' })
       const claim = await em
         .createQueryBuilder()
         .update(Contact)
@@ -58,7 +63,7 @@ export class SendingService {
       if (claim.affected !== 1) throw new ConflictException('Already queued')
 
       await em.update(Draft, draftId, { status: 'approved', approvedHash: contentHash })
-      await this.jobs.enqueue('send', { attemptId: attempt.id }, new Date(), em)
+      if (route === 'api') await this.jobs.enqueue('send', { attemptId: attempt.id }, new Date(), em)
       return { attemptId: attempt.id }
     })
   }
