@@ -77,6 +77,10 @@ export class FakeXClient implements XClient {
     return client
   }
 
+  removeProfile(handle: string) {
+    this.profiles.delete(handle.toLowerCase())
+  }
+
   addProfile(p: Partial<XProfile> & Pick<XProfile, 'id' | 'handle'>) {
     this.profiles.set(p.handle.toLowerCase(), {
       name: p.handle,

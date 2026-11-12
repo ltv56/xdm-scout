@@ -27,6 +27,15 @@ export class JobsService {
     })
   }
 
+  hasOpen(type: string, key: string, value: number) {
+    return this.ds
+      .getRepository(Job)
+      .createQueryBuilder('j')
+      .where("j.type = :type AND j.status IN ('pending', 'running')", { type })
+      .andWhere(`JSON_EXTRACT(j.payload, :path) = :value`, { path: `$.${key}`, value })
+      .getExists()
+  }
+
   async retry(id: number, runAt: Date) {
     await this.ds.getRepository(Job).update(id, { status: 'pending', runAt })
   }

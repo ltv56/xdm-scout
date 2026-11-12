@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common'
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Post } from '@nestjs/common'
 import { DataSource, IsNull } from 'typeorm'
 import { z } from 'zod'
 import { JobsService } from '../jobs/jobs.service'
@@ -37,14 +37,23 @@ export class CampaignsController {
     return this.ds.getRepository(Campaign).save({ ...rest, ...(budgetUsd && { budgetMicros: Math.round(budgetUsd * 1_000_000) }) })
   }
 
+  @Get(':id')
+  get(@Param('id', ParseIntPipe) id: number) {
+    return this.campaign(id)
+  }
+
   @Get(':id/estimate')
   async estimate(@Param('id', ParseIntPipe) id: number) {
+    await this.campaign(id)
     return { ...(await this.discovery.estimate(id)), note: 'estimate at the prices in discovery/pricing.ts' }
   }
 
   @Post(':id/discover')
   async discover(@Param('id', ParseIntPipe) id: number) {
-    await this.ds.getRepository(Campaign).findOneByOrFail({ id })
+    await this.campaign(id)
+    if (await this.jobs.hasOpen('discover', 'campaignId', id)) {
+      return { queued: false, reason: 'Discovery is already running for this campaign' }
+    }
     await this.jobs.enqueue('discover', { campaignId: id }, new Date())
     return { queued: true }
   }
@@ -59,5 +68,11 @@ export class CampaignsController {
   @Get(':id/prospects')
   list(@Param('id', ParseIntPipe) id: number) {
     return this.prospects.list(id)
+  }
+
+  private async campaign(id: number) {
+    const campaign = await this.ds.getRepository(Campaign).findOneBy({ id })
+    if (!campaign) throw new NotFoundException('Campaign not found')
+    return campaign
   }
 }
