@@ -11,7 +11,7 @@ import {
   XUncertainError,
 } from './x-client'
 
-export type FakeSendOutcome = 'ok' | 'not-accepting' | 'rate-limit' | 'timeout-delivered' | 'timeout-undelivered'
+export type FakeSendOutcome = 'ok' | 'not-accepting' | 'rejected' | 'rate-limit' | 'timeout-delivered' | 'timeout-undelivered'
 
 export class FakeXClient implements XClient {
   nextSend: FakeSendOutcome = 'ok'
@@ -31,6 +31,8 @@ export class FakeXClient implements XClient {
     switch (this.nextSend) {
       case 'not-accepting':
         throw new XNotAcceptingDmError()
+      case 'rejected':
+        throw new Error('X returned 400: Bad Request')
       case 'rate-limit':
         throw new XRateLimitError(this.retryAt)
       case 'timeout-undelivered':

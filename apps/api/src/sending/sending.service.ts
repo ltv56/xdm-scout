@@ -2,7 +2,7 @@ import { ConflictException, ForbiddenException, Inject, Injectable, NotFoundExce
 import { createHash } from 'node:crypto'
 import { DataSource, EntityManager, LessThan } from 'typeorm'
 import { JobsService } from '../jobs/jobs.service'
-import { DmMessage, X_CLIENT, XClient, XNotAcceptingDmError, XRateLimitError, XUncertainError } from '../x/x-client'
+import { DmMessage, SendDmResult, X_CLIENT, XClient, XRateLimitError, XUncertainError } from '../x/x-client'
 import { Contact, DoNotContact, Draft, SendAttempt } from './entities'
 
 export const hashContent = (content: string) => createHash('sha256').update(content).digest('hex')
@@ -37,6 +37,7 @@ export class SendingService {
     return this.ds.transaction(async (em) => {
       const draft = await em.findOne(Draft, { where: { id: draftId } })
       if (!draft) throw new NotFoundException('Draft not found')
+      if (draft.status === 'skipped' || draft.status === 'superseded') throw new ConflictException('This draft is no longer in the queue')
       const contact = await em.findOneOrFail(Contact, { where: { id: draft.contactId } })
 
       if (await em.exists(DoNotContact, { where: { xUserId: contact.xUserId } })) {
@@ -72,6 +73,9 @@ export class SendingService {
     const draft = await this.ds.getRepository(Draft).findOneByOrFail({ id: attempt.draftId })
     const contact = await this.ds.getRepository(Contact).findOneByOrFail({ id: attempt.contactId })
 
+    if (hashContent(draft.content) !== attempt.contentHash) {
+      return this.release(attempt, contact.id, 'cancelled', 'Draft changed after approval; review it again')
+    }
     if (await this.ds.getRepository(DoNotContact).existsBy({ xUserId: contact.xUserId })) {
       return this.release(attempt, contact.id, 'cancelled', 'Recipient is on Do not contact')
     }
@@ -90,15 +94,11 @@ export class SendingService {
       return this.release(attempt, contact.id, 'failed', 'Someone already replied outside xdm-scout')
     }
 
+    let sent: SendDmResult
     try {
-      const sent = await this.x.sendDm(contact.xUserId, draft.content)
-      await this.ds
-        .getRepository(SendAttempt)
-        .update(attemptId, { status: 'sent', xConversationId: sent.conversationId, xEventId: sent.eventId })
+      sent = await this.x.sendDm(contact.xUserId, draft.content)
     } catch (err) {
-      if (err instanceof XNotAcceptingDmError) {
-        await this.release(attempt, contact.id, 'failed', err.message)
-      } else if (err instanceof XRateLimitError) {
+      if (err instanceof XRateLimitError) {
         await this.ds.transaction(async (em) => {
           await em.update(SendAttempt, attemptId, { status: 'queued', runAt: err.retryAt })
           await this.jobs.enqueue('send', { attemptId }, err.retryAt, em)
@@ -106,9 +106,15 @@ export class SendingService {
       } else if (err instanceof XUncertainError) {
         await this.markUnknown(attemptId, now)
       } else {
-        throw err
+        // Any other X error is a definite refusal: nothing was sent.
+        await this.release(attempt, contact.id, 'failed', err instanceof Error ? err.message : String(err))
       }
+      return
     }
+    // Outside the try: if saving fails after X accepted, the attempt stays `sending` and recovery reconciles it.
+    await this.ds
+      .getRepository(SendAttempt)
+      .update(attemptId, { status: 'sent', xConversationId: sent.conversationId, xEventId: sent.eventId })
   }
 
   async recoverStale(now: Date): Promise<void> {
