@@ -42,6 +42,7 @@ export interface XClient {
   getConversation(recipientId: string, max?: number): Promise<DmMessage[]>
   lookupUsers(handles: string[]): Promise<XProfile[]>
   getRecentPosts(userId: string, max: number): Promise<XPost[]>
+  getFollowing(userId: string, max: number): Promise<XProfile[]>
 }
 
 export const X_CLIENT = Symbol('X_CLIENT')

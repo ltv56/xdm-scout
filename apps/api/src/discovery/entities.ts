@@ -15,6 +15,9 @@ export class Campaign {
   @Column({ type: 'json' })
   handles!: string[]
 
+  @Column({ type: 'json', nullable: true })
+  seeds!: string[] | null
+
   @Column({ type: 'int', default: 1_000_000 })
   budgetMicros!: number
 }
@@ -48,7 +51,7 @@ export class ApiUsage {
   campaignId!: number
 
   @Column({ type: 'varchar', length: 16 })
-  kind!: 'profile' | 'post'
+  kind!: 'profile' | 'post' | 'following'
 
   @Column({ type: 'int' })
   count!: number
@@ -79,6 +82,10 @@ export class Prospect {
 
   @Column({ type: 'varchar', length: 16, default: 'new' })
   status!: ProspectStatus
+
+  // How many campaign seeds follow this person; more seeds rank first.
+  @Column({ type: 'int', default: 0 })
+  seedCount!: number
 
   @Column({ type: 'varchar', length: 16, nullable: true })
   fit!: 'strong' | 'possible' | 'weak' | 'not_a_fit' | null

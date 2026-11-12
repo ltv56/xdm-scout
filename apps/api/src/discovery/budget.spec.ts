@@ -41,6 +41,7 @@ describe('discovery budget', () => {
     expect(await discovery.estimate(campaign.id, now)).toEqual({
       profiles: 3,
       maxPosts: 45,
+      maxFollowing: 0,
       estimatedMicros: 3 * PRICES.profile + 45 * PRICES.post,
     })
 

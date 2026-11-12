@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { DataSource, In, Not } from 'typeorm'
-import { Contact, DoNotContact, SendAttempt, XUser } from '../sending/entities'
+import { Contact, DoNotContact, RelationshipContext, SendAttempt, XUser } from '../sending/entities'
 import { X_CLIENT, XClient, XProfile } from '../x/x-client'
 import { ApiUsage, Campaign, Prospect, XPost } from './entities'
-import { MAX_POSTS_PER_USER, PRICES } from './pricing'
+import { MAX_FOLLOWING_PER_SEED, MAX_POSTS_PER_USER, PRICES } from './pricing'
 
 const FRESH_MS = 7 * 86_400_000
 
@@ -25,27 +25,36 @@ export class DiscoveryService {
 
   async estimate(campaignId: number, now = new Date()) {
     const campaign = await this.ds.getRepository(Campaign).findOneByOrFail({ id: campaignId })
-    const handles = uniqueHandles(campaign)
+    const handles = uniqueHandles(campaign.handles)
+    const seeds = uniqueHandles(campaign.seeds ?? [])
     const known = await this.knownByHandle()
-    const profiles = handles.filter((h) => isStale(known.get(h), now)).length
+    const profiles = unique([...handles, ...seeds]).filter((h) => isStale(known.get(h), now)).length
     let needPosts = 0
     for (const h of handles) {
       const user = known.get(h)
       if (!user || !(await this.hasPosts(user.xUserId))) needPosts += 1
     }
     const maxPosts = needPosts * MAX_POSTS_PER_USER
-    return { profiles, maxPosts, estimatedMicros: profiles * PRICES.profile + maxPosts * PRICES.post }
+    const maxFollowing = seeds.length * MAX_FOLLOWING_PER_SEED
+    return {
+      profiles,
+      maxPosts,
+      maxFollowing,
+      estimatedMicros: profiles * PRICES.profile + maxPosts * PRICES.post + maxFollowing * PRICES.following,
+    }
   }
 
   async run(campaignId: number, now = new Date()) {
     const campaign = await this.ds.getRepository(Campaign).findOneByOrFail({ id: campaignId })
-    const handles = uniqueHandles(campaign)
+    const handles = uniqueHandles(campaign.handles)
+    const seeds = uniqueHandles(campaign.seeds ?? [])
     const startSpent = await this.spent(campaignId)
     let stoppedByBudget = false
 
     const known = await this.knownByHandle()
-    const stale = handles.filter((h) => isStale(known.get(h), now))
+    const stale = unique([...handles, ...seeds]).filter((h) => isStale(known.get(h), now))
     const affordable = Math.max(0, Math.floor((campaign.budgetMicros - startSpent) / PRICES.profile))
+    const unaffordable = new Set(stale.slice(affordable))
     const toFetch = stale.slice(0, affordable)
     if (toFetch.length) {
       const profiles = await this.x.lookupUsers(toFetch)
@@ -54,28 +63,52 @@ export class DiscoveryService {
     }
 
     const skipped: { handle: string; reason: SkipReason }[] = []
-    const added: XUser[] = []
+    const candidates = new Map<string, Candidate>()
+    for (const handle of [...handles, ...seeds]) {
+      if (known.has(handle)) continue
+      skipped.push({ handle, reason: unaffordable.has(handle) ? 'budget' : 'not-found' })
+      if (unaffordable.has(handle)) stoppedByBudget = true
+    }
     for (const handle of handles) {
       const user = known.get(handle)
-      if (!user && stale.indexOf(handle) >= affordable) {
-        skipped.push({ handle, reason: 'budget' })
+      if (user) candidates.set(user.xUserId, { handle, user, relationship: 'cold', seedCount: 0 })
+    }
+    const seedIds = new Set(seeds.flatMap((s) => known.get(s)?.xUserId ?? []))
+    for (const seedId of seedIds) {
+      const max = Math.min(MAX_FOLLOWING_PER_SEED, Math.floor((campaign.budgetMicros - (await this.spent(campaignId))) / PRICES.following))
+      if (max <= 0) {
         stoppedByBudget = true
         continue
       }
-      const reason = user ? await this.skipReason(user, campaign.keywords) : 'not-found'
-      if (reason) skipped.push({ handle, reason })
-      else if (user) added.push(user)
+      const following = await this.x.getFollowing(seedId, max)
+      await this.recordUsage(campaignId, 'following', following.length, PRICES.following)
+      for (const p of following) {
+        if (seedIds.has(p.id)) continue
+        const user = await this.ds.getRepository(XUser).save(toUser(p, now))
+        const seen = candidates.get(p.id)
+        if (seen) Object.assign(seen, { relationship: 'adjacent', seedCount: seen.seedCount + 1 })
+        else candidates.set(p.id, { handle: p.handle, user, relationship: 'adjacent', seedCount: 1 })
+      }
     }
-    for (const user of added) {
+
+    const kept: Candidate[] = []
+    for (const c of candidates.values()) {
+      const reason = await this.skipReason(c.user, campaign.keywords)
+      if (reason) skipped.push({ handle: c.handle, reason })
+      else kept.push(c)
+    }
+    kept.sort((a, b) => b.seedCount - a.seedCount)
+    for (const c of kept) {
       await this.ds
         .getRepository(Prospect)
         .createQueryBuilder()
         .insert()
-        .values({ campaignId, xUserId: user.xUserId, relationship: 'cold' })
+        .values({ campaignId, xUserId: c.user.xUserId, relationship: c.relationship, seedCount: c.seedCount })
         .orIgnore()
         .updateEntity(false)
         .execute()
     }
+    const added = kept.map((c) => c.user)
 
     let postsPending = 0
     for (const user of added) {
@@ -117,7 +150,7 @@ export class DiscoveryService {
     return Number(row?.s ?? 0)
   }
 
-  private recordUsage(campaignId: number, kind: 'profile' | 'post', count: number, unit: number) {
+  private recordUsage(campaignId: number, kind: ApiUsage['kind'], count: number, unit: number) {
     return this.ds.getRepository(ApiUsage).save({ campaignId, kind, count, costMicros: count * unit })
   }
 
@@ -141,7 +174,11 @@ export class DiscoveryService {
   }
 }
 
-const uniqueHandles = (campaign: Campaign) => [...new Set(campaign.handles.map((h) => h.replace(/^@/, '').toLowerCase()))]
+type Candidate = { handle: string; user: XUser; relationship: RelationshipContext; seedCount: number }
+
+const unique = <T>(items: T[]) => [...new Set(items)]
+
+const uniqueHandles = (handles: string[]) => unique(handles.map((h) => h.replace(/^@/, '').toLowerCase()))
 
 const isStale = (user: XUser | undefined, now: Date) => !user?.fetchedAt || now.getTime() - user.fetchedAt.getTime() > FRESH_MS
 

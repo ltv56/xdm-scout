@@ -4,5 +4,7 @@
   { "id": "9003", "handle": "lena_embodied", "name": "Lena Ito", "bio": "Researcher, embodied AI and manipulation.", "followers": 15000 },
   { "id": "9004", "handle": "robotco", "name": "RoboCo", "bio": "Robotics platform for warehouses.", "followers": 52000, "orgType": "business" },
   { "id": "9005", "handle": "private_dev", "name": "P. Dev", "bio": "AI engineer.", "followers": 90, "isProtected": true },
-  { "id": "9006", "handle": "pasta_daily", "name": "Pasta Daily", "bio": "Recipes every day.", "followers": 310 }
+  { "id": "9006", "handle": "pasta_daily", "name": "Pasta Daily", "bio": "Recipes every day.", "followers": 310 },
+  { "id": "9101", "handle": "sea_robotics_lab", "name": "SEA Robotics Lab", "bio": "University robotics lab in Singapore.", "followers": 2100 },
+  { "id": "9102", "handle": "ai_builders_sg", "name": "AI Builders SG", "bio": "Community of AI builders in Southeast Asia.", "followers": 6400 }
 ]
