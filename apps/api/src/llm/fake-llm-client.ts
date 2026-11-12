@@ -1,7 +1,7 @@
 import { LlmClient, LlmRequest } from './llm-client'
 
 type EvidenceItem = { id: string; text: string; date: string | null }
-type DraftInput = { opening: { evidence_id: string; summary: string | null; text: string }; profile: { intro: string; offers: string[]; signer: string } }
+type DraftInput = { opening: { evidence_id: string; summary: string | null; text: string }; profile: { intro: string; programs: { name: string; description: string }[]; signer: string } }
 
 function cannedDraft({ opening, profile }: DraftInput) {
   const topic = (opening.summary || opening.text).replace(/\s+/g, ' ').replace(/[.!?\s]+$/, '').slice(0, 120)
@@ -9,7 +9,7 @@ function cannedDraft({ opening, profile }: DraftInput) {
     sentences: [
       { text: `Saw your post: ${topic}.`, source: { type: 'evidence', evidence_id: opening.evidence_id } },
       { text: profile.intro, source: { type: 'sender_profile', field: 'intro' } },
-      { text: `Would it help if we offered: ${profile.offers[0]?.toLowerCase() ?? 'an intro'}?`, source: { type: 'sender_profile', field: 'offers' } },
+      { text: `Would it help if we offered: ${(profile.programs[0]?.name ?? 'an intro').toLowerCase()}?`, source: { type: 'sender_profile', field: 'program' } },
       { text: 'No worries if not.', source: { type: 'opt_out' } },
     ],
   }

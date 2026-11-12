@@ -2,7 +2,7 @@ import { CheckResult, SenderProfile } from './contract'
 
 export type StoredSource =
   | { type: 'evidence'; evidenceId: string }
-  | { type: 'sender_profile'; field: 'intro' | 'offers' | 'signer' }
+  | { type: 'sender_profile'; field: 'intro' | 'program' | 'signer' }
   | { type: 'opt_out' }
 
 export type StoredSentence = { text: string; source: StoredSource | null }
@@ -47,8 +47,8 @@ export function runChecks(input: CheckInput): CheckResult[] {
     )
   }
 
-  const offerWords = new Set(profile.offers.flatMap(longWords))
-  const badOffer = sentences.find((s) => s.source?.type === 'sender_profile' && s.source.field === 'offers' && !longWords(s.text).some((w) => offerWords.has(w)))
+  const offerWords = new Set(profile.programs.flatMap((p) => longWords(`${p.name} ${p.description}`)))
+  const badOffer = sentences.find((s) => s.source?.type === 'sender_profile' && s.source.field === 'program' && !longWords(s.text).some((w) => offerWords.has(w)))
   if (badOffer) out.push({ code: 'offer_not_in_profile', level: 'block', message: 'This offer is not in your sender profile.', needsConfirm: false })
 
   if (!sentences.some((s) => s.source?.type === 'opt_out') && !OPT_OUT.test(text)) {

@@ -17,7 +17,7 @@ import { ReviewService } from './review.service'
 
 let ds: DataSource
 const now = new Date('2026-11-12T03:00:00Z')
-const profile = { intro: 'GenAI Fund backs early AI founders in Southeast Asia.', offers: ['Intro to investors'], signer: 'Vinh', sampleMessages: [] }
+const profile = { intro: 'GenAI Fund backs early AI founders in Southeast Asia.', programs: [{ id: 1, name: 'Intro to investors', description: 'Intro to investors', link: 'https://genaifund.ai/', deadline: null }], signer: 'Vinh', sampleMessages: [] }
 
 async function seedPerson(handle: string, campaignId = 1) {
   const xUserId = `u-${handle}`
@@ -70,7 +70,7 @@ describe('review queue', () => {
     expect(item.prospect).toMatchObject({ handle: 'mai', name: 'MAI', fit: 'strong', relationship: 'cold', daysSinceActive: 4 })
     expect(item.evidence).toEqual([{ id: 1, kind: 'post', text: 'Shipped v2 of our eval harness', url: 'https://x.com/mai/status/1', postedAt: '2026-11-08T00:00:00.000Z' }])
     expect(item.sentences[0].source).toEqual({ type: 'evidence', evidenceId: 1 })
-    expect(item.prospect.criteria).toEqual([{ text: 'Based in SEA', status: 'unknown' }])
+    expect(item.prospect.criteria).toEqual([{ text: 'Based in SEA', status: 'unknown', evidence: [], fact: null }])
   })
 
   it('computes the numbers from posts we read, dated and with their sample size', async () => {

@@ -18,7 +18,7 @@ afterAll(async () => {
   if (ds?.isInitialized) await ds.destroy()
 })
 
-const profile = { intro: 'We back AI founders in SEA.', offers: ['Intro to investors'], signer: 'Vinh', sampleMessages: [] }
+const profile = { intro: 'We back AI founders in SEA.', programs: [{ id: 1, name: 'Intro to investors', description: 'Intro to investors', link: 'https://genaifund.ai/', deadline: null }], signer: 'Vinh', sampleMessages: [] }
 
 describe('sender profile', () => {
   it('is empty before the first save', async () => {
@@ -36,7 +36,7 @@ describe('sender profile', () => {
     expect(await controller.get()).toMatchObject({ signer: 'Mai' })
   })
 
-  it('rejects a profile without offers', async () => {
-    await expect(controller.save({ ...profile, offers: [] })).rejects.toBeInstanceOf(BadRequestException)
+  it('rejects a profile without programs', async () => {
+    await expect(controller.save({ ...profile, programs: [] })).rejects.toBeInstanceOf(BadRequestException)
   })
 })
