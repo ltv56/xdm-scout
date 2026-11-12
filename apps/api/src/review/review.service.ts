@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { DataSource, In } from 'typeorm'
 import { Prospect, XPost } from '../discovery/entities'
 import { Evidence } from '../fit/entities'
@@ -30,12 +30,30 @@ export class ReviewService {
   constructor(private readonly ds: DataSource) {}
 
   async queue(campaignId: number, now = new Date()): Promise<ReviewQueue> {
+    const { prospects, live } = await this.liveDrafts(campaignId)
+    return { campaignId, sessionSize: SESSION_SIZE, items: await this.render(live.slice(0, SESSION_SIZE), live, prospects, now) }
+  }
+
+  // One draft as the queue shows it, whatever its status; similar-draft checks still look at the live ones.
+  async one(draftId: number, now = new Date()): Promise<ReviewItem> {
+    const draft = await this.ds.getRepository(Draft).findOneBy({ id: draftId })
+    const prospect = draft?.prospectId ? await this.ds.getRepository(Prospect).findOneBy({ id: draft.prospectId }) : null
+    if (!draft || !prospect) throw new NotFoundException('Draft not found')
+    const { prospects, live } = await this.liveDrafts(prospect.campaignId)
+    return (await this.render([draft], live.some((d) => d.id === draft.id) ? live : [...live, draft], prospects, now))[0]
+  }
+
+  private async liveDrafts(campaignId: number) {
     const prospects = await this.ds.getRepository(Prospect).findBy({ campaignId })
-    const drafts = prospects.length
-      ? await this.ds.getRepository(Draft).find({ where: { prospectId: In(prospects.map((p) => p.id)), status: In(['pending', 'approved']) }, order: { id: 'ASC' }, take: SESSION_SIZE })
+    const live = prospects.length
+      ? await this.ds.getRepository(Draft).find({ where: { prospectId: In(prospects.map((p) => p.id)), status: In(['pending', 'approved']) }, order: { id: 'ASC' } })
       : []
-    const ctx = await this.context(prospects, drafts)
-    return { campaignId, sessionSize: SESSION_SIZE, items: drafts.map((d) => this.item(d, ctx, now)) }
+    return { prospects, live }
+  }
+
+  private async render(shown: Draft[], live: Draft[], prospects: Prospect[], now: Date) {
+    const ctx = await this.context(prospects, shown, live)
+    return shown.map((d) => this.item(d, ctx, now))
   }
 
   private item(draft: Draft, ctx: Context, now: Date): ReviewItem {
@@ -60,7 +78,7 @@ export class ReviewService {
     return {
       draftId: draft.id,
       contentHash: hashContent(draft.content),
-      status: draft.status === 'approved' ? 'approved' : 'pending',
+      status: draft.status,
       sendPath: draft.sendPath,
       kind: draft.kind,
       editedByReviewer: draft.editedByReviewer,
@@ -107,7 +125,7 @@ export class ReviewService {
     return out
   }
 
-  private async context(prospects: Prospect[], drafts: Draft[]): Promise<Context> {
+  private async context(prospects: Prospect[], drafts: Draft[], live: Draft[]): Promise<Context> {
     const xUserIds = prospects.map((p) => p.xUserId)
     const evidenceIds = [...prospects.map((p) => p.openingEvidenceId), ...drafts.flatMap((d) => (d.sentences ?? []).map((s) => (s.source?.type === 'evidence' ? s.source.evidenceId : null)))].filter((x): x is string => !!x)
     const row = await this.ds.getRepository(Setting).findOneBy({ key: 'sender_profile' })
@@ -123,7 +141,7 @@ export class ReviewService {
       contacts: new Map((drafts.length ? await this.ds.getRepository(Contact).findBy({ id: In(drafts.map((d) => d.contactId)) }) : []).map((c) => [c.id, c])),
       evidence: new Map((evidenceIds.length ? await this.ds.getRepository(Evidence).findBy({ id: In(evidenceIds) }) : []).map((e) => [e.id, e])),
       posts: postsBy,
-      texts: new Map(drafts.map((d) => [d.id, (d.sentences ?? []).map((s) => s.text).join(' ') || d.content])),
+      texts: new Map(live.map((d) => [d.id, (d.sentences ?? []).map((s) => s.text).join(' ') || d.content])),
     }
   }
 }
