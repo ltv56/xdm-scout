@@ -23,7 +23,7 @@ let x: FakeXClient
 let sending: SendingService
 let actions: ReviewActionsService
 const now = new Date('2026-11-12T03:00:00Z')
-const profile = { intro: 'GenAI Fund backs early AI founders in Southeast Asia.', offers: ['Intro to investors'], signer: 'Vinh', sampleMessages: [] }
+const profile = { intro: 'GenAI Fund backs early AI founders in Southeast Asia.', programs: [{ id: 1, name: 'Intro to investors', description: 'Intro to investors', link: 'https://genaifund.ai/', deadline: null }], signer: 'Vinh', sampleMessages: [] }
 
 async function seedDraft(handle = 'mai') {
   const xUserId = `u-${handle}`

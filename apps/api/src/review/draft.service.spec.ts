@@ -14,7 +14,7 @@ import { DraftService } from './draft.service'
 let ds: DataSource
 const now = new Date('2026-11-12T03:00:00Z')
 
-const profile = { intro: 'GenAI Fund backs early AI founders in Southeast Asia.', offers: ['Intro to investors'], signer: 'Vinh', sampleMessages: [] }
+const profile = { intro: 'GenAI Fund backs early AI founders in Southeast Asia.', programs: [{ id: 1, name: 'Intro to investors', description: 'Intro to investors', link: 'https://genaifund.ai/', deadline: null }], signer: 'Vinh', sampleMessages: [] }
 
 async function seed(opts: { fit?: Prospect['fit']; opening?: boolean; handle?: string } = {}) {
   const handle = opts.handle ?? 'mai'

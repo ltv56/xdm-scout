@@ -90,11 +90,16 @@ export class ReviewService {
         fit: prospect.fit === 'strong' || prospect.fit === 'possible' || prospect.fit === 'weak' ? prospect.fit : 'no_basis',
         relationship: prospect.relationship,
         permissionNote: permissionNote(contact, now),
+        history: null,
+        bio: user?.bio ?? null,
+        mainLanguage: null,
         daysSinceActive: posts.length ? Math.floor((now.getTime() - Math.max(...posts.map((p) => p.postedAt.getTime()))) / DAY) : null,
         snapshot: snapshot(prospect, user, posts, now),
-        criteria: (prospect.criteria ?? []).map((c) => ({ text: c.text, status: c.status })),
+        criteria: (prospect.criteria ?? []).map((c) => ({ text: c.text, status: c.status, evidence: [], fact: null })),
       },
       text: draft.content,
+      language: 'en',
+      englishText: null,
       sentences: sentences.map((s) => ({
         text: s.text,
         source: !s.source ? null : s.source.type === 'evidence' ? (idOf.has(s.source.evidenceId) ? { type: 'evidence', evidenceId: idOf.get(s.source.evidenceId)! } : null) : s.source,
@@ -135,7 +140,7 @@ export class ReviewService {
     const postsBy = new Map<string, XPost[]>()
     for (const p of posts) postsBy.set(p.xUserId, [...(postsBy.get(p.xUserId) ?? []), p])
     return {
-      profile: parsed.success ? parsed.data : { intro: '', offers: [], signer: '', sampleMessages: [] },
+      profile: parsed.success ? parsed.data : { intro: '', programs: [], signer: '', sampleMessages: [] },
       sender: (await this.ds.getRepository(SenderAccount).find({ order: { id: 'ASC' }, take: 1 }))[0] ?? null,
       prospects: new Map(prospects.map((p) => [p.id, p])),
       users: new Map((xUserIds.length ? await this.ds.getRepository(XUser).findBy({ xUserId: In(xUserIds) }) : []).map((u) => [u.xUserId, u])),

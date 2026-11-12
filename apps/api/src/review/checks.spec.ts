@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { runChecks, StoredSentence } from './checks'
 
-const profile = { intro: 'GenAI Fund backs early AI founders in Southeast Asia.', offers: ['Intro to investors', 'Invite to our founder dinner'], signer: 'Vinh', sampleMessages: [] }
+const profile = { intro: 'GenAI Fund backs early AI founders in Southeast Asia.', programs: [{ id: 1, name: 'Intro to investors', description: 'Intro to investors', link: 'https://genaifund.ai/', deadline: null }, { id: 2, name: 'Invite to our founder dinner', description: 'Invite to our founder dinner', link: 'https://genaifund.ai/', deadline: null }], signer: 'Vinh', sampleMessages: [] }
 const now = new Date('2026-11-12T00:00:00Z')
 
 const clean: StoredSentence[] = [
   { text: 'Saw you shipped v2 of your eval harness.', source: { type: 'evidence', evidenceId: 'post:1' } },
   { text: 'I help run a small fund backing AI founders in Southeast Asia.', source: { type: 'sender_profile', field: 'intro' } },
-  { text: 'Would an intro to investors be useful?', source: { type: 'sender_profile', field: 'offers' } },
+  { text: 'Would an intro to investors be useful?', source: { type: 'sender_profile', field: 'program' } },
   { text: 'No worries if not.', source: { type: 'opt_out' } },
 ]
 
@@ -33,7 +33,7 @@ describe('draft checks', () => {
   })
 
   it('blocks an offer that is not in the sender profile', () => {
-    const r = run(clean.map((s) => (s.source?.type === 'sender_profile' && s.source.field === 'offers' ? { ...s, text: 'Want a seed cheque of 500k?' } : s)))
+    const r = run(clean.map((s) => (s.source?.type === 'sender_profile' && s.source.field === 'program' ? { ...s, text: 'Want a seed cheque of 500k?' } : s)))
     expect(codes(r)).toContain('block:offer_not_in_profile')
   })
 
