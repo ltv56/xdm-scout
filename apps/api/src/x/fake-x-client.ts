@@ -15,7 +15,8 @@ export class FakeXClient implements XClient {
   sendCalls = 0
   conversationError: Error | null = null
   readonly sent: { recipientId: string; text: string }[] = []
-  private readonly messages: (DmMessage & { recipientId: string })[] = []
+  readonly conversationReads: { recipientId: string; max?: number }[] = []
+  private readonly messages: (DmMessage & { recipientId: string; seq: number })[] = []
   private counter = 0
 
   async sendDm(recipientId: string, text: string): Promise<SendDmResult> {
@@ -38,13 +39,17 @@ export class FakeXClient implements XClient {
     }
   }
 
-  async getConversation(recipientId: string): Promise<DmMessage[]> {
+  async getConversation(recipientId: string, max?: number): Promise<DmMessage[]> {
+    this.conversationReads.push({ recipientId, max })
     if (this.conversationError) throw this.conversationError
-    return this.messages.filter((m) => m.recipientId === recipientId)
+    const newestFirst = this.messages
+      .filter((m) => m.recipientId === recipientId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime() || b.seq - a.seq)
+    return newestFirst.slice(0, max ?? newestFirst.length)
   }
 
-  priorMessage(recipientId: string, text: string) {
-    this.record(recipientId, text, false, new Date(0))
+  priorMessage(recipientId: string, text: string, createdAt = new Date(0)) {
+    return this.record(recipientId, text, false, createdAt)
   }
 
   deliverSilently(recipientId: string, text: string, createdAt: Date) {
@@ -53,7 +58,7 @@ export class FakeXClient implements XClient {
 
   private record(recipientId: string, text: string, fromMe: boolean, createdAt: Date) {
     this.counter += 1
-    const message = { recipientId, conversationId: `${'1'.repeat(19)}-${recipientId.padStart(19, '0')}`, eventId: `e-${this.counter}`, text, fromMe, createdAt }
+    const message = { recipientId, conversationId: `${'1'.repeat(19)}-${recipientId.padStart(19, '0')}`, eventId: `e-${this.counter}`, text, fromMe, createdAt, seq: this.counter }
     this.messages.push(message)
     return message
   }

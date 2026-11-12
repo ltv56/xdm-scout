@@ -31,7 +31,9 @@ afterAll(async () => {
   if (ds?.isInitialized) await ds.destroy()
 })
 
+// The API path only exists for people who messaged first, so the default conversation holds their DM.
 async function approve(content = 'Hi there') {
+  x.priorMessage('200', 'Hi, can we talk about your fund?', new Date(Date.now() - 86_400_000))
   const draft = await seedDraft(ds, '200', content)
   const { attemptId } = await service.approveAndSend(draft.id, sha(content))
   return { draft, attemptId }
@@ -125,15 +127,36 @@ describe('send outcomes', () => {
     expect((await attemptOf(attemptId)).status).toBe('sending')
   })
 
-  it('test 7: existing conversation -> no send, attempt stopped, right released', async () => {
+  it('test 7a: their DM is the latest message -> the reply is sent', async () => {
     const { attemptId } = await approve()
-    x.priorMessage('200', 'hey from before')
+    await worker.tick(new Date())
+    expect((await attemptOf(attemptId)).status).toBe('sent')
+    expect(x.sendCalls).toBe(1)
+  })
+
+  it('test 7b: the operator already replied by hand outside the app -> no send, right released', async () => {
+    const { attemptId } = await approve()
+    x.deliverSilently('200', 'Thanks, I will take a look', new Date(Date.now() - 60_000))
     await worker.tick(new Date())
     const attempt = await attemptOf(attemptId)
     expect(attempt.status).toBe('failed')
-    expect(attempt.error).toContain('existing conversation')
+    expect(attempt.error).toContain('replied outside xdm-scout')
     expect(x.sendCalls).toBe(0)
     expect((await contactOf(attempt.contactId)).activeAttemptId).toBeNull()
+  })
+
+  it('test 7c: an earlier manual reply followed by a new DM from them does not block', async () => {
+    x.deliverSilently('200', 'Thanks, I will take a look', new Date(Date.now() - 3_600_000))
+    const { attemptId } = await approve()
+    x.priorMessage('200', 'Any update on the intro?', new Date(Date.now() - 60_000))
+    await worker.tick(new Date())
+    expect((await attemptOf(attemptId)).status).toBe('sent')
+  })
+
+  it('the pre-send check reads only the latest event', async () => {
+    await approve()
+    await worker.tick(new Date())
+    expect(x.conversationReads).toEqual([{ recipientId: '200', max: 1 }])
   })
 
   it('test 9: rate limit -> back to queued with a retry time, still holds the right', async () => {
@@ -161,6 +184,17 @@ describe('send outcomes', () => {
     const attempt = await attemptOf(attemptId)
     expect(attempt.status).toBe('failed')
     expect(attempt.error).toContain('token revoked')
+    expect(x.sendCalls).toBe(0)
+    expect((await contactOf(attempt.contactId)).activeAttemptId).toBeNull()
+  })
+
+  it('an invitation that expires between approve and send stops the send', async () => {
+    const { attemptId } = await approve()
+    const later = new Date(Date.now() + 31 * 86_400_000)
+    await worker.tick(later)
+    const attempt = await attemptOf(attemptId)
+    expect(attempt.status).toBe('cancelled')
+    expect(attempt.error).toContain('older than 30 days')
     expect(x.sendCalls).toBe(0)
     expect((await contactOf(attempt.contactId)).activeAttemptId).toBeNull()
   })

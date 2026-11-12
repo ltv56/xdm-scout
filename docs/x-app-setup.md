@@ -20,9 +20,9 @@ Requirements for connecting an X account.
 
 ## Scopes
 
-`dm.read dm.write tweet.read users.read follows.read like.read offline.access`
+`dm.read dm.write tweet.read users.read follows.read offline.access`
 
-A missing scope returns `403 Forbidden` without naming the scope. `follows.read` is required for followers and following, `like.read` for liking users.
+A missing scope returns `403 Forbidden` without naming the scope. `follows.read` is required for followers and following.
 
 ## Credits
 

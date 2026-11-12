@@ -32,11 +32,12 @@ export class LiveXClient implements XClient {
     return { conversationId: parsed.data.dm_conversation_id, eventId: parsed.data.dm_event_id }
   }
 
-  async getConversation(recipientId: string): Promise<DmMessage[]> {
+  async getConversation(recipientId: string, max?: number): Promise<DmMessage[]> {
     const { userId } = await this.getSession()
     const query = new URLSearchParams({
       'dm_event.fields': 'created_at,sender_id,text,dm_conversation_id,event_type',
       event_types: 'MessageCreate',
+      ...(max !== undefined && { max_results: String(Math.min(100, Math.max(1, max))) }),
     })
     const res = await this.call(`/2/dm_conversations/with/${recipientId}/dm_events?${query}`, 'GET')
     const parsed = eventsResponse.parse(await res.json())
@@ -49,6 +50,7 @@ export class LiveXClient implements XClient {
         fromMe: e.sender_id === userId,
         createdAt: new Date(e.created_at),
       }))
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
   }
 
   private async call(path: string, method: 'GET' | 'POST', body?: unknown): Promise<Response> {

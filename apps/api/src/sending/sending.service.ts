@@ -2,7 +2,7 @@ import { ConflictException, ForbiddenException, Inject, Injectable, NotFoundExce
 import { createHash } from 'node:crypto'
 import { DataSource, EntityManager, LessThan } from 'typeorm'
 import { JobsService } from '../jobs/jobs.service'
-import { X_CLIENT, XClient, XNotAcceptingDmError, XRateLimitError, XUncertainError } from '../x/x-client'
+import { DmMessage, X_CLIENT, XClient, XNotAcceptingDmError, XRateLimitError, XUncertainError } from '../x/x-client'
 import { Contact, DoNotContact, Draft, SendAttempt } from './entities'
 
 export const hashContent = (content: string) => createHash('sha256').update(content).digest('hex')
@@ -10,6 +10,20 @@ export const hashContent = (content: string) => createHash('sha256').update(cont
 const STALE_SENDING_MS = 60_000
 const RECONCILE_EVERY_MS = 60_000
 const RECONCILE_GIVE_UP_MS = 10 * 60_000
+const INVITATION_MAX_AGE_MS = 30 * 86_400_000
+// Reconciliation runs minutes after the attempt, so our message is among the newest few events.
+const RECONCILE_READ_MAX = 10
+
+// X allows automated DMs only to people who asked for them, so the API path needs a confirmed, recent invitation.
+export function apiSendBlock(contact: Contact, now: Date): string | null {
+  if (contact.recipientPermission !== 'requested_dm' || !contact.invitationEventId || !contact.invitationAt) {
+    return "API sending is limited to people who messaged you first. This person hasn't."
+  }
+  if (now.getTime() - contact.invitationAt.getTime() > INVITATION_MAX_AGE_MS) {
+    return 'Their invitation is older than 30 days. Send it yourself in X.'
+  }
+  return null
+}
 
 @Injectable()
 export class SendingService {
@@ -28,6 +42,8 @@ export class SendingService {
       if (await em.exists(DoNotContact, { where: { xUserId: contact.xUserId } })) {
         throw new ForbiddenException('Recipient is on Do not contact')
       }
+      const blocked = apiSendBlock(contact, new Date())
+      if (blocked) throw new ForbiddenException(blocked)
       const contentHash = hashContent(draft.content)
       if (contentHash !== seenHash) throw new ConflictException('Draft changed after you reviewed it')
 
@@ -59,16 +75,19 @@ export class SendingService {
     if (await this.ds.getRepository(DoNotContact).existsBy({ xUserId: contact.xUserId })) {
       return this.release(attempt, contact.id, 'cancelled', 'Recipient is on Do not contact')
     }
-    let existing: number
+    const blocked = apiSendBlock(contact, now)
+    if (blocked) return this.release(attempt, contact.id, 'cancelled', blocked)
+    let latest: DmMessage | undefined
     try {
-      existing = (await this.x.getConversation(contact.xUserId)).length
+      latest = (await this.x.getConversation(contact.xUserId, 1))[0]
     } catch (err) {
       // Nothing was sent yet, so failing here is safe and frees the send right.
       const reason = err instanceof Error ? err.message : String(err)
       return this.release(attempt, contact.id, 'failed', `Could not check the conversation: ${reason}`)
     }
-    if (existing > 0) {
-      return this.release(attempt, contact.id, 'failed', 'An existing conversation was found, not sending')
+    // A latest message from us that the app did not send means someone already answered by hand.
+    if (latest?.fromMe && !(await this.ds.getRepository(SendAttempt).existsBy({ contactId: contact.id, xEventId: latest.eventId }))) {
+      return this.release(attempt, contact.id, 'failed', 'Someone already replied outside xdm-scout')
     }
 
     try {
@@ -104,7 +123,7 @@ export class SendingService {
     const draft = await this.ds.getRepository(Draft).findOneByOrFail({ id: attempt.draftId })
     const contact = await this.ds.getRepository(Contact).findOneByOrFail({ id: attempt.contactId })
 
-    const messages = await this.x.getConversation(contact.xUserId)
+    const messages = await this.x.getConversation(contact.xUserId, RECONCILE_READ_MAX)
     // X timestamps have whole-second precision, so compare from the start of the attempt's second.
     const since = Math.floor(attempt.createdAt.getTime() / 1000) * 1000
     const found = messages.find((m) => m.fromMe && m.text === draft.content && m.createdAt.getTime() >= since)

@@ -55,6 +55,13 @@ export class Contact {
   @Column({ type: 'varchar', length: 16, default: 'none' })
   recipientPermission!: RecipientPermission
 
+  // The inbound DM the operator confirmed as an invitation; API sending depends on it.
+  @Column({ type: 'varchar', length: 32, nullable: true })
+  invitationEventId!: string | null
+
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  invitationAt!: Date | null
+
   @Column({ type: 'int', nullable: true })
   activeAttemptId!: number | null
 }
