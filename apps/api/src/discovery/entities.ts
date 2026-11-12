@@ -79,4 +79,28 @@ export class Prospect {
 
   @Column({ type: 'varchar', length: 16, default: 'new' })
   status!: ProspectStatus
+
+  @Column({ type: 'varchar', length: 16, nullable: true })
+  fit!: 'strong' | 'possible' | 'weak' | 'not_a_fit' | null
+
+  @Column({ type: 'varchar', length: 16, nullable: true })
+  role!: string | null
+
+  @Column({ type: 'json', nullable: true })
+  areas!: string[] | null
+
+  @Column({ type: 'varchar', length: 16, nullable: true })
+  openingType!: string | null
+
+  @Column({ type: 'varchar', length: 512, nullable: true })
+  openingSummary!: string | null
+
+  @Column({ type: 'varchar', length: 48, nullable: true })
+  openingEvidenceId!: string | null
+
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  openingDate!: Date | null
+
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  scoredAt!: Date | null
 }
