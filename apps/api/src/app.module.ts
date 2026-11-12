@@ -16,6 +16,8 @@ import { LLM_CLIENT, LlmClient } from './llm/llm-client'
 import { RetentionService } from './retention/retention.service'
 import { CampaignDraftsController } from './review/campaign-drafts.controller'
 import { DraftService } from './review/draft.service'
+import { ReviewController } from './review/review.controller'
+import { ReviewService } from './review/review.service'
 import { ReviewStubController } from './review/review-stub.controller'
 import { SenderProfileController } from './review/sender-profile.controller'
 import { DraftsController } from './sending/drafts.controller'
@@ -33,7 +35,7 @@ import { X_CLIENT, XClient } from './x/x-client'
   // REVIEW_STUB=1 serves fixed review data (see review/contract.ts) instead of the real draft routes.
   controllers: [
     HealthController,
-    ...(process.env.REVIEW_STUB === '1' ? [ReviewStubController] : [DraftsController, SenderProfileController, CampaignDraftsController]),
+    ...(process.env.REVIEW_STUB === '1' ? [ReviewStubController] : [DraftsController, SenderProfileController, CampaignDraftsController, ReviewController]),
     AuthController,
     CampaignsController,
   ],
@@ -56,6 +58,7 @@ import { X_CLIENT, XClient } from './x/x-client'
     },
     FitService,
     DraftService,
+    ReviewService,
     RetentionService,
     {
       provide: LLM_CLIENT,
