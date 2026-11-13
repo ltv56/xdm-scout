@@ -5,7 +5,7 @@ import { AlertTriangle, CheckCircle, MinusCircle, XCircle, XLogo } from '../icon
 import { chip, tone } from '../ui'
 import Frame from './Actions'
 import { ModelChecks, PersonFacts } from './PersonFacts'
-import { activeLabel, evidenceIdOf, RELATIONSHIP_LABEL, shortDate, sourceLine, type Verdict } from './labels'
+import { activeLabel, evidenceIdOf, LANGUAGE_NAME, RELATIONSHIP_LABEL, shortDate, sourceLine, type Verdict } from './labels'
 
 // The draft-level check says some post is old; only the old ones get the chip.
 const isOld = (postedAt: string | null) => postedAt !== null && Date.now() - Date.parse(postedAt) > 30 * 86_400_000
@@ -101,7 +101,7 @@ function Draft({ item, shownSentence, setHoverSentence, pinnedSentence, onPick, 
   ).gaps
   return (
     <>
-      <p className={`max-w-[58ch] whitespace-pre-line ${textSize(item.text.length)}`}>
+      <p lang={item.language} className={`max-w-[58ch] whitespace-pre-line ${textSize(item.text.length)}`}>
         {item.sentences.map((s, i) => {
           const linked = activeEvidence !== null && evidenceIdOf(s) === activeEvidence
           return (
@@ -208,6 +208,7 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
               <p className="mb-2 flex items-center gap-2 text-sm font-semibold">
                 <XLogo className="size-4" />
                 {item.kind === 'reply' ? 'Reply to' : 'Direct message to'} @{p.handle}
+                {item.language !== 'en' && <span className="font-normal text-muted">· in {LANGUAGE_NAME[item.language]}</span>}
                 {(item.status === 'pending' || item.status === 'approved') && <span className="font-normal text-muted">· not sent yet</span>}
               </p>
               {!api.editing && (
@@ -215,6 +216,14 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
                   <div ref={card} className="max-h-[min(42vh,360px)] max-w-[62ch] scroll-thin overflow-y-auto rounded-2xl border border-rule bg-paper px-6 py-4">
                     <Draft item={item} shownSentence={shownSentence} setHoverSentence={setHoverSentence} pinnedSentence={pinnedSentence} onPick={pickSentence} activeEvidence={activeEvidence} />
                   </div>
+                  {item.englishText !== null && (
+                    <div className="mt-3 max-w-[62ch] rounded-2xl bg-rail px-6 py-4">
+                      <p className="text-xs font-semibold text-muted">{item.editedByReviewer ? 'English version of the draft before your edit' : 'English version, for you to read. It is not what gets sent.'}</p>
+                      <p lang="en" className="mt-1 whitespace-pre-line text-sm leading-snug">
+                        {item.englishText}
+                      </p>
+                    </div>
+                  )}
                   <div className="mt-3 max-w-[62ch] text-sm">
                     <p>
                       <span className="font-semibold">Weakest point.</span> {item.weakestPoint}

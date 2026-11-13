@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Decision, ReviewItem } from '../../../api/src/review/contract'
 import { CheckCircle, ChevronDown, QuestionCircle, XCircle } from '../icons'
-import { activeLabel, shortDate } from './labels'
+import { activeLabel, LANGUAGE_NAME, shortDate } from './labels'
 
 type Prospect = ReviewItem['prospect']
 
@@ -120,6 +120,7 @@ export function PersonFacts({ prospect }: { prospect: Prospect }) {
         <Fact label="Kind of work" value={CONTRIBUTION[s.contribution]} />
         <Fact label="Followed by our seeds" value={String(s.fundTies)} />
         <Fact label="Last active" value={activeLabel(prospect.daysSinceActive).replace('Active ', '')} />
+        {prospect.mainLanguage && <Fact label="Writes mostly in" value={LANGUAGE_NAME[prospect.mainLanguage]} />}
       </dl>
       {prospect.bio && (
         <div className="mt-5">

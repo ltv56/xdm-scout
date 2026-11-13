@@ -1,12 +1,14 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
-import { postJson } from './api'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useRef, useState } from 'react'
+import type { CampaignLane, SenderProfile } from '../../api/src/review/contract'
+import { getJson, postJson, putJson } from './api'
 import { btnPrimary, btnSecondary, field as baseField } from './ui'
 
 const field = `${baseField} mt-1`
 
 const lines = (text: string) => text.split('\n').map((l) => l.trim()).filter(Boolean)
 const handles = (text: string) => lines(text).map((l) => l.replace(/^@/, ''))
+const isPostLink = (s: string) => /^https:\/\/(x|twitter)\.com\/[A-Za-z0-9_]{1,15}\/status\/\d{10,20}([/?#].*)?$/.test(s.trim())
 
 interface Props {
   first: boolean
@@ -23,13 +25,27 @@ export default function NewCampaign({ first, onCreated, onCancel }: Props) {
   const [queries, setQueries] = useState('')
   const [criteria, setCriteria] = useState('')
   const [budget, setBudget] = useState('')
+  const [programId, setProgramId] = useState<number | null>(null)
+  const [callUrl, setCallUrl] = useState('')
+  const [callKeyword, setCallKeyword] = useState('')
   const [missing, setMissing] = useState<string | null>(null)
+  // If the campaign was made but its program and call post failed to save, a second try saves those again instead of making another campaign.
+  const made = useRef<number | null>(null)
+
+  const profile = useQuery<SenderProfile>({ queryKey: ['sender-profile'], queryFn: () => getJson('/sender-profile'), retry: false })
+  const programs = profile.data?.programs ?? []
+  const chosen = programId ?? programs[0]?.id ?? null
+
   const create = useMutation({
-    mutationFn: (body: unknown) => postJson<{ id: number }>('/campaigns', body),
-    onSuccess: async (made) => {
+    mutationFn: async (v: { campaign: unknown; lane: { programId: number | null; callPostUrl: string | null; callKeyword: string | null } }) => {
+      if (made.current === null) made.current = (await postJson<{ id: number }>('/campaigns', v.campaign)).id
       await qc.invalidateQueries({ queryKey: ['campaigns'] })
-      onCreated(made.id)
+      await putJson<CampaignLane>(`/campaign-lane/${made.current}`, v.lane).catch((e: Error) => {
+        throw new Error(`The campaign was created, but its program and call post were not saved: ${e.message}`)
+      })
+      return made.current
     },
+    onSuccess: (id) => onCreated(id),
   })
 
   const submit = () => {
@@ -42,18 +58,27 @@ export default function NewCampaign({ first, onCreated, onCancel }: Props) {
           ? 'Add at least one handle, seed account or search query.'
           : budgetUsd !== undefined && !(budgetUsd > 0 && budgetUsd <= 100)
             ? 'Budget must be above 0 and at most 100 USD.'
-            : null
+            : programs.length > 0 && chosen === null
+              ? 'Pick the program this campaign offers.'
+              : !!callUrl.trim() !== !!callKeyword.trim()
+                ? 'Give both the call post and the keyword, or neither.'
+                : callUrl.trim() && !isPostLink(callUrl)
+                  ? 'The call post must be the link of a post on X, like https://x.com/yourfund/status/123…'
+                  : null
     setMissing(gap)
     create.reset()
     if (gap) return
     create.mutate({
-      name: name.trim(),
-      keywords: lines(keywords),
-      handles: handles(handleText),
-      seeds: handles(seeds),
-      queries: lines(queries),
-      criteria: lines(criteria),
-      ...(budgetUsd !== undefined && { budgetUsd }),
+      campaign: {
+        name: name.trim(),
+        keywords: lines(keywords),
+        handles: handles(handleText),
+        seeds: handles(seeds),
+        queries: lines(queries),
+        criteria: lines(criteria),
+        ...(budgetUsd !== undefined && { budgetUsd }),
+      },
+      lane: { programId: chosen, callPostUrl: callUrl.trim() || null, callKeyword: callKeyword.trim() || null },
     })
   }
 
@@ -124,6 +149,41 @@ export default function NewCampaign({ first, onCreated, onCancel }: Props) {
           className={field}
         />
         <p className="mt-1 text-xs text-muted">One per line, up to 5. Each is checked against the person's posts and shown on their Fit card. Write each one so that met is good: “Pre-Series A, no $100M+ fund yet”, not “Has not raised a big round”.</p>
+      </details>
+
+      <div>
+        <label htmlFor="program" className="text-sm font-medium">
+          Program to offer
+        </label>
+        {programs.length > 0 ? (
+          <select id="program" value={chosen ?? ''} onChange={(e) => setProgramId(Number(e.target.value))} className={field}>
+            {programs.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+                {p.deadline ? `, applications close ${new Date(p.deadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}` : ''}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <p className="mt-1 text-sm text-muted">{profile.isLoading ? 'Loading…' : 'Add a program in Account first. Drafts can only offer a program from your sender profile.'}</p>
+        )}
+        <p className="mt-1 text-xs text-muted">Every draft in this campaign offers this program, with its link and deadline.</p>
+      </div>
+
+      <details>
+        <summary className="cursor-pointer text-sm font-medium">Call post (optional)</summary>
+        <p className="mt-2 text-xs text-muted">
+          Post it on X yourself, for example “Building agents in SEA? DM us ‘build’ for an Agentic AI Build Week invite.” xdm-scout does not post. People who DM you after it are added to this campaign, and you can reply to them from here.
+        </p>
+        <label htmlFor="call-url" className="mt-3 block text-sm text-muted">
+          Link of the post
+        </label>
+        <input id="call-url" type="url" inputMode="url" value={callUrl} onChange={(e) => setCallUrl(e.target.value)} className={field} />
+        <label htmlFor="call-keyword" className="mt-3 block text-sm text-muted">
+          Keyword people DM
+        </label>
+        <input id="call-keyword" value={callKeyword} maxLength={40} onChange={(e) => setCallKeyword(e.target.value)} className={`${field} max-w-60`} />
+        <p className="mt-1 text-xs text-muted">We read when the post went up from its link, so only DMs sent after it count.</p>
       </details>
 
       <div>

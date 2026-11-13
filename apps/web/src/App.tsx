@@ -1,12 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import type { CampaignSummary, ReviewQueue as Queue } from '../../api/src/review/contract'
+import type { CampaignSummary, ReviewQueue as Queue, SenderProfile as Profile } from '../../api/src/review/contract'
 import { getJson } from './api'
+import Account from './Account'
+import CampaignPicker from './CampaignPicker'
+import { User as UserIcon } from './icons'
 import NewCampaign from './NewCampaign'
 import Overview from './Overview'
-import Prospects from './Prospects'
+import Prospects, { type Filter as CandidateFilter } from './Prospects'
 import ReviewQueue from './review/ReviewQueue'
-import { btnSecondary } from './ui'
 
 interface Health {
   status: string
@@ -16,12 +18,14 @@ interface Health {
 const TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'review', label: 'Review' },
-  { id: 'prospects', label: 'Prospects' },
+  { id: 'prospects', label: 'Candidates' },
+  { id: 'profile', label: 'Account' },
 ] as const
 type Tab = (typeof TABS)[number]['id']
 
 export default function App() {
   const [tab, setTab] = useState<Tab>('overview')
+  const [candidateFilter, setCandidateFilter] = useState<CandidateFilter>('all')
   const [campaignId, setCampaignId] = useState<number | null>(null)
   const [creating, setCreating] = useState(false)
   const health = useQuery<Health>({ queryKey: ['health'], queryFn: () => getJson('/health') })
@@ -36,6 +40,13 @@ export default function App() {
     retry: false,
   })
   const waiting = (queue.data?.items ?? []).filter((i) => i.status === 'pending').length
+  const profile = useQuery<Profile>({ queryKey: ['sender-profile'], queryFn: () => getJson('/sender-profile'), retry: false })
+  const initials = (profile.data?.signer ?? '')
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join('')
 
   const scroll = 'h-full overflow-y-auto px-12 py-10'
 
@@ -44,7 +55,7 @@ export default function App() {
       <header className="mx-auto flex w-full max-w-[1280px] shrink-0 flex-wrap items-center gap-x-10 gap-y-2 px-6 py-5 text-sm">
         <span className="text-base font-bold tracking-tight text-ink">xdm-scout</span>
         <nav aria-label="Sections" className="flex flex-wrap gap-x-6">
-          {TABS.map((t) => (
+          {TABS.filter((t) => t.id !== 'profile').map((t) => (
             <button
               key={t.id}
               type="button"
@@ -61,36 +72,45 @@ export default function App() {
           ))}
         </nav>
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 lg:ml-auto">
-          {list.length > 0 && (
-            <label className="flex items-center gap-2 rounded-xl bg-raised px-3.5 py-2 shadow-soft">
-              <span className="text-muted">Campaign</span>
-              <select
-                aria-label="Campaign"
-                value={active ?? ''}
-                onChange={(e) => {
-                  setCampaignId(Number(e.target.value))
-                  setCreating(false)
-                }}
-                className="bg-transparent font-semibold"
-              >
-                {list.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
-          <button type="button" className={btnSecondary} onClick={() => setCreating(true)}>
-            New campaign
-          </button>
-          {(health.error || (health.data && health.data.status !== 'ok')) && <span className="text-xs font-medium text-block">API unreachable</span>}
+          <CampaignPicker
+            list={list}
+            active={active}
+            onSelect={(id) => {
+              setCampaignId(id)
+              setCreating(false)
+              if (tab === 'profile') setTab('overview')
+            }}
+            onNew={() => {
+              if (tab === 'profile') setTab('overview')
+              setCreating(true)
+            }}
+          />
+          <div className="flex items-center gap-4">
+            {(health.error || (health.data && health.data.status !== 'ok')) && <span className="text-xs font-medium text-block">API unreachable</span>}
+            <button
+              type="button"
+              aria-label="Account"
+              title="Account"
+              onClick={() => {
+                setTab('profile')
+                setCreating(false)
+              }}
+              aria-current={tab === 'profile' ? 'page' : undefined}
+              className={`flex size-9 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-ink transition-shadow hover:bg-accent-hover ${tab === 'profile' ? 'ring-2 ring-accent ring-offset-2 ring-offset-paper' : ''}`}
+            >
+              {initials || <UserIcon className="size-4" />}
+            </button>
+          </div>
         </div>
       </header>
 
       <main className="mx-auto w-full max-w-[1280px] px-6 pb-6 lg:min-h-0 lg:flex-1">
         <div className="overflow-hidden rounded-3xl bg-raised shadow-soft lg:h-full lg:min-h-[460px]">
-          {creating || active === null ? (
+          {tab === 'profile' ? (
+            <div className={scroll}>
+              <Account />
+            </div>
+          ) : creating || active === null ? (
             <div className={scroll}>
               <NewCampaign
                 first={active === null}
@@ -104,13 +124,17 @@ export default function App() {
             </div>
           ) : tab === 'overview' ? (
             <div className={scroll}>
-              <Overview campaignId={active} onReview={() => setTab('review')} onProspects={() => setTab('prospects')} />
+              <Overview campaignId={active} onReview={() => setTab('review')} onProspects={(f) => {
+                  setCandidateFilter(f)
+                  setTab('prospects')
+                }}
+              />
             </div>
           ) : tab === 'review' ? (
             <ReviewQueue campaignId={active} />
           ) : (
             <div className={scroll}>
-              <Prospects campaignId={active} />
+              <Prospects key={candidateFilter} campaignId={active} onReview={() => setTab('review')} initialFilter={candidateFilter} />
             </div>
           )}
         </div>

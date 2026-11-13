@@ -91,6 +91,8 @@ export const blockers = (checks: CheckResult[]) => checks.filter((c) => c.level 
 
 const PROFILE_FIELD = { intro: 'who you are', program: 'the program this campaign offers', signer: 'who signs' }
 
+export const LANGUAGE_NAME = { en: 'English', vi: 'Vietnamese', th: 'Thai', id: 'Indonesian' }
+
 export function sourceLine(sentence: DraftSentence, evidence: EvidenceItem[]) {
   const s = sentence.source
   if (!s) return 'No source. Nothing in their posts or your profile backs this sentence.'
