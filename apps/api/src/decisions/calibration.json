@@ -1,0 +1,166 @@
+{
+  "gpt-6-luna": {
+    "measuredOn": "2026-11-13",
+    "byCode": {
+      "own_account": {
+        "examples": 26,
+        "right": 26,
+        "low": 0.871,
+        "high": 1
+      },
+      "invitation": {
+        "examples": 46,
+        "right": 39,
+        "low": 0.718,
+        "high": 0.924
+      },
+      "no_sensitive": {
+        "examples": 107,
+        "right": 107,
+        "low": 0.965,
+        "high": 1
+      },
+      "no_familiarity": {
+        "examples": 116,
+        "right": 114,
+        "low": 0.939,
+        "high": 0.995
+      },
+      "one_person": {
+        "examples": 114,
+        "right": 114,
+        "low": 0.967,
+        "high": 1
+      },
+      "claim_backed": {
+        "examples": 65,
+        "right": 57,
+        "low": 0.775,
+        "high": 0.936
+      }
+    }
+  },
+  "gpt-5-nano": {
+    "measuredOn": "2026-11-13",
+    "byCode": {
+      "own_account": {
+        "examples": 17,
+        "right": 17,
+        "low": 0.816,
+        "high": 1
+      },
+      "invitation": {
+        "examples": 53,
+        "right": 40,
+        "low": 0.624,
+        "high": 0.851
+      },
+      "no_sensitive": {
+        "examples": 118,
+        "right": 115,
+        "low": 0.928,
+        "high": 0.991
+      },
+      "no_familiarity": {
+        "examples": 116,
+        "right": 116,
+        "low": 0.968,
+        "high": 1
+      },
+      "one_person": {
+        "examples": 133,
+        "right": 120,
+        "low": 0.84,
+        "high": 0.942
+      },
+      "claim_backed": {
+        "examples": 61,
+        "right": 43,
+        "low": 0.581,
+        "high": 0.804
+      }
+    }
+  },
+  "gemini-decision-1": {
+    "measuredOn": "2026-11-13",
+    "byCode": {
+      "own_account": {
+        "examples": 23,
+        "right": 23,
+        "low": 0.857,
+        "high": 1
+      },
+      "invitation": {
+        "examples": 36,
+        "right": 36,
+        "low": 0.904,
+        "high": 1
+      },
+      "no_sensitive": {
+        "examples": 121,
+        "right": 118,
+        "low": 0.93,
+        "high": 0.992
+      },
+      "no_familiarity": {
+        "examples": 104,
+        "right": 104,
+        "low": 0.964,
+        "high": 1
+      },
+      "one_person": {
+        "examples": 110,
+        "right": 110,
+        "low": 0.966,
+        "high": 1
+      },
+      "claim_backed": {
+        "examples": 71,
+        "right": 55,
+        "low": 0.665,
+        "high": 0.856
+      }
+    }
+  },
+  "deepseek-flash": {
+    "measuredOn": "2026-11-13",
+    "byCode": {
+      "own_account": {
+        "examples": 23,
+        "right": 23,
+        "low": 0.857,
+        "high": 1
+      },
+      "invitation": {
+        "examples": 40,
+        "right": 36,
+        "low": 0.769,
+        "high": 0.96
+      },
+      "no_sensitive": {
+        "examples": 122,
+        "right": 119,
+        "low": 0.93,
+        "high": 0.992
+      },
+      "no_familiarity": {
+        "examples": 114,
+        "right": 114,
+        "low": 0.967,
+        "high": 1
+      },
+      "one_person": {
+        "examples": 119,
+        "right": 119,
+        "low": 0.969,
+        "high": 1
+      },
+      "claim_backed": {
+        "examples": 28,
+        "right": 26,
+        "low": 0.774,
+        "high": 0.98
+      }
+    }
+  }
+}

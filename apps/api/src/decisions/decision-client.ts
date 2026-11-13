@@ -9,6 +9,8 @@ export interface DecisionAsk {
 export interface DecisionAnswer extends DecisionAsk {
   probability: number
   answeredBy: 'jev' | 'llm' | 'fixture'
+  // The model that answered; measurements are looked up by it. Fixture answers have none.
+  model?: string
 }
 
 export interface DecisionClient {

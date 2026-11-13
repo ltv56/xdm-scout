@@ -21,7 +21,7 @@ describe('GeminiDecisionClient', () => {
   it('posts the input and one yes/no question to gemini-decision-1 and marks the answer as a decision-model answer', async () => {
     const { calls, fetchFn } = fakeFetch(recorded)
     const [a] = await make(fetchFn).decide([ask])
-    expect(a).toEqual({ ...ask, probability: 0.99, answeredBy: 'jev' })
+    expect(a).toEqual({ ...ask, probability: 0.99, answeredBy: 'jev', model: 'gemini-decision-1' })
     expect(calls[0].url).toBe('https://generativelanguage.googleapis.com/v1beta/decisions')
     expect((calls[0].init.headers as Record<string, string>)['x-goog-api-key']).toBe('k')
     expect(JSON.parse(calls[0].init.body as string)).toEqual({

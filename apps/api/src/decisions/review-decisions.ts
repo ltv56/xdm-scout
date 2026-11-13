@@ -1,5 +1,6 @@
 import { Decision, ReviewItem } from '../review/contract'
 import { bandOf } from './bands'
+import { calibrationFor } from './calibration'
 import { DecisionAsk, DecisionClient } from './decision-client'
 import { QUESTIONS } from './questions'
 
@@ -33,7 +34,7 @@ export async function decisionsFor(client: DecisionClient, item: Input): Promise
     question: QUESTIONS[a.code].label,
     answeredBy: a.answeredBy,
     sentence: a.sentence,
-    calibration: null,
+    calibration: a.model ? calibrationFor(a.model, a.code) : null,
     probability: a.probability,
     input: a.input,
     band: bandOf(a.probability),

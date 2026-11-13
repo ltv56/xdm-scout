@@ -209,3 +209,16 @@ npm test -w apps/api
 ```
 
 Runs against MySQL on schema `xdm_test`.
+
+## Eval over the labelled fixtures
+
+Run from `apps/api` after `npx tsc -p tsconfig.build.json`. The model name goes through the same routing as `DECISION_MODEL` (`gemini-decision-1`, `gpt-6-luna`, any text model such as `gpt-5-nano` or `deepseek-flash`).
+
+```
+node scripts/eval.cjs --model <name> [--limit N]      # ask every labelled question, print Brier, precision and coverage
+node scripts/eval-import.cjs <name> <answers.json>... # store answers copied from a chat app as if they were a model run
+node scripts/eval-compare.cjs [--only a,b]            # all cached models side by side on the same questions
+node scripts/eval-ensemble.cjs <a> <b>                # two models alone, averaged, and with the "both agree" rule
+```
+
+`--limit` keeps that many items per question. `fixture` answers 0.5 for everything. Answers are cached in `.local/eval/<name>.json`, so a rerun asks only what is missing; a 429 is retried up to five times. Reports are written to `.local/eval/`.
