@@ -10,6 +10,7 @@ import { Contact, Draft, SenderAccount, XUser } from '../sending/entities'
 import { hashContent } from '../sending/sending.service'
 import { Setting } from '../setting.entity'
 import { createTestDataSource } from '../test/db'
+import { FixtureDecisionClient } from '../decisions/decision-client'
 import { reviewQueue } from './contract'
 import { DraftService } from './draft.service'
 import { ReviewController } from './review.controller'
@@ -81,7 +82,7 @@ describe('review queue', () => {
     expect(snapshot.postsPerWeek).toBeCloseTo(1, 0)
   })
 
-  it('gives hand-off drafts an Open in X link with the draft prefilled, and API drafts none', async () => {
+  it('gives every draft an Open in X link with the draft prefilled, API drafts too', async () => {
     await seedPerson('mai')
     await seedPerson('linh')
     await ds.getRepository(Contact).update({ xUserId: 'u-linh' }, { recipientPermission: 'requested_dm', invitationEventId: 'e1', invitationAt: new Date('2026-11-10T00:00:00Z') })
@@ -90,7 +91,38 @@ describe('review queue', () => {
     const mai = items.find((i) => i.prospect.handle === 'mai')!
     const linh = items.find((i) => i.prospect.handle === 'linh')!
     expect(mai.openInXUrl).toBe(`https://x.com/messages/compose?recipient_id=u-mai&text=${encodeURIComponent(mai.text)}`)
-    expect(linh.openInXUrl).toBeNull()
+    expect(linh.openInXUrl).toBe(`https://x.com/messages/compose?recipient_id=u-linh&text=${encodeURIComponent(linh.text)}`)
+  })
+
+  it('says what history we have with a person, from what we stored, and nothing when there is none', async () => {
+    await seedPerson('cold')
+    await seedPerson('linh')
+    await seedPerson('fan')
+    await seedPerson('liker')
+    await ds.getRepository(Contact).update({ xUserId: 'u-linh' }, { relationshipContext: 'messaged_us', recipientPermission: 'requested_dm', invitationEventId: 'e1', invitationAt: new Date('2026-11-10T00:00:00Z') })
+    await ds.getRepository(Contact).update({ xUserId: 'u-fan' }, { relationshipContext: 'follower' })
+    await ds.getRepository(Contact).update({ xUserId: 'u-liker' }, { relationshipContext: 'engaged' })
+    const by = Object.fromEntries((await service().queue(1, now)).items.map((i) => [i.prospect.handle, i.prospect.history]))
+    expect(by).toEqual({ cold: null, linh: 'Messaged you on 10 Nov', fan: 'Follows you', liker: 'Engaged with your posts' })
+  })
+
+  it('backs each met or not met criterion with the posts it cites, and gives a date fact only where the evidence has a date', async () => {
+    const p = await seedPerson('mai')
+    await ds.getRepository(Evidence).save({ id: 'bio:u-mai', xUserId: 'u-mai', kind: 'bio', url: 'https://x.com/mai', excerpt: 'Building in Hanoi', postedAt: null, fetchedAt: now })
+    await ds.getRepository(Prospect).update(p.id, {
+      criteria: [
+        { text: 'Shipped something in the last 90 days', status: 'met', evidenceIds: ['post:mai1'] },
+        { text: 'Based in Southeast Asia', status: 'met', evidenceIds: ['bio:u-mai'] },
+        { text: 'Raised a seed round', status: 'unknown', evidenceIds: [] },
+      ],
+    })
+    const [shipped, based, seed] = (await service().queue(1, now)).items[0].prospect.criteria
+    expect(shipped.evidence).toEqual([{ id: 1, kind: 'post', text: 'Shipped v2 of our eval harness', url: 'https://x.com/mai/status/1', postedAt: '2026-11-08T00:00:00.000Z' }])
+    expect(shipped.fact).toBe('Post of 8 Nov, 4 days ago')
+    expect(based.evidence).toMatchObject([{ kind: 'bio', text: 'Building in Hanoi' }])
+    expect(based.evidence[0].id).toBeGreaterThan(1)
+    expect(based.fact).toBeNull()
+    expect(seed).toMatchObject({ evidence: [], fact: null })
   })
 
   it('knows the main language of each person from the language X gave their posts', async () => {
@@ -107,6 +139,15 @@ describe('review queue', () => {
     expect(first).toMatchObject({ language: 'en', englishText: null })
     await ds.getRepository(Draft).update({ prospectId: mai.id }, { language: 'vi', englishText: 'Hi Mai!' })
     expect((await service().queue(1, now)).items[0]).toMatchObject({ language: 'vi', englishText: 'Hi Mai!' })
+  })
+
+  it('adds the model checks when a decision client is there, and none otherwise', async () => {
+    await seedPerson('mai')
+    expect((await service().queue(1, now)).items[0].decisions).toEqual([])
+    const withModel = reviewQueue.parse(await new ReviewService(ds, new FixtureDecisionClient(() => 0.9)).queue(1, now))
+    const codes = withModel.items[0].decisions.map((d) => d.code)
+    expect(codes).toEqual(expect.arrayContaining(['no_sensitive', 'no_familiarity', 'one_person', 'claim_backed', 'own_account']))
+    expect(withModel.items[0].decisions.every((d) => d.answeredBy === 'fixture' && d.band === 'high')).toBe(true)
   })
 
   it('shows pending and approved drafts of this campaign only, at most ten', async () => {

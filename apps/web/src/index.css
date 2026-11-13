@@ -1,1 +1,111 @@
 @import "tailwindcss";
+@import "./fonts/fonts.css";
+
+/* Light, Apple-like neutrals; the primary action is near-black. Colour is only for status (fit, ready, check, fix), as tinted fills with dark text. */
+:root {
+  --paper: #f5f5f7;
+  --raised: #ffffff;
+  --rail: #ececf0;
+  --ink: #1d1d1f;
+  --muted: #63636b;
+  --rule: #e3e3e8;
+  --accent: #1d1d1f;
+  --accent-ink: #ffffff;
+  --accent-hover: #424245;
+  --block: #c42318;
+  --block-bg: #ffe2df;
+  --warn: #1d1d1f;
+  --warn-bg: #fff2a8;
+  --ok: #087529;
+  --ok-bg: #d2f6dc;
+  --mark: #e8e8ed;
+  --fit-strong: #34c759;
+  --fit-possible: #ffcc00;
+  --fit-not: #ff3b30;
+  --shadow: 0 0 0 1px rgb(0 0 0 / 0.04), 0 2px 8px rgb(0 0 0 / 0.04), 0 12px 32px rgb(0 0 0 / 0.06);
+  --shadow-pop: 0 0 0 1px rgb(0 0 0 / 0.06), 0 12px 40px rgb(0 0 0 / 0.16);
+}
+
+@theme {
+  --font-sans: 'Be Vietnam Pro', 'Segoe UI', sans-serif;
+  --color-paper: var(--paper);
+  --color-raised: var(--raised);
+  --color-rail: var(--rail);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-hover: var(--accent-hover);
+  --color-block: var(--block);
+  --color-block-bg: var(--block-bg);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-ok: var(--ok);
+  --color-ok-bg: var(--ok-bg);
+  --color-mark: var(--mark);
+  --color-fit-strong: var(--fit-strong);
+  --color-fit-possible: var(--fit-possible);
+  --color-fit-not: var(--fit-not);
+}
+
+@utility shadow-soft {
+  box-shadow: var(--shadow);
+}
+
+@utility shadow-pop {
+  box-shadow: var(--shadow-pop);
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--mark);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+input,
+textarea,
+select {
+  caret-color: var(--accent);
+  accent-color: var(--accent);
+}
+
+* {
+  scrollbar-color: var(--rule) transparent;
+}
+
+@utility scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

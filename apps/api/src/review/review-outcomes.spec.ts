@@ -138,11 +138,23 @@ describe('manual outcome', () => {
     expect((await ds.getRepository(Draft).findOneByOrFail({ id: d.id })).status).toBe('pending')
   })
 
-  it('only applies to an approved hand-off draft', async () => {
+  it('only applies to an approved draft', async () => {
     const d = await seedDraft()
     await expect(actions.manual(d.id, 'sent', now)).rejects.toBeInstanceOf(ConflictException)
     await ds.getRepository(Draft).update(d.id, { sendPath: 'API_SEND' })
     await expect(actions.manual(d.id, 'sent', now)).rejects.toBeInstanceOf(ConflictException)
+  })
+
+  it('a draft the app could send can still be sent by hand once approved, on the same attempt', async () => {
+    const d = await seedDraft()
+    await ds.getRepository(Contact).update(d.contactId, { recipientPermission: 'requested_dm', invitationEventId: 'e1', invitationAt: new Date(Date.now() - 86_400_000) })
+    await ds.getRepository(Draft).update(d.id, { sendPath: 'API_SEND' })
+    await expect(actions.manual(d.id, 'sent', now)).rejects.toBeInstanceOf(ConflictException)
+    const { attemptId } = await actions.approve(d.id, body(d), new Date())
+    expect((await actions.manual(d.id, 'sent', now)).status).toBe('sent_manually')
+    expect(await ds.getRepository(SendAttempt).find()).toMatchObject([{ id: attemptId, route: 'manual', status: 'manual_unverified' }])
+    expect(await ds.getRepository(Job).countBy({ type: 'verify_manual' })).toBe(1)
+    expect(await ds.getRepository(Job).countBy({ type: 'send' })).toBe(0)
   })
 })
 
@@ -161,6 +173,7 @@ describe('routes', () => {
     await expect(controller.skip(1, { reason: 'bored' })).rejects.toBeInstanceOf(BadRequestException)
     await expect(controller.regenerate(1, { note: '' })).rejects.toBeInstanceOf(BadRequestException)
     await expect(controller.manual(1, { outcome: 'maybe' })).rejects.toBeInstanceOf(BadRequestException)
+    await expect(controller.send(1, { contentHash: 'short' })).rejects.toBeInstanceOf(BadRequestException)
     await expect(controller.language(1, { language: 'fr' })).rejects.toBeInstanceOf(BadRequestException)
   })
 })

@@ -11,6 +11,7 @@ import { Contact, DoNotContact, Draft, SenderAccount, XUser } from '../sending/e
 import { Setting } from '../setting.entity'
 import { createTestDataSource } from '../test/db'
 import { DraftService } from './draft.service'
+import { ReviewSignal } from './review-signal.entity'
 
 let ds: DataSource
 const now = new Date('2026-11-12T03:00:00Z')
@@ -195,16 +196,40 @@ describe('the program in the draft prompt', () => {
   })
 })
 
-describe('queueing drafts for a campaign', () => {
-  it('queues one job per strong or possible prospect with an opening, no live draft and not on the do-not-contact list', async () => {
+describe('writing drafts for a campaign', () => {
+  async function field() {
     const ok = await seed()
     await seed({ handle: 'weak', fit: 'weak' })
     await seed({ handle: 'noopen', opening: false })
     await seed({ handle: 'dnc' })
     await ds.getRepository(DoNotContact).save({ xUserId: 'u-dnc', reason: 'asked', source: 'manual' })
-    expect(await service().enqueueForCampaign(1)).toEqual({ queued: 1 })
+    return ok
+  }
+
+  it('counts only people who are ready: Strong or Possible, with an opening, no live draft, not on the do-not-contact list', async () => {
+    await field()
+    expect(await service().ready(1, now)).toHaveLength(1)
+  })
+
+  it('queues one job per chosen person and says what is left and who has no opening', async () => {
+    const ok = await field()
+    expect(await service().writeDrafts(1, 10, now)).toEqual({ drafted: 1, readyToDraft: 0, noOpening: 1 })
     const jobs = await ds.getRepository(Job).find()
     expect(jobs.map((j) => [j.type, j.payload])).toEqual([['draft', { prospectId: ok.id }]])
+  })
+
+  it('does not queue the same person twice', async () => {
+    await field()
+    await service().writeDrafts(1, 10, now)
+    expect(await service().writeDrafts(1, 10, now)).toEqual({ drafted: 0, readyToDraft: 0, noOpening: 1 })
+    expect(await ds.getRepository(Job).count()).toBe(1)
+  })
+
+  it('stops at the limit and leaves the rest ready', async () => {
+    await seed({ handle: 'a' })
+    await seed({ handle: 'b' })
+    await seed({ handle: 'c' })
+    expect(await service().writeDrafts(1, 2, now)).toEqual({ drafted: 2, readyToDraft: 1, noOpening: 0 })
   })
 })
 
@@ -264,3 +289,44 @@ describe('drafting again in the language of the recipient', () => {
     expect((await ds.getRepository(Draft).findOneByOrFail({ id })).content).toBe(before.content)
   })
 })
+describe('drafting one person on request', () => {
+  it('drafts any Fit but Not a fit, and marks the person shortlisted', async () => {
+    const p = await seed({ fit: 'weak' })
+    const id = await service().draftOne(1, p.id, now)
+    expect((await ds.getRepository(Draft).findOneByOrFail({ id })).prospectId).toBe(p.id)
+    expect((await ds.getRepository(Prospect).findOneByOrFail({ id: p.id })).status).toBe('shortlisted')
+  })
+
+  it('says why it cannot', async () => {
+    const unscored = await seed({ handle: 'u' })
+    await ds.getRepository(Prospect).update(unscored.id, { fit: null })
+    await expect(service().draftOne(1, unscored.id, now)).rejects.toThrow('Not scored yet')
+    const bad = await seed({ handle: 'n', fit: 'not_a_fit' })
+    await expect(service().draftOne(1, bad.id, now)).rejects.toThrow('Not a fit')
+    const none = await seed({ handle: 'o', opening: false })
+    await expect(service().draftOne(1, none.id, now)).rejects.toThrow('No reason to reach out yet')
+    const twice = await seed({ handle: 't' })
+    await service().draftOne(1, twice.id, now)
+    await expect(service().draftOne(1, twice.id, now)).rejects.toThrow('already has a draft')
+    await expect(service().draftOne(1, 9999, now)).rejects.toBeInstanceOf(NotFoundException)
+  })
+})
+
+describe('dismissing a person', () => {
+  it('marks them dismissed, leaves them out of the ready list and records one signal with no handle', async () => {
+    const p = await seed()
+    expect(await service().ready(1, now)).toHaveLength(1)
+    await service().dismiss(1, p.id, 'weak_opening')
+    expect((await ds.getRepository(Prospect).findOneByOrFail({ id: p.id })).status).toBe('dismissed')
+    expect(await service().ready(1, now)).toHaveLength(0)
+    const signals = await ds.getRepository(ReviewSignal).find()
+    expect(signals).toHaveLength(1)
+    expect(signals[0]).toMatchObject({ action: 'dismiss', reason: 'weak_opening' })
+    expect(JSON.stringify(signals[0])).not.toContain('u-mai')
+  })
+
+  it('404s for a person who is not in the campaign', async () => {
+    await expect(service().dismiss(1, 9999, 'other')).rejects.toBeInstanceOf(NotFoundException)
+  })
+})
+

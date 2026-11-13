@@ -10,12 +10,13 @@ import { DiscoveryService } from './discovery/discovery.service'
 import { ProspectsService } from './discovery/prospects.service'
 import { FitService } from './fit/fit.service'
 import { JobsService } from './jobs/jobs.service'
-import { cannedHandler, FakeLlmClient } from './llm/fake-llm-client'
-import { AnthropicLlmClient, OpenAiCompatibleLlmClient } from './llm/http-llm-clients'
+import { DECISION_CLIENT } from './decisions/review-decisions'
+import { createDecisionClient, createLlmClient } from './llm/ai-config'
 import { LLM_CLIENT, LlmClient } from './llm/llm-client'
 import { RetentionService } from './retention/retention.service'
 import { CampaignDraftsController } from './review/campaign-drafts.controller'
 import { DraftService } from './review/draft.service'
+import { ProspectDraftController } from './review/prospect-draft.controller'
 import { ReviewActionsController } from './review/review-actions.controller'
 import { ReviewActionsService } from './review/review-actions.service'
 import { ReviewController } from './review/review.controller'
@@ -28,6 +29,9 @@ import { FakeXClient } from './x/fake-x-client'
 import { LiveXClient } from './x/live-x-client'
 import { X_CLIENT, XClient } from './x/x-client'
 
+const AI_VARS = ['GOOGLE_API_KEY', 'OPEN_ROUTER_API_KEY', 'ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'LLM_MODEL', 'DECISION_MODEL']
+const aiEnv = (config: ConfigService) => Object.fromEntries(AI_VARS.map((k) => [k, config.get<string>(k, '')]))
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env', '../../.env'] }),
@@ -36,7 +40,7 @@ import { X_CLIENT, XClient } from './x/x-client'
   // REVIEW_STUB=1 serves fixed review data (see review/contract.ts) instead of the real draft routes.
   controllers: [
     HealthController,
-    ...(process.env.REVIEW_STUB === '1' ? [ReviewStubController] : [ReviewActionsController, SenderProfileController, CampaignDraftsController, ReviewController]),
+    ...(process.env.REVIEW_STUB === '1' ? [ReviewStubController] : [ReviewActionsController, SenderProfileController, CampaignDraftsController, ProspectDraftController, ReviewController]),
     AuthController,
     CampaignsController,
   ],
@@ -65,13 +69,12 @@ import { X_CLIENT, XClient } from './x/x-client'
     {
       provide: LLM_CLIENT,
       inject: [ConfigService],
-      useFactory: (config: ConfigService): LlmClient => {
-        const apiKey = config.get('LLM_API_KEY', '')
-        const model = config.get('LLM_MODEL', '')
-        if (!apiKey || !model) return new FakeLlmClient(cannedHandler)
-        if (config.get('LLM_PROVIDER', 'openai') === 'anthropic') return new AnthropicLlmClient({ apiKey, model })
-        return new OpenAiCompatibleLlmClient({ apiKey, model, baseUrl: config.get('LLM_BASE_URL', 'https://api.openai.com/v1') })
-      },
+      useFactory: (config: ConfigService): LlmClient => createLlmClient(aiEnv(config)),
+    },
+    {
+      provide: DECISION_CLIENT,
+      inject: [ConfigService, LLM_CLIENT],
+      useFactory: (config: ConfigService, llm: LlmClient) => createDecisionClient(aiEnv(config), llm),
     },
     {
       provide: X_CLIENT,

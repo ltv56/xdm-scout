@@ -141,6 +141,8 @@ export class Draft {
 }
 
 export type AttemptStatus =
+  // Approved API draft holding the send right; the worker never sees it until Send moves it to queued.
+  | 'approved'
   | 'queued'
   | 'sending'
   | 'sent'
