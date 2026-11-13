@@ -221,4 +221,4 @@ node scripts/eval-compare.cjs [--only a,b]            # all cached models side b
 node scripts/eval-ensemble.cjs <a> <b>                # two models alone, averaged, and with the "both agree" rule
 ```
 
-`--limit` keeps that many items per question. `fixture` answers 0.5 for everything. Answers are cached in `.local/eval/<name>.json`, so a rerun asks only what is missing; a 429 is retried up to five times. Reports are written to `.local/eval/`.
+`--target` (eval and eval-compare, default 0.9) picks, per question, the lowest threshold from 0.50 to 0.95 whose 95% lower bound on precision reaches the target on the first half of the fixtures, with at least 10 yes answers; the second half reports precision and coverage at it. `none (0.7)` means no threshold passed. `--limit` keeps that many items per question. `fixture` answers 0.5 for everything. Answers are cached in `.local/eval/<name>.json`, so a rerun asks only what is missing; a 429 is retried up to five times. Reports are written to `.local/eval/`.

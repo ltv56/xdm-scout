@@ -1,4 +1,4 @@
-export type DecisionCode = 'invitation' | 'no_sensitive' | 'no_familiarity' | 'one_person' | 'claim_backed' | 'own_account'
+export type DecisionCode = 'invitation' | 'no_sensitive' | 'no_familiarity' | 'one_person' | 'no_loaded_question' | 'claim_backed' | 'own_account'
 
 export interface DecisionAsk {
   code: DecisionCode

@@ -8,16 +8,18 @@ if (!name || !files.length) {
   console.error('usage: node scripts/eval-import.cjs <name> <answers.json>...')
   process.exit(2)
 }
-const byIdAndCode = new Map(loadItems().map((i) => [`${i.id}|${i.ask.code}`, i]))
+const byIdAndCode = new Map(loadItems().map((i) => [`${i.id}|${i.code}`, i]))
 const cache = loadCache(name)
 let added = 0
 let skipped = 0
+let perSentence = 0
 for (const file of files) {
   for (const { id, ...codes } of JSON.parse(fs.readFileSync(file, 'utf8'))) {
     for (const [code, p] of Object.entries(codes)) {
       const item = byIdAndCode.get(`${id}|${code}`)
-      if (item && typeof p === 'number') {
-        cache[askKey(item)] = p
+      if (item && item.asks.length > 1) perSentence++
+      else if (item && typeof p === 'number') {
+        cache[askKey(item.asks[0])] = p
         added++
       } else skipped++
     }
@@ -25,4 +27,4 @@ for (const file of files) {
 }
 fs.mkdirSync(outDir, { recursive: true })
 fs.writeFileSync(cachePath(name), JSON.stringify(cache))
-console.log(`${name}: ${added} answers stored, ${skipped} skipped (unknown id or question)`)
+console.log(`${name}: ${added} answers stored, ${skipped} skipped (unknown id or question), ${perSentence} skipped (asked per sentence, one answer per draft does not fit)`)

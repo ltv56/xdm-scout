@@ -1,10 +1,10 @@
 // Run the decision questions over the labelled fixtures with one model.
-//   node scripts/eval.cjs [--model <name>] [--limit N]
+//   node scripts/eval.cjs [--model <name>] [--limit N] [--target 0.9]
 // No --model: DECISION_MODEL from .env; `fixture` answers 0.5 for everything.
 // Answers are cached in .local/eval/<model>.json, so a rerun asks only what is missing.
 const { createDecisionClient, createLlmClient } = require('../dist/llm/ai-config.js')
 const { runEval } = require('../dist/decisions/eval-run.js')
-const { askKey, cachePath, fs, limitPerQuestion, loadCache, loadItems, option, outDir, path, pct, safeName } = require('./eval-common.cjs')
+const { askKey, cachePath, fs, limitPerQuestion, loadCache, loadItems, option, outDir, path, pct, safeName, targetOption } = require('./eval-common.cjs')
 require('dotenv').config({ path: path.join(__dirname, '../../../.env'), quiet: true })
 
 const args = process.argv.slice(2)
@@ -31,12 +31,20 @@ async function decideWithRetry(client, asks) {
   }
 }
 
-function report(result) {
-  const lines = [`# Eval: ${name}`, '', '| question | n | Brier | answered yes | precision (95% interval) | coverage |', '| --- | --- | --- | --- | --- | --- |']
+const interval = (p) => `${pct(p.precision)} (${pct(p.precisionInterval.low)}-${pct(p.precisionInterval.high)})`
+
+function report(result, target) {
+  const lines = [`# Eval: ${name}`, '', '## All fixtures at 0.7', '', '| question | n | Brier | answered yes | precision (95% interval) | coverage |', '| --- | --- | --- | --- | --- | --- |']
   for (const [code, r] of Object.entries(result.byCode)) {
     const p = r.precision
-    const interval = `${pct(p.precisionInterval.low)}-${pct(p.precisionInterval.high)}`
-    lines.push(`| ${code} | ${r.n} | ${r.brier.toFixed(3)} | ${p.answeredYes} | ${pct(p.precision)} (${interval}) | ${pct(p.coverage)} |`)
+    lines.push(`| ${code} | ${r.n} | ${r.brier.toFixed(3)} | ${p.answeredYes} | ${interval(p)} | ${pct(p.coverage)} |`)
+  }
+  lines.push('', `## Threshold picked on the first half (precision lower bound >= ${pct(target)}), measured on the second half`, '')
+  lines.push('| question | picked | n | answered yes | precision (95% interval) | coverage |', '| --- | --- | --- | --- | --- | --- |')
+  for (const [code, r] of Object.entries(result.byCode)) {
+    const p = r.tuned.precision
+    const picked = r.tuned.picked === null ? `none (${r.tuned.used})` : r.tuned.picked
+    lines.push(`| ${code} | ${picked} | ${p.n} | ${p.answeredYes} | ${interval(p)} | ${pct(p.coverage)} |`)
   }
   return lines.join('\n')
 }
@@ -55,6 +63,7 @@ function saveCalibration(result) {
 }
 
 async function main() {
+  const target = targetOption(args)
   fs.mkdirSync(outDir, { recursive: true })
   const off = name === 'fixture'
   const env = { ...process.env, DECISION_MODEL: off ? '' : model, ...(off ? { LLM_MODEL: '' } : {}) }
@@ -62,20 +71,21 @@ async function main() {
   const items = limitPerQuestion(loadItems(), limit)
   const cache = loadCache(name)
 
-  const missing = items.filter((i) => !(askKey(i) in cache))
-  console.log(`${name}: ${items.length} questions, ${items.length - missing.length} cached, ${missing.length} to ask`)
+  const asks = [...new Map(items.flatMap((i) => i.asks).map((a) => [askKey(a), a])).values()]
+  const missing = asks.filter((a) => !(askKey(a) in cache))
+  console.log(`${name}: ${items.length} items, ${asks.length} questions, ${asks.length - missing.length} cached, ${missing.length} to ask`)
   for (let i = 0; i < missing.length; i += BATCH) {
     const part = missing.slice(i, i + BATCH)
-    const answers = await decideWithRetry(client, part.map((p) => p.ask))
+    const answers = await decideWithRetry(client, part)
     part.forEach((p, n) => (cache[askKey(p)] = answers[n].probability))
     fs.writeFileSync(cachePath(name), JSON.stringify(cache))
     process.stdout.write(`\r${Math.min(i + BATCH, missing.length)}/${missing.length}`)
   }
   if (missing.length) console.log()
 
-  const cached = { decide: async (asks) => asks.map((ask) => ({ ...ask, probability: cache[`${ask.code}|${ask.input}`], answeredBy: 'fixture' })) }
-  const result = await runEval(cached, items)
-  const text = report(result)
+  const cached = { decide: async (asks) => asks.map((ask) => ({ ...ask, probability: cache[askKey(ask)], answeredBy: 'fixture' })) }
+  const result = await runEval(cached, items, { target })
+  const text = report(result, target)
   fs.writeFileSync(path.join(outDir, `${safeName(name)}-report.md`), `${text}\n`)
   console.log(text)
   if (writeCalibration) saveCalibration(result)

@@ -13,14 +13,15 @@ describe('eval fixtures', () => {
   it('keeps the sizes the spec asks for', () => {
     expect(load<Profile[]>('profiles')).toHaveLength(60)
     expect(load<Dm[]>('dms')).toHaveLength(300)
-    expect(load<Draft[]>('drafts')).toHaveLength(300)
+    expect(load<Draft[]>('drafts')).toHaveLength(320)
   })
 
   it('keeps the first batch as it was and adds a second one with ids that continue it', () => {
     const dms = load<Dm[]>('dms')
     expect(dms.slice(0, 100).every((d, i) => d.id === `dm${String(i + 1).padStart(3, '0')}` && d.batch === undefined)).toBe(true)
     expect(dms.slice(100).every((d, i) => d.id === `dm${String(i + 101).padStart(3, '0')}` && d.batch === 2)).toBe(true)
-    expect(load<Draft[]>('drafts').slice(100).every((d, i) => d.id === `dr${String(i + 101).padStart(3, '0')}` && d.batch === 2)).toBe(true)
+    expect(load<Draft[]>('drafts').slice(100, 300).every((d, i) => d.id === `dr${String(i + 101).padStart(3, '0')}` && d.batch === 2)).toBe(true)
+    expect(load<Draft[]>('drafts').slice(300).every((d, i) => d.id === `dr${String(i + 301).padStart(3, '0')}` && d.batch === 3)).toBe(true)
     expect(load<Profile[]>('profiles').slice(30).every((p, i) => p.id === `f${String(i + 31).padStart(2, '0')}` && p.batch === 2)).toBe(true)
   })
 
@@ -30,9 +31,20 @@ describe('eval fixtures', () => {
   })
 
   it('gives the second batch 80 clean drafts and 30 of each planted fault', () => {
-    const second = load<Draft[]>('drafts').slice(100)
+    const second = load<Draft[]>('drafts').slice(100, 300)
     const count = (f: string | null) => second.filter((d) => d.planted === f).length
     expect([count(null), count('one_person'), count('no_sensitive'), count('no_familiarity'), count('claim_backed')]).toEqual([80, 30, 30, 30, 30])
+  })
+
+  it('gives the third batch 15 loaded questions and 5 clean drafts whose question is neutral or backed', () => {
+    const third = load<Draft[]>('drafts').slice(300)
+    expect(third.filter((d) => d.planted === 'no_loaded_question')).toHaveLength(15)
+    expect(third.filter((d) => d.planted === null)).toHaveLength(5)
+    expect(third.every((d) => /\?/.test(d.text))).toBe(true)
+  })
+
+  it('labels every draft for loaded questions', () => {
+    expect(load<Draft[]>('drafts').every((d) => typeof d.labels.no_loaded_question === 'boolean')).toBe(true)
   })
 
   it('covers short, long, lowercase and emoji messages and 30 tricky ones in the second batch', () => {

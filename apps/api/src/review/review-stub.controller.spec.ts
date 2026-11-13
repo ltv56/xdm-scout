@@ -100,7 +100,7 @@ describe('review stub', () => {
     for (const d of decisions) expect(d.answeredBy).toBe('fixture')
     expect(decisions.every((d) => !('model' in d))).toBe(true)
     expect(new Set(decisions.map((d) => d.question))).toEqual(
-      new Set(['Asked us to get in touch', 'No sensitive guesses', 'No made-up familiarity', 'Written for this person', 'Backed by the evidence', 'Looks like their own account']),
+      new Set(['Asked us to get in touch', 'No sensitive guesses', 'No made-up familiarity', 'Written for this person', 'No loaded questions', 'Backed by the evidence', 'Looks like their own account']),
     )
   })
 

@@ -5,7 +5,7 @@ import measured from './calibration.json'
 export type CalibrationTable = Record<string, { measuredOn: string; byCode: Partial<Record<DecisionCode, { examples: number; right: number; low: number; high: number }>> }>
 
 // Only the draft policy questions carry a measurement; the rest are shown without one.
-const POLICY: DecisionCode[] = ['no_sensitive', 'no_familiarity', 'one_person']
+const POLICY: DecisionCode[] = ['no_sensitive', 'no_familiarity', 'one_person', 'no_loaded_question']
 
 // The table is written by `node scripts/eval.cjs --model <name> --write-calibration` from the second half of the labelled fixtures.
 export function calibrationFor(model: string, code: DecisionCode, table: CalibrationTable = measured as CalibrationTable): Decision['calibration'] {

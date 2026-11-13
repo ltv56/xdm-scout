@@ -15,28 +15,34 @@
         "high": 0.924
       },
       "no_sensitive": {
-        "examples": 107,
-        "right": 107,
-        "low": 0.965,
+        "examples": 115,
+        "right": 115,
+        "low": 0.968,
         "high": 1
       },
       "no_familiarity": {
-        "examples": 116,
-        "right": 114,
-        "low": 0.939,
+        "examples": 121,
+        "right": 119,
+        "low": 0.942,
         "high": 0.995
       },
       "one_person": {
-        "examples": 114,
-        "right": 114,
-        "low": 0.967,
+        "examples": 123,
+        "right": 123,
+        "low": 0.97,
         "high": 1
       },
+      "no_loaded_question": {
+        "examples": 138,
+        "right": 137,
+        "low": 0.96,
+        "high": 0.999
+      },
       "claim_backed": {
-        "examples": 65,
-        "right": 57,
-        "low": 0.775,
-        "high": 0.936
+        "examples": 45,
+        "right": 45,
+        "low": 0.921,
+        "high": 1
       }
     }
   },

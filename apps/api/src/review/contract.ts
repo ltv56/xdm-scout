@@ -95,7 +95,7 @@ export const calibration = z.object({
 })
 
 export const decision = z.object({
-  code: z.enum(['invitation', 'no_sensitive', 'no_familiarity', 'one_person', 'claim_backed', 'own_account']),
+  code: z.enum(['invitation', 'no_sensitive', 'no_familiarity', 'one_person', 'no_loaded_question', 'claim_backed', 'own_account']),
   // The short label the reviewer reads. The longer instructions the model gets live with the decision client.
   question: z.string(),
   // Who answered. Only Jev's probability is shown as a percentage; an LLM's own figure is uncalibrated, so only its band is shown.

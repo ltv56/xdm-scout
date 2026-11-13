@@ -73,6 +73,7 @@ const QUESTION: Record<Decision['code'], string> = {
   no_sensitive: 'No sensitive guesses',
   no_familiarity: 'No made-up familiarity',
   one_person: 'Written for this person',
+  no_loaded_question: 'No loaded questions',
   claim_backed: 'Backed by the evidence',
   own_account: 'Looks like their own account',
 }
@@ -115,9 +116,11 @@ function stubDecisions(item: Pick<ReviewItem, 'kind' | 'sentences' | 'checks' | 
   out.push(ask('no_sensitive', 0.97, draft))
   out.push(ask('no_familiarity', has('fake_familiarity') ? 0.08 : 0.95, draft))
   out.push(ask('one_person', has('similar_draft') ? 0.41 : has('has_link') || has('too_long') || has('many_questions') ? 0.52 : 0.9, draft))
-  // One question per sentence that claims something: a sentence with no source, or one that cites a post.
+  out.push(ask('no_loaded_question', 0.95, draft))
+  // One question per sentence that claims something: a sentence with no source, or one that cites a post. Questions are left to no_loaded_question.
   item.sentences.forEach((s, n) => {
     if (s.source !== null && s.source.type !== 'evidence') return
+    if (s.text.trim().endsWith('?')) return
     const cited = s.source?.type === 'evidence' ? item.evidence.find((e) => e.id === (s.source as { evidenceId: number }).evidenceId) : undefined
     const evidence = cited ? `“${cited.text}”` : 'none given'
     out.push(ask('claim_backed', s.source === null ? 0.12 : 0.94, `Sentence: “${s.text}”
