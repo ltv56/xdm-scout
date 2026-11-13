@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { LlmClient } from '../llm/llm-client'
 import { DecisionAnswer, DecisionAsk, DecisionClient, FixtureDecisionClient } from './decision-client'
+import { JevConfig, JevDecisionClient } from './jev-decision-client'
 import { QUESTIONS } from './questions'
 
 const answer = z.object({ probability: z.number().min(0).max(1) })
@@ -25,6 +26,8 @@ export class LlmDecisionClient implements DecisionClient {
   }
 }
 
-export function decisionClientFor(llm: LlmClient, hasKey: boolean): DecisionClient {
+// Jev only when its key is set; without it the LLM fallback, and without a model key the fixture client.
+export function decisionClientFor(llm: LlmClient, hasKey: boolean, jev?: JevConfig): DecisionClient {
+  if (jev?.apiKey) return new JevDecisionClient(jev)
   return hasKey ? new LlmDecisionClient(llm) : new FixtureDecisionClient()
 }

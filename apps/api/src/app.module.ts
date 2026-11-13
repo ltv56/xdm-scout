@@ -78,7 +78,7 @@ import { X_CLIENT, XClient } from './x/x-client'
     {
       provide: DECISION_CLIENT,
       inject: [ConfigService, LLM_CLIENT],
-      useFactory: (config: ConfigService, llm: LlmClient) => decisionClientFor(llm, !!config.get('LLM_API_KEY', '') && !!config.get('LLM_MODEL', '')),
+      useFactory: (config: ConfigService, llm: LlmClient) => decisionClientFor(llm, !!config.get('LLM_API_KEY', '') && !!config.get('LLM_MODEL', ''), { apiKey: config.get('JEV_API_KEY', ''), baseUrl: config.get('JEV_BASE_URL', '') || undefined, model: config.get('JEV_MODEL', '') || undefined }),
     },
     {
       provide: X_CLIENT,
