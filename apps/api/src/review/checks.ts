@@ -2,7 +2,7 @@ import { CheckResult, SenderProfile } from './contract'
 
 export type StoredSource =
   | { type: 'evidence'; evidenceId: string }
-  | { type: 'sender_profile'; field: 'intro' | 'program' | 'signer' }
+  | { type: 'sender_profile'; field: 'intro' | 'program' | 'signer' | 'contact' }
   | { type: 'opt_out' }
   // Made by the app from the X display name; there is nothing in it to verify.
   | { type: 'greeting' }

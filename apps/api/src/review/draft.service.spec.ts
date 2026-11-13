@@ -68,6 +68,30 @@ describe('draft generation', () => {
     expect(draft.sentences!.at(-1)!.source).toEqual({ type: 'opt_out' })
   })
 
+  it('fills the operator frame: own greeting, own opt-out line instead of the model\'s, then the contact line', async () => {
+    const p = await seed()
+    const frame = { greeting: 'Dear {name},', optOut: 'Ignore this if it is not for you.', contactLine: 'Write to vinh@genaifund.ai' }
+    await ds.getRepository(Setting).save({ key: 'sender_profile', value: { ...profile, frame } })
+    await service().generate(p.id, now)
+    const draft = await ds.getRepository(Draft).findOneByOrFail({ contactId: 1 })
+    const lines = draft.content.split('\n')
+    expect(lines[0]).toBe('Dear Mai,')
+    expect(lines.slice(-2)).toEqual(['Ignore this if it is not for you.', 'Write to vinh@genaifund.ai'])
+    expect(draft.content).not.toContain('No worries if not.')
+    expect(draft.sentences!.at(-2)!.source).toEqual({ type: 'opt_out' })
+    expect(draft.sentences!.at(-1)!.source).toEqual({ type: 'sender_profile', field: 'contact' })
+  })
+
+  it('uses the plain built-in greeting when the frame greeting needs a name and the person has none', async () => {
+    const p = await seed({ handle: 'acme' })
+    await ds.getRepository(XUser).update({ xUserId: 'u-acme' }, { name: 'Acme Labs' })
+    await ds.getRepository(Setting).save({ key: 'sender_profile', value: { ...profile, frame: { greeting: 'Dear {name},', optOut: null, contactLine: null } } })
+    await service().generate(p.id, now)
+    const draft = await ds.getRepository(Draft).findOneByOrFail({ contactId: 1 })
+    expect(draft.sentences![0].text).not.toContain('Dear')
+    expect(draft.sentences!.at(-1)!.source).toEqual({ type: 'opt_out' })
+  })
+
   it('opens with a greeting made in code from the X display name, and drops the name when it is not a person', async () => {
     const p = await seed({ handle: 'acme' })
     await ds.getRepository(XUser).update({ xUserId: 'u-acme' }, { name: 'Acme Labs' })

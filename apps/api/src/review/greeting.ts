@@ -61,8 +61,10 @@ function hash(seed: string) {
   return h >>> 0
 }
 
-export function greetingFor(displayName: string | null | undefined, seed: string, language: GreetingLanguage = 'en'): string {
+// A frame template only replaces the English wording; the person still needs a usable name.
+export function greetingFor(displayName: string | null | undefined, seed: string, language: GreetingLanguage = 'en', template: string | null = null): string {
   const name = usableName(displayName)
+  if (name && template && language === 'en') return template.replace('{name}', name)
   const h = hash(seed)
   const named = NAMED[language]
   const nameless = NAMELESS[language]
