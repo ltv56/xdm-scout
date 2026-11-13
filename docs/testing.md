@@ -180,6 +180,43 @@ Web app against the same data: run the API with `REVIEW_STUB=1`, then `npm run d
 
 `REVIEW_STUB_EMPTY=1` starts with no drafts. With it, `POST /api/campaigns/:id/drafts` and `POST /api/campaigns/:id/prospects/:pid/draft` make drafts from the campaign's own prospects (in memory, reset on restart).
 
+## Review with real data (fake X, canned LLM)
+
+Start the API and the worker with `X_MODE=fake` and `REVIEW_STUB=0`. Without `LLM_API_KEY` the draft text is a fixed template built from the person's opening post, so no model is called.
+
+```
+B=http://localhost:3001/api; J='content-type: application/json'
+curl -XPUT $B/sender-profile -H "$J" -d '{"intro":"GenAI Fund backs early AI founders in Southeast Asia.","programs":[{"id":1,"name":"Intro to investors","description":"Intro to investors","link":"https://genaifund.ai/","deadline":null}],"signer":"Vinh","sampleMessages":[]}'
+# create a campaign, discover and score as in section 6 and 7, then:
+curl $B/campaigns/1/drafts/ready                                  # {"ready":N}
+curl -XPOST $B/campaigns/1/drafts -H "$J" -d '{"limit":3}'        # {"drafted","readyToDraft","noOpening"}; the worker writes the drafts
+curl -XPOST $B/campaigns/1/prospects/5/draft                      # one person from Candidates; 409 says why not
+curl -XPOST $B/campaigns/1/prospects/6/dismiss -H "$J" -d '{"reason":"weak_opening"}'
+curl "$B/review-queue?campaignId=1"                               # drafts with checks, evidence, weakest point, Open in X link
+curl -XPOST $B/drafts/1/approve -H "$J" -d '{"contentHash":"<contentHash from the queue>","confirmedUnbacked":true}'
+```
+
+- Nothing is drafted by scoring; drafts exist only after the calls above.
+- A stale `contentHash` answers `409`; a draft with a blocking check answers `409` until it is edited.
+- Skip, dismiss, approve, regenerate and Do not contact add a row to `review_signals` (no handle).
+
+## Browser walkthroughs (web)
+
+Playwright in `apps/web/e2e` with its own `package.json` and `node_modules`: New campaign, Candidates, Review, a phone-sized screen, and the error and empty states. It drives the installed Edge, so no browser is downloaded. The API runs the review mock on its own port:
+
+```
+cd apps/api
+REVIEW_STUB=1 X_MODE=fake PORT=3021 node dist/main.js
+X_MODE=fake PORT=3021 node dist/worker-main.js
+cd ../web/e2e
+npm install                         # once
+E2E_API_URL=http://localhost:3021 npm run e2e
+```
+
+- The tests create the `robotics demo` campaign through the API when it is missing and wait for discovery and scoring on the fake X.
+- Vite starts on port 3020 (`E2E_WEB_PORT`) and proxies `/api` to `E2E_API_URL`.
+- The mock keeps its state in memory. Approving or skipping uses up the pending draft; when none is left the Review tests are skipped. Restart the API to get it back.
+
 ## Automated tests
 
 ```

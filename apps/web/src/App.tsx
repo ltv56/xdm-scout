@@ -48,10 +48,13 @@ export default function App() {
     .map((w) => w[0].toUpperCase())
     .join('')
 
-  const scroll = 'h-full overflow-y-auto px-12 py-10'
+  const scroll = 'h-full overflow-y-auto px-5 py-8 sm:px-12 sm:py-10'
 
   return (
     <div className="min-h-screen lg:flex lg:h-screen lg:flex-col">
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-50 focus:rounded-lg focus:bg-raised focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:shadow-pop">
+        Skip to content
+      </a>
       <header className="mx-auto flex w-full max-w-[1280px] shrink-0 flex-wrap items-center gap-x-10 gap-y-2 px-6 py-5 text-sm">
         <span className="text-base font-bold tracking-tight text-ink">xdm-scout</span>
         <nav aria-label="Sections" className="flex flex-wrap gap-x-6">
@@ -104,7 +107,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-[1280px] px-6 pb-6 lg:min-h-0 lg:flex-1">
+      <main id="main" className="mx-auto w-full max-w-[1280px] px-6 pb-6 lg:min-h-0 lg:flex-1">
         <div className="overflow-hidden rounded-3xl bg-raised shadow-soft lg:h-full lg:min-h-[460px]">
           {tab === 'profile' ? (
             <div className={scroll}>

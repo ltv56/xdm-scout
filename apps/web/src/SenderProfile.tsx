@@ -11,7 +11,7 @@ const area = `${field} field-sizing-content`
 
 export default function SenderProfile() {
   const { data, error, isLoading } = useQuery<Profile>({ queryKey: ['sender-profile'], queryFn: () => getJson('/sender-profile') })
-  if (isLoading) return <p className="text-sm text-muted">Loading…</p>
+  if (isLoading) return <p role="status" className="text-sm text-muted">Loading…</p>
   if (error || !data) return <p role="alert" className="text-sm font-medium text-block">{error?.message ?? 'No profile returned'}</p>
   return <ProfileForm profile={data} />
 }

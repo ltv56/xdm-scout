@@ -129,11 +129,11 @@ export default function ReviewQueue({ campaignId }: { campaignId: number }) {
     return () => window.removeEventListener('keydown', onKey)
   })
 
-  if (isLoading) return <p className="px-12 py-10 text-sm text-muted">Loading drafts…</p>
-  if (error) return <p role="alert" className="px-12 py-10 text-sm font-medium text-block">{error.message}</p>
+  if (isLoading) return <p role="status" className="px-5 py-8 text-sm sm:px-12 sm:py-10 text-muted">Loading drafts…</p>
+  if (error) return <p role="alert" className="px-5 py-8 text-sm sm:px-12 sm:py-10 font-medium text-block">{error.message}</p>
   if (!current) {
     return (
-      <div className="max-w-md px-12 py-10">
+      <div className="max-w-md px-5 py-8 sm:px-12 sm:py-10">
         <h2 className="text-lg font-semibold">Nothing to review</h2>
         <p className="mt-1 text-sm text-muted">Drafts appear here after discovery finds people with a recent post to open with. Run a search from the Overview.</p>
       </div>

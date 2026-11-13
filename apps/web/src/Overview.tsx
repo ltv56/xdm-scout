@@ -92,10 +92,11 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
     onSuccess: () => qc.invalidateQueries({ queryKey: ['prospects', campaignId] }),
   })
 
-  if (campaign.isLoading) return <p className="text-sm text-muted">Loading…</p>
+  if (campaign.isLoading) return <p role="status" className="text-sm text-muted">Loading…</p>
   if (campaign.error || !campaign.data) return <p role="alert" className="text-sm font-medium text-block">{campaign.error?.message ?? 'Campaign not found'}</p>
 
   const c = campaign.data
+  const loadError = prospects.error ?? queue.error ?? readyQuery.error
   const people = prospects.data ?? []
   const counts = { strong: 0, possible: 0, weak: 0, not_a_fit: 0, unscored: 0 }
   for (const p of people) counts[p.fit ?? 'unscored'] += 1
@@ -137,11 +138,12 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
           </p>
         </div>
       </header>
+      {loadError && <p role="alert" className="mt-3 text-sm font-medium text-block">Some numbers could not be loaded: {loadError.message}</p>}
       {waiting && <p className="mt-3 text-sm text-muted" role="status">The search is queued. This page updates when it finishes.</p>}
       {note && <p className="mt-3 text-sm font-medium text-warn" role="status">{note}</p>}
       {search.error && <p role="alert" className="mt-3 text-sm font-medium text-block">{search.error.message}</p>}
 
-      <section aria-label="Next step" className="mt-8 flex flex-wrap items-center justify-between gap-x-10 gap-y-5 rounded-3xl bg-rail px-10 py-9">
+      <section aria-label="Next step" className="mt-8 flex flex-wrap items-center justify-between gap-x-10 gap-y-5 rounded-3xl bg-rail px-5 py-6 sm:px-10 sm:py-9">
         {drafts.length > 0 ? (
           <>
             <div>
@@ -172,10 +174,12 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
         ) : (
           <div>
             <h2 className="text-2xl font-bold leading-tight">
-              {ready > 0 ? `${plural(ready, 'person is', 'people are')} ready for a draft` : people.length ? 'Nothing waiting for you' : 'No one found yet'}
+              {loadError ? 'The numbers did not load' : ready > 0 ? `${plural(ready, 'person is', 'people are')} ready for a draft` : people.length ? 'Nothing waiting for you' : 'No one found yet'}
             </h2>
             <p className="mt-1.5 text-sm text-muted">
-              {ready > 0
+              {loadError
+                ? 'Reload the page when the server is back.'
+                : ready > 0
                 ? 'Nothing is written by itself. Write drafts for several people at once, or pick one person in Candidates.'
                 : people.length
                   ? 'Search again to find more people.'

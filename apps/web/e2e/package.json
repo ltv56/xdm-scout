@@ -1,0 +1,7 @@
+{
+  "name": "xdm-scout-e2e",
+  "private": true,
+  "type": "module",
+  "scripts": { "e2e": "playwright test" },
+  "devDependencies": { "@playwright/test": "^1.65.0" }
+}

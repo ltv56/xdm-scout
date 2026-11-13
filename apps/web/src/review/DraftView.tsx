@@ -81,7 +81,7 @@ function StatusChip({ verdict }: { verdict: Verdict }) {
 }
 
 // The writing rule aims for about 450 characters. Longer text steps the size down, never below 16px, and the card scrolls past that.
-const textSize = (chars: number) => (chars <= 240 ? 'text-xl leading-[1.65]' : chars <= 360 ? 'text-lg leading-[1.6]' : 'text-base leading-relaxed')
+const textSize = (chars: number) => (chars <= 240 ? 'text-base leading-relaxed sm:text-xl sm:leading-[1.65]' : chars <= 360 ? 'text-base leading-relaxed sm:text-lg sm:leading-[1.6]' : 'text-base leading-relaxed')
 
 function Draft({ item, shownSentence, setHoverSentence, pinnedSentence, onPick, activeEvidence }: {
   item: ReviewItem
@@ -188,7 +188,7 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
     <Frame key={item.contentHash} item={item} nav={nav} onFinished={onFinished}>
       {(api) => (
         <div className="grid lg:h-full lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_400px] lg:grid-rows-[minmax(0,1fr)]">
-          <div className="scroll-thin min-w-0 px-12 pb-6 pt-6 lg:overflow-y-auto">
+          <div className="scroll-thin min-w-0 px-5 pb-6 pt-6 sm:px-12 lg:overflow-y-auto">
             <header>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
                 <FitBadge fit={p.fit} size="lg" />
@@ -213,7 +213,7 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
               </p>
               {!api.editing && (
                 <>
-                  <div ref={card} className="max-h-[min(42vh,360px)] max-w-[62ch] scroll-thin overflow-y-auto rounded-2xl border border-rule bg-paper px-6 py-4">
+                  <div ref={card} className="max-h-[min(55vh,420px)] sm:max-h-[min(42vh,360px)] max-w-[62ch] scroll-thin overflow-y-auto rounded-2xl border border-rule bg-paper px-6 py-4">
                     <Draft item={item} shownSentence={shownSentence} setHoverSentence={setHoverSentence} pinnedSentence={pinnedSentence} onPick={pickSentence} activeEvidence={activeEvidence} />
                   </div>
                   {item.englishText !== null && (
@@ -236,7 +236,7 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
             </section>
           </div>
 
-          <aside ref={aside} className="scroll-thin min-w-0 space-y-8 px-12 pb-8 lg:overflow-y-auto lg:border-l lg:border-rule lg:px-9 lg:py-6">
+          <aside ref={aside} className="scroll-thin min-w-0 space-y-8 px-5 pb-8 sm:px-12 lg:overflow-y-auto lg:border-l lg:border-rule lg:px-9 lg:py-6">
             <PersonFacts prospect={p} />
             <section aria-label="Evidence">
               <h3 className="mb-3 text-sm font-semibold">Why this opening</h3>
