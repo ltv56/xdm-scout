@@ -16,6 +16,11 @@ describe('layoutText', () => {
     expect(layoutText([post, offer, optOut])).toBe('Saw your eval harness. We back early AI founders.\nNo worries if not.')
   })
 
+  it('puts the contact line last, on its own line after the opt-out', () => {
+    const contact: StoredSentence = { text: 'Write to vinh@genaifund.ai', source: { type: 'sender_profile', field: 'contact' } }
+    expect(layoutText([hi, post, optOut, contact])).toBe('Hi Mai!\nSaw your eval harness.\nNo worries if not.\nWrite to vinh@genaifund.ai')
+  })
+
   it('keeps one line when there is neither', () => {
     expect(layoutText([post, offer])).toBe('Saw your eval harness. We back early AI founders.')
     expect(layoutText([])).toBe('')

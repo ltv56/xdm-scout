@@ -10,6 +10,7 @@ import { apiSendBlock } from '../sending/sending.service'
 import { Setting } from '../setting.entity'
 import { StoredSentence, StoredSource } from './checks'
 import { Language, SenderProfile, senderProfile } from './contract'
+import { applyFrame } from './draft-frame'
 import { layoutText } from './draft-text'
 import { greetingFor } from './greeting'
 
@@ -96,8 +97,8 @@ export class DraftService {
     const asked = await this.ask(user, allowed)
     // The opener is made in code from the display name, never by the model, and varies by person.
     const person = await this.ds.getRepository(XUser).findOneBy({ xUserId: prospect.xUserId })
-    const opener: StoredSentence = { text: greetingFor(person?.name, prospect.xUserId + (reviewerNote ?? '')), source: { type: 'greeting' } }
-    const sentences = [opener, ...asked]
+    const opener: StoredSentence = { text: greetingFor(person?.name, prospect.xUserId + (reviewerNote ?? ''), 'en', profile.frame?.greeting ?? null), source: { type: 'greeting' } }
+    const sentences = applyFrame(opener, asked, profile.frame)
 
     let contact = await this.ds.getRepository(Contact).findOneBy({ senderAccountId: sender[0].id, xUserId: prospect.xUserId })
     if (!contact) {

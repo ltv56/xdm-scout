@@ -13,11 +13,25 @@ export const program = z.object({
   deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable(),
 })
 
+// What surrounds the model's message. The model's prompt and its rules are not part of it. Null = the built-in wording.
+export const draftFrame = z.object({
+  // Greeting for a person we have a usable name for; {name} is replaced by it.
+  greeting: z.string().min(1).max(80).includes('{name}').nullable(),
+  // Replaces the opt-out sentence the model writes.
+  optOut: z.string().min(1).max(160).nullable(),
+  // Last line, for example how to reach the sender.
+  contactLine: z.string().min(1).max(160).nullable(),
+})
+
+// The frame filled in on a sample person, for the Settings preview.
+export const framePreview = z.object({ text: z.string() })
+
 export const senderProfile = z.object({
   intro: z.string().min(1).max(400),
   programs: z.array(program).min(1).max(8),
   signer: z.string().min(1).max(64),
   sampleMessages: z.array(z.string().max(600)).max(3),
+  frame: draftFrame.optional(),
 })
 
 export const evidenceItem = z.object({
@@ -31,7 +45,7 @@ export const evidenceItem = z.object({
 // Where a sentence of the draft comes from; null = no source, the UI underlines it.
 export const sentenceSource = z.discriminatedUnion('type', [
   z.object({ type: z.literal('evidence'), evidenceId: z.number() }),
-  z.object({ type: z.literal('sender_profile'), field: z.enum(['intro', 'program', 'signer']) }),
+  z.object({ type: z.literal('sender_profile'), field: z.enum(['intro', 'program', 'signer', 'contact']) }),
   z.object({ type: z.literal('opt_out') }),
   // Made by the app from the X display name, never by the model.
   z.object({ type: z.literal('greeting') }),
@@ -190,6 +204,8 @@ export const approveResult = z.object({ attemptId: z.number() })
 
 export type CampaignSummary = z.infer<typeof campaignSummary>
 export type SenderProfile = z.infer<typeof senderProfile>
+export type DraftFrame = z.infer<typeof draftFrame>
+export type FramePreview = z.infer<typeof framePreview>
 export type EvidenceItem = z.infer<typeof evidenceItem>
 export type DraftSentence = z.infer<typeof draftSentence>
 export type CheckResult = z.infer<typeof checkResult>
