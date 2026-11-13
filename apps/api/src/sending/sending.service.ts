@@ -33,27 +33,18 @@ export class SendingService {
     private readonly jobs: JobsService,
   ) {}
 
-  // The reviewer sends it in X themselves: same send right and approval rules, but nothing goes through the API.
-  approveManual(draftId: number, seenHash: string) {
-    return this.approveAndSend(draftId, seenHash, 'manual')
-  }
-
-  async approveAndSend(draftId: number, seenHash: string, route: 'api' | 'manual' = 'api'): Promise<{ attemptId: number }> {
+  // Approval takes the send right and holds it. API drafts wait in `approved` for Send; hand-off drafts wait for the reviewer in X.
+  async approve(draftId: number, seenHash: string, route: 'api' | 'manual' = 'api'): Promise<{ attemptId: number }> {
     return this.ds.transaction(async (em) => {
       const draft = await em.findOne(Draft, { where: { id: draftId } })
       if (!draft) throw new NotFoundException('Draft not found')
       if (draft.status === 'skipped' || draft.status === 'superseded') throw new ConflictException('This draft is no longer in the queue')
       const contact = await em.findOneOrFail(Contact, { where: { id: draft.contactId } })
-
-      if (await em.exists(DoNotContact, { where: { xUserId: contact.xUserId } })) {
-        throw new ForbiddenException('Recipient is on Do not contact')
-      }
-      const blocked = route === 'api' ? apiSendBlock(contact, new Date()) : null
-      if (blocked) throw new ForbiddenException(blocked)
+      await this.assertSendable(em, contact, route)
       const contentHash = hashContent(draft.content)
       if (contentHash !== seenHash) throw new ConflictException('Draft changed after you reviewed it')
 
-      const attempt = await em.save(SendAttempt, { contactId: contact.id, draftId, contentHash, route, status: route === 'manual' ? 'manual_pending' : 'queued' })
+      const attempt = await em.save(SendAttempt, { contactId: contact.id, draftId, contentHash, route, status: route === 'manual' ? 'manual_pending' : 'approved' })
       const claim = await em
         .createQueryBuilder()
         .update(Contact)
@@ -63,9 +54,38 @@ export class SendingService {
       if (claim.affected !== 1) throw new ConflictException('Already queued')
 
       await em.update(Draft, draftId, { status: 'approved', approvedHash: contentHash })
-      if (route === 'api') await this.jobs.enqueue('send', { attemptId: attempt.id }, new Date(), em)
       return { attemptId: attempt.id }
     })
+  }
+
+  // Only this step creates the send job; the approved attempt must still hold the send right.
+  async send(draftId: number, seenHash: string): Promise<{ attemptId: number }> {
+    return this.ds.transaction(async (em) => {
+      const draft = await em.findOne(Draft, { where: { id: draftId } })
+      if (!draft) throw new NotFoundException('Draft not found')
+      if (draft.status !== 'approved') throw new ConflictException('Approve the draft before sending it')
+      if (seenHash !== draft.approvedHash || hashContent(draft.content) !== draft.approvedHash) {
+        throw new ConflictException('The draft changed since you read it. Review it again.')
+      }
+      const attempt = await em.findOne(SendAttempt, { where: { draftId, route: 'api', status: 'approved' } })
+      if (!attempt || attempt.contentHash !== draft.approvedHash) throw new ConflictException('Already queued')
+      const contact = await em.findOneOrFail(Contact, { where: { id: draft.contactId } })
+      if (contact.activeAttemptId !== attempt.id) throw new ConflictException('This draft no longer holds the send right. Approve it again.')
+      await this.assertSendable(em, contact, 'api')
+
+      const moved = await em.update(SendAttempt, { id: attempt.id, status: 'approved' }, { status: 'queued' })
+      if (moved.affected !== 1) throw new ConflictException('Already queued')
+      await this.jobs.enqueue('send', { attemptId: attempt.id }, new Date(), em)
+      return { attemptId: attempt.id }
+    })
+  }
+
+  private async assertSendable(em: EntityManager, contact: Contact, route: 'api' | 'manual') {
+    if (await em.exists(DoNotContact, { where: { xUserId: contact.xUserId } })) {
+      throw new ForbiddenException('Recipient is on Do not contact')
+    }
+    const blocked = route === 'api' ? apiSendBlock(contact, new Date()) : null
+    if (blocked) throw new ForbiddenException(blocked)
   }
 
   async processAttempt(attemptId: number, now = new Date()): Promise<void> {
