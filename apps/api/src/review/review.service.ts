@@ -1,6 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException, Optional } from '@nestjs/common'
 import { DataSource, In } from 'typeorm'
 import { Prospect, XPost } from '../discovery/entities'
+import { DecisionClient } from '../decisions/decision-client'
+import { decisionsFor, DECISION_CLIENT } from '../decisions/review-decisions'
 import { Evidence } from '../fit/entities'
 import { Contact, Draft, SendAttempt, SenderAccount, XUser } from '../sending/entities'
 import { apiSendBlock, hashContent } from '../sending/sending.service'
@@ -28,7 +30,10 @@ export const composeUrl = (xUserId: string, text: string) => `https://x.com/mess
 
 @Injectable()
 export class ReviewService {
-  constructor(private readonly ds: DataSource) {}
+  constructor(
+    private readonly ds: DataSource,
+    @Optional() @Inject(DECISION_CLIENT) private readonly decisions?: DecisionClient,
+  ) {}
 
   async queue(campaignId: number, now = new Date()): Promise<ReviewQueue> {
     const { prospects, live } = await this.liveDrafts(campaignId)
@@ -54,7 +59,12 @@ export class ReviewService {
 
   private async render(shown: Draft[], live: Draft[], prospects: Prospect[], now: Date) {
     const ctx = await this.context(prospects, shown, live)
-    return shown.map((d) => this.item(d, ctx, now))
+    return Promise.all(
+      shown.map(async (d) => {
+        const item = this.item(d, ctx, now)
+        return this.decisions ? { ...item, decisions: await decisionsFor(this.decisions, item) } : item
+      }),
+    )
   }
 
   private item(draft: Draft, ctx: Context, now: Date): ReviewItem {

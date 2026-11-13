@@ -18,6 +18,7 @@ function cannedDraft({ opening, profile }: DraftInput) {
 // Stand-in used when no LLM key is set: shows the flow, does not judge anyone.
 export function cannedHandler(req: LlmRequest): unknown {
   if (req.task === 'verify') return { supported: true }
+  if (req.task === 'decide') return { probability: 0.5 }
   if (req.task === 'draft') return cannedDraft(JSON.parse(req.user) as DraftInput)
   const evidence = (JSON.parse(req.user) as { evidence: EvidenceItem[] }).evidence
   const bio = evidence.find((e) => e.id.startsWith('bio:'))

@@ -10,6 +10,8 @@ import { DiscoveryService } from './discovery/discovery.service'
 import { ProspectsService } from './discovery/prospects.service'
 import { FitService } from './fit/fit.service'
 import { JobsService } from './jobs/jobs.service'
+import { decisionClientFor } from './decisions/llm-decision-client'
+import { DECISION_CLIENT } from './decisions/review-decisions'
 import { cannedHandler, FakeLlmClient } from './llm/fake-llm-client'
 import { AnthropicLlmClient, OpenAiCompatibleLlmClient } from './llm/http-llm-clients'
 import { LLM_CLIENT, LlmClient } from './llm/llm-client'
@@ -72,6 +74,11 @@ import { X_CLIENT, XClient } from './x/x-client'
         if (config.get('LLM_PROVIDER', 'openai') === 'anthropic') return new AnthropicLlmClient({ apiKey, model })
         return new OpenAiCompatibleLlmClient({ apiKey, model, baseUrl: config.get('LLM_BASE_URL', 'https://api.openai.com/v1') })
       },
+    },
+    {
+      provide: DECISION_CLIENT,
+      inject: [ConfigService, LLM_CLIENT],
+      useFactory: (config: ConfigService, llm: LlmClient) => decisionClientFor(llm, !!config.get('LLM_API_KEY', '') && !!config.get('LLM_MODEL', '')),
     },
     {
       provide: X_CLIENT,
