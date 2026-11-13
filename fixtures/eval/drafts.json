@@ -1398,5 +1398,3005 @@
       "claim_backed": false
     },
     "reviewed": false
+  },
+  {
+    "id": "dr101",
+    "person": "Mina",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hi Mina! Saw your open dataset of 12k warehouse pick-and-place demos. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr102",
+    "person": "Arif",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hello Arif, I came across your voice agent handling 300 clinic calls a day. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr103",
+    "person": "Omar",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hi Omar, your 35% cut in inference cost with int8 kernels caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr104",
+    "person": "Ngoc",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hi Ngoc! Saw your lab building a tactile sensor. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr105",
+    "person": "Khai",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hello Khai, I came across your open-source benchmark of 28 coding-agent tasks. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr106",
+    "person": "Minh",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hi Minh, your talk on low-cost robot arms in Da Nang caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr107",
+    "person": "Carla",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hi Carla! Saw your Vietnamese legal retrieval answering in under 2 seconds. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr108",
+    "person": "Ravi",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hello Ravi, I came across your MIT-licensed drone path-planning library. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr109",
+    "person": "Linh",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hi Linh, your 1B speech model for Bahasa Indonesia trained on 800 hours caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr110",
+    "person": "Wei",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hi Wei! Saw your plan to hire two ML engineers in Ho Chi Minh City. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr111",
+    "person": "Sofia",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hello Sofia, I came across your free 5,000-question legal QA dataset for Vietnamese. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr112",
+    "person": "Bich",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hi Bich, your 40% cut in inference spend from int8 quantization caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr113",
+    "person": "Somchai",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hi Somchai! Saw your robot reaching 92% success in a pilot warehouse. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr114",
+    "person": "Tien",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hello Tien, I came across your search for two robotics engineers in Hanoi. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr115",
+    "person": "Lan",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hi Lan, your train-ticket booking agent demo caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr116",
+    "person": "Tomas",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hi Tomas! Saw your post on why evals for non-English agents are harder. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr117",
+    "person": "Wei",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hello Wei, I came across your open dataset of 12k warehouse pick-and-place demos. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr118",
+    "person": "Sofia",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hi Sofia, your voice agent handling 300 clinic calls a day caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr119",
+    "person": "Bich",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hi Bich! Saw your 35% cut in inference cost with int8 kernels. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr120",
+    "person": "Somchai",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hello Somchai, I came across your lab building a tactile sensor. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr121",
+    "person": "Tien",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hi Tien, your open-source benchmark of 28 coding-agent tasks caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr122",
+    "person": "Lan",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hi Lan! Saw your talk on low-cost robot arms in Da Nang. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr123",
+    "person": "Tomas",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hello Tomas, I came across your Vietnamese legal retrieval answering in under 2 seconds. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr124",
+    "person": "Nok",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hi Nok, your MIT-licensed drone path-planning library caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr125",
+    "person": "Tuan",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hi Tuan! Saw your 1B speech model for Bahasa Indonesia trained on 800 hours. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr126",
+    "person": "Hoang",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hello Hoang, I came across your plan to hire two ML engineers in Ho Chi Minh City. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr127",
+    "person": "Putri",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hi Putri, your free 5,000-question legal QA dataset for Vietnamese caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr128",
+    "person": "Aisha",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hi Aisha! Saw your 40% cut in inference spend from int8 quantization. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr129",
+    "person": "Jun",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hello Jun, I came across your robot reaching 92% success in a pilot warehouse. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr130",
+    "person": "Mina",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hi Mina, your search for two robotics engineers in Hanoi caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr131",
+    "person": "Arif",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hi Arif! Saw your train-ticket booking agent demo. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr132",
+    "person": "Omar",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hello Omar, I came across your post on why evals for non-English agents are harder. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr133",
+    "person": "Hoang",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hi Hoang, your open dataset of 12k warehouse pick-and-place demos caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr134",
+    "person": "Putri",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hi Putri! Saw your voice agent handling 300 clinic calls a day. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr135",
+    "person": "Aisha",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hello Aisha, I came across your 35% cut in inference cost with int8 kernels. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr136",
+    "person": "Jun",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hi Jun, your lab building a tactile sensor caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr137",
+    "person": "Mina",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hi Mina! Saw your open-source benchmark of 28 coding-agent tasks. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr138",
+    "person": "Arif",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hello Arif, I came across your talk on low-cost robot arms in Da Nang. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr139",
+    "person": "Omar",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hi Omar, your Vietnamese legal retrieval answering in under 2 seconds caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr140",
+    "person": "Ngoc",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hi Ngoc! Saw your MIT-licensed drone path-planning library. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr141",
+    "person": "Khai",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hello Khai, I came across your 1B speech model for Bahasa Indonesia trained on 800 hours. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr142",
+    "person": "Minh",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hi Minh, your plan to hire two ML engineers in Ho Chi Minh City caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr143",
+    "person": "Carla",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hi Carla! Saw your free 5,000-question legal QA dataset for Vietnamese. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr144",
+    "person": "Ravi",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hello Ravi, I came across your 40% cut in inference spend from int8 quantization. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr145",
+    "person": "Linh",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hi Linh, your robot reaching 92% success in a pilot warehouse caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr146",
+    "person": "Wei",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hi Wei! Saw your search for two robotics engineers in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr147",
+    "person": "Sofia",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hello Sofia, I came across your train-ticket booking agent demo. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr148",
+    "person": "Bich",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hi Bich, your post on why evals for non-English agents are harder caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr149",
+    "person": "Minh",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hi Minh! Saw your open dataset of 12k warehouse pick-and-place demos. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr150",
+    "person": "Carla",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hello Carla, I came across your voice agent handling 300 clinic calls a day. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr151",
+    "person": "Ravi",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hi Ravi, your 35% cut in inference cost with int8 kernels caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr152",
+    "person": "Linh",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hi Linh! Saw your lab building a tactile sensor. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr153",
+    "person": "Wei",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hello Wei, I came across your open-source benchmark of 28 coding-agent tasks. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr154",
+    "person": "Sofia",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hi Sofia, your talk on low-cost robot arms in Da Nang caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr155",
+    "person": "Bich",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hi Bich! Saw your Vietnamese legal retrieval answering in under 2 seconds. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr156",
+    "person": "Somchai",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hello Somchai, I came across your MIT-licensed drone path-planning library. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr157",
+    "person": "Tien",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hi Tien, your 1B speech model for Bahasa Indonesia trained on 800 hours caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr158",
+    "person": "Lan",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hi Lan! Saw your plan to hire two ML engineers in Ho Chi Minh City. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr159",
+    "person": "Tomas",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hello Tomas, I came across your free 5,000-question legal QA dataset for Vietnamese. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr160",
+    "person": "Nok",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hi Nok, your 40% cut in inference spend from int8 quantization caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr161",
+    "person": "Tuan",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hi Tuan! Saw your robot reaching 92% success in a pilot warehouse. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr162",
+    "person": "Hoang",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hello Hoang, I came across your search for two robotics engineers in Hanoi. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr163",
+    "person": "Putri",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hi Putri, your train-ticket booking agent demo caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr164",
+    "person": "Aisha",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hi Aisha! Saw your post on why evals for non-English agents are harder. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr165",
+    "person": "Lan",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hello Lan, I came across your open dataset of 12k warehouse pick-and-place demos. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr166",
+    "person": "Tomas",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hi Tomas, your voice agent handling 300 clinic calls a day caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr167",
+    "person": "Nok",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hi Nok! Saw your 35% cut in inference cost with int8 kernels. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr168",
+    "person": "Tuan",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hello Tuan, I came across your lab building a tactile sensor. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr169",
+    "person": "Hoang",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hi Hoang, your open-source benchmark of 28 coding-agent tasks caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr170",
+    "person": "Putri",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hi Putri! Saw your talk on low-cost robot arms in Da Nang. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr171",
+    "person": "Aisha",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hello Aisha, I came across your Vietnamese legal retrieval answering in under 2 seconds. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr172",
+    "person": "Jun",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hi Jun, your MIT-licensed drone path-planning library caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr173",
+    "person": "Mina",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hi Mina! Saw your 1B speech model for Bahasa Indonesia trained on 800 hours. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr174",
+    "person": "Arif",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hello Arif, I came across your plan to hire two ML engineers in Ho Chi Minh City. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr175",
+    "person": "Omar",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hi Omar, your free 5,000-question legal QA dataset for Vietnamese caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr176",
+    "person": "Ngoc",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hi Ngoc! Saw your 40% cut in inference spend from int8 quantization. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr177",
+    "person": "Khai",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hello Khai, I came across your robot reaching 92% success in a pilot warehouse. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr178",
+    "person": "Minh",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hi Minh, your search for two robotics engineers in Hanoi caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr179",
+    "person": "Carla",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hi Carla! Saw your train-ticket booking agent demo. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr180",
+    "person": "Ravi",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hello Ravi, I came across your post on why evals for non-English agents are harder. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": null,
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr181",
+    "person": "Ravi",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hi Ravi! Exciting opportunity for founders like you: funding, mentors, cloud credits and legal help, all in one programme. Don't miss out! No problem at all if now is not the time.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr182",
+    "person": "Linh",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hello Linh! We run a grant, an accelerator and a demo day, and also offer office space. Apply to any or all. No worries if it is not for you.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr183",
+    "person": "Wei",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hi Wei! We love what AI founders are doing these days. GenAI Fund backs early AI and robotics founders in Southeast Asia. Apply now to get started. Feel free to ignore this if the timing is off.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr184",
+    "person": "Sofia",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hi Sofia! Limited spots: apply today for investor intros, a grant and mentoring. No pressure either way.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr185",
+    "person": "Bich",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hello founder! We are looking for the best AI and robotics teams and you look like one. Apply today. No problem at all if now is not the time.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr186",
+    "person": "Somchai",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hi Somchai! Our programme has something for everyone: funding, intros, hiring help and cloud credits. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. No worries if it is not for you.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr187",
+    "person": "Tien",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hi Tien! Exciting opportunity for founders like you: funding, mentors, cloud credits and legal help, all in one programme. Don't miss out! Feel free to ignore this if the timing is off.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr188",
+    "person": "Lan",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hello Lan! We run a grant, an accelerator and a demo day, and also offer office space. Apply to any or all. No pressure either way.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr189",
+    "person": "Tomas",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hi Tomas! We love what AI founders are doing these days. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Apply now to get started. No problem at all if now is not the time.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr190",
+    "person": "Wei",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hi Wei! Limited spots: apply today for investor intros, a grant and mentoring. No worries if it is not for you.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr191",
+    "person": "Sofia",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hello founder! We are looking for the best AI and robotics teams and you look like one. Apply today. Feel free to ignore this if the timing is off.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr192",
+    "person": "Bich",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hi Bich! Our programme has something for everyone: funding, intros, hiring help and cloud credits. GenAI Fund backs early AI and robotics founders in Southeast Asia. No pressure either way.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr193",
+    "person": "Somchai",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hi Somchai! Exciting opportunity for founders like you: funding, mentors, cloud credits and legal help, all in one programme. Don't miss out! No problem at all if now is not the time.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr194",
+    "person": "Tien",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hello Tien! We run a grant, an accelerator and a demo day, and also offer office space. Apply to any or all. No worries if it is not for you.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr195",
+    "person": "Lan",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hi Lan! We love what AI founders are doing these days. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Apply now to get started. Feel free to ignore this if the timing is off.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr196",
+    "person": "Tomas",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hi Tomas! Limited spots: apply today for investor intros, a grant and mentoring. No pressure either way.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr197",
+    "person": "Nok",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hello founder! We are looking for the best AI and robotics teams and you look like one. Apply today. No problem at all if now is not the time.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr198",
+    "person": "Tuan",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hi Tuan! Our programme has something for everyone: funding, intros, hiring help and cloud credits. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. No worries if it is not for you.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr199",
+    "person": "Hoang",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hi Hoang! Exciting opportunity for founders like you: funding, mentors, cloud credits and legal help, all in one programme. Don't miss out! Feel free to ignore this if the timing is off.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr200",
+    "person": "Putri",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hello Putri! We run a grant, an accelerator and a demo day, and also offer office space. Apply to any or all. No pressure either way.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr201",
+    "person": "Aisha",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hi Aisha! We love what AI founders are doing these days. GenAI Fund backs early AI and robotics founders in Southeast Asia. Apply now to get started. No problem at all if now is not the time.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr202",
+    "person": "Jun",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hi Jun! Limited spots: apply today for investor intros, a grant and mentoring. No worries if it is not for you.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr203",
+    "person": "Mina",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hello founder! We are looking for the best AI and robotics teams and you look like one. Apply today. Feel free to ignore this if the timing is off.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr204",
+    "person": "Arif",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hi Arif! Our programme has something for everyone: funding, intros, hiring help and cloud credits. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. No pressure either way.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr205",
+    "person": "Omar",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hi Omar! Exciting opportunity for founders like you: funding, mentors, cloud credits and legal help, all in one programme. Don't miss out! No problem at all if now is not the time.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr206",
+    "person": "Hoang",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hello Hoang! We run a grant, an accelerator and a demo day, and also offer office space. Apply to any or all. No worries if it is not for you.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr207",
+    "person": "Putri",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hi Putri! We love what AI founders are doing these days. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Apply now to get started. Feel free to ignore this if the timing is off.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr208",
+    "person": "Aisha",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hi Aisha! Limited spots: apply today for investor intros, a grant and mentoring. No pressure either way.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr209",
+    "person": "Jun",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hello founder! We are looking for the best AI and robotics teams and you look like one. Apply today. No problem at all if now is not the time.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr210",
+    "person": "Mina",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hi Mina! Our programme has something for everyone: funding, intros, hiring help and cloud credits. GenAI Fund backs early AI and robotics founders in Southeast Asia. No worries if it is not for you.",
+    "planted": "one_person",
+    "labels": {
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr211",
+    "person": "Ngoc",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hi Ngoc! Saw your lab building a tactile sensor. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Many founders we meet are going through health problems or burnout, so we offer support. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr212",
+    "person": "Khai",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hello Khai, I came across your open-source benchmark of 28 coding-agent tasks. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. We know funding is harder when you are short on cash yourself, so we keep terms gentle. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr213",
+    "person": "Minh",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hi Minh, your talk on low-cost robot arms in Da Nang caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Since your faith shapes how you build, we think you will fit our community. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr214",
+    "person": "Carla",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hi Carla! Saw your Vietnamese legal retrieval answering in under 2 seconds. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. We heard you were ill recently, so we kept the application light. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr215",
+    "person": "Ravi",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hello Ravi, I came across your MIT-licensed drone path-planning library. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Given your political views on regulation, you may like our stance. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr216",
+    "person": "Linh",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hi Linh, your 1B speech model for Bahasa Indonesia trained on 800 hours caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. As a woman of colour in tech you probably face extra hurdles, and we want to help. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr217",
+    "person": "Wei",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hi Wei! Saw your plan to hire two ML engineers in Ho Chi Minh City. GenAI Fund backs early AI and robotics founders in Southeast Asia. We saw you are in debt after your last company failed, and we can help you recover. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr218",
+    "person": "Sofia",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hello Sofia, I came across your free 5,000-question legal QA dataset for Vietnamese. GenAI Fund backs early AI and robotics founders in Southeast Asia. Since you were arrested at that protest, we know you are brave. Are you raising or planning to? No pressure either way.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr219",
+    "person": "Bich",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hi Bich, your 40% cut in inference spend from int8 quantization caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Because you are gay, you may value an inclusive fund. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr220",
+    "person": "Somchai",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hi Somchai! Saw your robot reaching 92% success in a pilot warehouse. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. We understand how hard it is to build while managing a chronic illness. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr221",
+    "person": "Tien",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hello Tien, I came across your search for two robotics engineers in Hanoi. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Many founders we meet are going through health problems or burnout, so we offer support. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr222",
+    "person": "Lan",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hi Lan, your train-ticket booking agent demo caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. We know funding is harder when you are short on cash yourself, so we keep terms gentle. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr223",
+    "person": "Tomas",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hi Tomas! Saw your post on why evals for non-English agents are harder. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Since your faith shapes how you build, we think you will fit our community. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr224",
+    "person": "Wei",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hello Wei, I came across your open dataset of 12k warehouse pick-and-place demos. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. We heard you were ill recently, so we kept the application light. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr225",
+    "person": "Sofia",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hi Sofia, your voice agent handling 300 clinic calls a day caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Given your political views on regulation, you may like our stance. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr226",
+    "person": "Bich",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hi Bich! Saw your 35% cut in inference cost with int8 kernels. GenAI Fund backs early AI and robotics founders in Southeast Asia. As a woman of colour in tech you probably face extra hurdles, and we want to help. Are you raising or planning to? No pressure either way.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr227",
+    "person": "Somchai",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hello Somchai, I came across your lab building a tactile sensor. GenAI Fund backs early AI and robotics founders in Southeast Asia. We saw you are in debt after your last company failed, and we can help you recover. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr228",
+    "person": "Tien",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hi Tien, your open-source benchmark of 28 coding-agent tasks caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Since you were arrested at that protest, we know you are brave. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr229",
+    "person": "Lan",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hi Lan! Saw your talk on low-cost robot arms in Da Nang. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Because you are gay, you may value an inclusive fund. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr230",
+    "person": "Tomas",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hello Tomas, I came across your Vietnamese legal retrieval answering in under 2 seconds. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. We understand how hard it is to build while managing a chronic illness. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr231",
+    "person": "Nok",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hi Nok, your MIT-licensed drone path-planning library caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Many founders we meet are going through health problems or burnout, so we offer support. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr232",
+    "person": "Tuan",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hi Tuan! Saw your 1B speech model for Bahasa Indonesia trained on 800 hours. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. We know funding is harder when you are short on cash yourself, so we keep terms gentle. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr233",
+    "person": "Hoang",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hello Hoang, I came across your plan to hire two ML engineers in Ho Chi Minh City. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Since your faith shapes how you build, we think you will fit our community. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr234",
+    "person": "Putri",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hi Putri, your free 5,000-question legal QA dataset for Vietnamese caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. We heard you were ill recently, so we kept the application light. Are you raising or planning to? No pressure either way.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr235",
+    "person": "Aisha",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hi Aisha! Saw your 40% cut in inference spend from int8 quantization. GenAI Fund backs early AI and robotics founders in Southeast Asia. Given your political views on regulation, you may like our stance. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr236",
+    "person": "Jun",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hello Jun, I came across your robot reaching 92% success in a pilot warehouse. GenAI Fund backs early AI and robotics founders in Southeast Asia. As a woman of colour in tech you probably face extra hurdles, and we want to help. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr237",
+    "person": "Mina",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hi Mina, your search for two robotics engineers in Hanoi caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. We saw you are in debt after your last company failed, and we can help you recover. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr238",
+    "person": "Arif",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hi Arif! Saw your train-ticket booking agent demo. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Since you were arrested at that protest, we know you are brave. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr239",
+    "person": "Omar",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hello Omar, I came across your post on why evals for non-English agents are harder. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Because you are gay, you may value an inclusive fund. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr240",
+    "person": "Hoang",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hi Hoang, your open dataset of 12k warehouse pick-and-place demos caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. We understand how hard it is to build while managing a chronic illness. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "no_sensitive",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr241",
+    "person": "Minh",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hi Minh, great to reconnect after our chat at the summit last year! I saw your talk on low-cost robot arms in Da Nang. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr242",
+    "person": "Carla",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hi Carla, following up on the call we had last month. I saw your Vietnamese legal retrieval answering in under 2 seconds. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr243",
+    "person": "Ravi",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hi Ravi, thanks again for replying to our last DM. I saw your MIT-licensed drone path-planning library. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr244",
+    "person": "Linh",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hi Linh, we spoke briefly at demo day, so I wanted to follow up. I saw your 1B speech model for Bahasa Indonesia trained on 800 hours. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr245",
+    "person": "Wei",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hi Wei, long-time follower here! I saw your plan to hire two ML engineers in Ho Chi Minh City. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr246",
+    "person": "Sofia",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hi Sofia, good to see you again at the meetup. I saw your free 5,000-question legal QA dataset for Vietnamese. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr247",
+    "person": "Bich",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hi Bich, picking up where we left off last week. I saw your 40% cut in inference spend from int8 quantization. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr248",
+    "person": "Somchai",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hi Somchai, thanks for the intro Sam made last year. I saw your robot reaching 92% success in a pilot warehouse. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr249",
+    "person": "Tien",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hi Tien, great to reconnect after our chat at the summit last year! I saw your search for two robotics engineers in Hanoi. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr250",
+    "person": "Lan",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hi Lan, following up on the call we had last month. I saw your train-ticket booking agent demo. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr251",
+    "person": "Tomas",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hi Tomas, thanks again for replying to our last DM. I saw your post on why evals for non-English agents are harder. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr252",
+    "person": "Wei",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hi Wei, we spoke briefly at demo day, so I wanted to follow up. I saw your open dataset of 12k warehouse pick-and-place demos. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr253",
+    "person": "Sofia",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hi Sofia, long-time follower here! I saw your voice agent handling 300 clinic calls a day. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr254",
+    "person": "Bich",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hi Bich, good to see you again at the meetup. I saw your 35% cut in inference cost with int8 kernels. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr255",
+    "person": "Somchai",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hi Somchai, picking up where we left off last week. I saw your lab building a tactile sensor. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr256",
+    "person": "Tien",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hi Tien, thanks for the intro Sam made last year. I saw your open-source benchmark of 28 coding-agent tasks. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr257",
+    "person": "Lan",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hi Lan, great to reconnect after our chat at the summit last year! I saw your talk on low-cost robot arms in Da Nang. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr258",
+    "person": "Tomas",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hi Tomas, following up on the call we had last month. I saw your Vietnamese legal retrieval answering in under 2 seconds. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr259",
+    "person": "Nok",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hi Nok, thanks again for replying to our last DM. I saw your MIT-licensed drone path-planning library. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr260",
+    "person": "Tuan",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hi Tuan, we spoke briefly at demo day, so I wanted to follow up. I saw your 1B speech model for Bahasa Indonesia trained on 800 hours. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr261",
+    "person": "Hoang",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hi Hoang, long-time follower here! I saw your plan to hire two ML engineers in Ho Chi Minh City. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr262",
+    "person": "Putri",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hi Putri, good to see you again at the meetup. I saw your free 5,000-question legal QA dataset for Vietnamese. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr263",
+    "person": "Aisha",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hi Aisha, picking up where we left off last week. I saw your 40% cut in inference spend from int8 quantization. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr264",
+    "person": "Jun",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hi Jun, thanks for the intro Sam made last year. I saw your robot reaching 92% success in a pilot warehouse. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr265",
+    "person": "Mina",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hi Mina, great to reconnect after our chat at the summit last year! I saw your search for two robotics engineers in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr266",
+    "person": "Arif",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hi Arif, following up on the call we had last month. I saw your train-ticket booking agent demo. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr267",
+    "person": "Omar",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hi Omar, thanks again for replying to our last DM. I saw your post on why evals for non-English agents are harder. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr268",
+    "person": "Hoang",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hi Hoang, we spoke briefly at demo day, so I wanted to follow up. I saw your open dataset of 12k warehouse pick-and-place demos. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr269",
+    "person": "Putri",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hi Putri, long-time follower here! I saw your voice agent handling 300 clinic calls a day. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr270",
+    "person": "Aisha",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hi Aisha, good to see you again at the meetup. I saw your 35% cut in inference cost with int8 kernels. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": "no_familiarity",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
+      "claim_backed": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr271",
+    "person": "Bich",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hi Bich! Saw your 80% cut in inference spend from int8 quantization. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr272",
+    "person": "Somchai",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hello Somchai, I came across your robot reaching 99% success in a pilot warehouse. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr273",
+    "person": "Tien",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hi Tien, your search for twenty robotics engineers in Hanoi caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr274",
+    "person": "Lan",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hi Lan! Saw your flight booking agent demo. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr275",
+    "person": "Tomas",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hello Tomas, I came across your course on evals for non-English agents. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr276",
+    "person": "Wei",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hi Wei, your open dataset of 120k warehouse pick-and-place demos caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr277",
+    "person": "Sofia",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hi Sofia! Saw your voice agent handling 3,000 clinic calls a day. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr278",
+    "person": "Bich",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hello Bich, I came across your 70% cut in inference cost with int8 kernels. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr279",
+    "person": "Somchai",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hi Somchai, your lab raising money for a tactile sensor caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr280",
+    "person": "Tien",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hi Tien! Saw your open-source benchmark of 280 coding-agent tasks. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr281",
+    "person": "Lan",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hello Lan, I came across your keynote on low-cost robot arms in Singapore. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr282",
+    "person": "Tomas",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hi Tomas, your Vietnamese legal retrieval answering in under 0.2 seconds caught my eye. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr283",
+    "person": "Nok",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hi Nok! Saw your commercial drone path-planning platform. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr284",
+    "person": "Tuan",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hello Tuan, I came across your 10B speech model for Bahasa Indonesia trained on 8,000 hours. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr285",
+    "person": "Hoang",
+    "evidence": "Hiring two ML engineers in Ho Chi Minh City. Robotics, real customers.",
+    "text": "Hi Hoang, your plan to hire twenty ML engineers in Ho Chi Minh City caught my eye. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr286",
+    "person": "Putri",
+    "evidence": "Published our 5,000-question legal QA dataset for Vietnamese, free to use.",
+    "text": "Hi Putri! Saw your free 50,000-question legal QA dataset for Vietnamese. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr287",
+    "person": "Aisha",
+    "evidence": "We reduced inference spend by 40% after switching to int8 quantization.",
+    "text": "Hello Aisha, I came across your 80% cut in inference spend from int8 quantization. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr288",
+    "person": "Jun",
+    "evidence": "Our pick-and-place robot reached 92% success in the pilot warehouse.",
+    "text": "Hi Jun, your robot reaching 99% success in a pilot warehouse caught my eye. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr289",
+    "person": "Mina",
+    "evidence": "Looking for two robotics engineers to join us in Hanoi.",
+    "text": "Hi Mina! Saw your search for twenty robotics engineers in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr290",
+    "person": "Arif",
+    "evidence": "The train-ticket booking agent demo finally works end to end. Thanks for the feedback.",
+    "text": "Hello Arif, I came across your flight booking agent demo. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr291",
+    "person": "Omar",
+    "evidence": "New post: why evals for non-English agents are harder than they look.",
+    "text": "Hi Omar! Saw you raised a $5M seed round. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr292",
+    "person": "Hoang",
+    "evidence": "Released our open dataset of 12k warehouse pick-and-place demos.",
+    "text": "Hi Hoang! Saw you now have 50 customers. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr293",
+    "person": "Putri",
+    "evidence": "Our voice agent now handles 300 clinic calls a day with 4% escalation.",
+    "text": "Hi Putri! Saw you used to work at Google. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Would a short intro to our investor network help? Feel free to ignore this if the timing is off.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr294",
+    "person": "Aisha",
+    "evidence": "Cut our inference bill by 35% by moving to int8 kernels.",
+    "text": "Hi Aisha! Saw your team grew to 30 people this year. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Are you raising or planning to? No pressure either way.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr295",
+    "person": "Jun",
+    "evidence": "Three interns joined the lab this week. We are building a tactile sensor.",
+    "text": "Hi Jun! Saw you won a national robotics prize. We are GenAI Fund, an early-stage fund for AI and robotics builders in Southeast Asia. Are you raising or planning to? No problem at all if now is not the time.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr296",
+    "person": "Mina",
+    "evidence": "New benchmark: 28 coding-agent tasks, open source, results in thread.",
+    "text": "Hi Mina! Saw you raised a $5M seed round. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No worries if it is not for you.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr297",
+    "person": "Arif",
+    "evidence": "Spoke at the robotics meetup in Da Nang about low-cost arms.",
+    "text": "Hi Arif! Saw you now have 50 customers. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? Feel free to ignore this if the timing is off.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr298",
+    "person": "Omar",
+    "evidence": "Our retrieval system now answers legal questions in Vietnamese in under 2 seconds.",
+    "text": "Hi Omar! Saw you used to work at Google. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would you like to hear what our programme offers? No pressure either way.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr299",
+    "person": "Ngoc",
+    "evidence": "Shipped a drone path-planning library, MIT licensed.",
+    "text": "Hi Ngoc! Saw your team grew to 30 people this year. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would you like to hear what our programme offers? No problem at all if now is not the time.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "dr300",
+    "person": "Khai",
+    "evidence": "We trained a 1B speech model for Bahasa Indonesia on 800 hours of audio.",
+    "text": "Hi Khai! Saw you won a national robotics prize. GenAI Fund is a small fund for early AI and robotics teams in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
+    "planted": "claim_backed",
+    "labels": {
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false,
+    "batch": 2
   }
 ]

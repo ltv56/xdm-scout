@@ -5,15 +5,48 @@ import { describe, expect, it } from 'vitest'
 const dir = join(__dirname, '../../../../fixtures/eval')
 const load = <T>(name: string) => JSON.parse(readFileSync(join(dir, `${name}.json`), 'utf8')) as T
 
-type Draft = { planted: string | null; labels: Record<string, boolean | null>; reviewed: boolean }
-type Dm = { group: string; text: string; labels: { invitation: boolean | null; opt_out: boolean; reply_class: string | null }; reviewed: boolean }
-type Profile = { handle: string; labels: { own_account: boolean; fits_segment: boolean | null }; reviewed: boolean }
+type Draft = { id: string; text: string; planted: string | null; labels: Record<string, boolean | null>; reviewed: boolean; batch?: number }
+type Dm = { id: string; group: string; text: string; labels: { invitation: boolean | null; opt_out: boolean; reply_class: string | null }; reviewed: boolean; batch?: number }
+type Profile = { id: string; handle: string; labels: { own_account: boolean; fits_segment: boolean | null }; reviewed: boolean; batch?: number }
 
 describe('eval fixtures', () => {
   it('keeps the sizes the spec asks for', () => {
-    expect(load<Profile[]>('profiles')).toHaveLength(30)
-    expect(load<Dm[]>('dms')).toHaveLength(100)
-    expect(load<Draft[]>('drafts')).toHaveLength(100)
+    expect(load<Profile[]>('profiles')).toHaveLength(60)
+    expect(load<Dm[]>('dms')).toHaveLength(300)
+    expect(load<Draft[]>('drafts')).toHaveLength(300)
+  })
+
+  it('keeps the first batch as it was and adds a second one with ids that continue it', () => {
+    const dms = load<Dm[]>('dms')
+    expect(dms.slice(0, 100).every((d, i) => d.id === `dm${String(i + 1).padStart(3, '0')}` && d.batch === undefined)).toBe(true)
+    expect(dms.slice(100).every((d, i) => d.id === `dm${String(i + 101).padStart(3, '0')}` && d.batch === 2)).toBe(true)
+    expect(load<Draft[]>('drafts').slice(100).every((d, i) => d.id === `dr${String(i + 101).padStart(3, '0')}` && d.batch === 2)).toBe(true)
+    expect(load<Profile[]>('profiles').slice(30).every((p, i) => p.id === `f${String(i + 31).padStart(2, '0')}` && p.batch === 2)).toBe(true)
+  })
+
+  it('has no repeated DM text and no repeated profile handle', () => {
+    expect(new Set(load<Dm[]>('dms').map((d) => d.text)).size).toBe(300)
+    expect(new Set(load<Profile[]>('profiles').map((p) => p.handle)).size).toBe(60)
+  })
+
+  it('gives the second batch 80 clean drafts and 30 of each planted fault', () => {
+    const second = load<Draft[]>('drafts').slice(100)
+    const count = (f: string | null) => second.filter((d) => d.planted === f).length
+    expect([count(null), count('one_person'), count('no_sensitive'), count('no_familiarity'), count('claim_backed')]).toEqual([80, 30, 30, 30, 30])
+  })
+
+  it('covers short, long, lowercase and emoji messages and 30 tricky ones in the second batch', () => {
+    const dms = load<Dm[]>('dms').slice(100)
+    expect(dms.some((d) => d.text.length < 25)).toBe(true)
+    expect(dms.some((d) => d.text.length > 100)).toBe(true)
+    expect(dms.some((d) => /^[a-z]/.test(d.text))).toBe(true)
+    expect(dms.some((d) => /\p{Extended_Pictographic}/u.test(d.text))).toBe(true)
+    expect(dms.filter((d) => d.group === 'tricky')).toHaveLength(30)
+  })
+
+  it('writes every fixture in English', () => {
+    const all = JSON.stringify([load('profiles'), load('dms'), load('drafts')])
+    expect(/[À-ɏḀ-ỿ]/.test(all)).toBe(false)
   })
 
   it('marks a planted fault false on its own check and every other check true', () => {
@@ -28,14 +61,18 @@ describe('eval fixtures', () => {
   it('labels a DM from the group it was written for and leaves the vague invitations to the reviewer', () => {
     for (const d of load<Dm[]>('dms')) {
       if (d.group === 'vague_invite') expect(d.labels.invitation).toBeNull()
-      else expect(d.labels.invitation).toBe(d.group === 'clear_invite')
+      else if (d.group !== 'tricky') expect(d.labels.invitation).toBe(d.group === 'clear_invite')
     }
   })
 
   it('treats a stop request as an opt-out and a plain decline as not one', () => {
     const dms = load<Dm[]>('dms')
     expect(dms.filter((d) => /^Please stop|^Unsubscribe/.test(d.text)).every((d) => d.labels.opt_out && d.labels.reply_class === 'Opt-out')).toBe(true)
-    expect(dms.filter((d) => d.text.startsWith('Not interested')).every((d) => !d.labels.opt_out && d.labels.reply_class === 'Not interested')).toBe(true)
+    expect(dms.filter((d) => d.group === 'decline' && d.text.startsWith('Not interested')).every((d) => !d.labels.opt_out && d.labels.reply_class === 'Not interested')).toBe(true)
+  })
+
+  it('has an opt-out exactly where the reply class is Opt-out', () => {
+    for (const d of load<Dm[]>('dms')) expect(d.labels.opt_out).toBe(d.labels.reply_class === 'Opt-out')
   })
 
   it('flags parody, fan and unaffiliated accounts as not their own', () => {

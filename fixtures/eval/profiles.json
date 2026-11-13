@@ -358,5 +358,395 @@
       "fits_segment": true
     },
     "reviewed": false
+  },
+  {
+    "id": "f31",
+    "handle": "hoang_vision",
+    "name": "Hoang Nguyen",
+    "bio": "Building vision models for agriculture in Can Tho. Founder, pre-seed.",
+    "followers": 940,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f32",
+    "handle": "bich_nlp",
+    "name": "Bich Le",
+    "bio": "Research engineer, Vietnamese NLP. Open-source fine-tunes of small models.",
+    "followers": 410,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f33",
+    "handle": "khai_agents",
+    "name": "Khai Pham",
+    "bio": "Building agent infrastructure at a Singapore seed startup. Previously Grab.",
+    "followers": 3300,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f34",
+    "handle": "putri_speech",
+    "name": "Putri Wulandari",
+    "bio": "Speech recognition for Bahasa Indonesia. Co-founder, Jakarta.",
+    "followers": 180,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f35",
+    "handle": "somchai_drones",
+    "name": "Somchai K.",
+    "bio": "Drone autonomy and path planning. Founder in Chiang Mai.",
+    "followers": 5100,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f36",
+    "handle": "minh_slam",
+    "name": "Minh Vo",
+    "bio": "SLAM and mapping for warehouse robots. Hanoi. Hiring interns.",
+    "followers": 760,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f37",
+    "handle": "aisha_rl",
+    "name": "Aisha Rahman",
+    "bio": "PhD candidate in reinforcement learning, Kuala Lumpur. Publishing soon.",
+    "followers": 7200,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f38",
+    "handle": "tien_edge",
+    "name": "Tien Do",
+    "bio": "Tiny ML on microcontrollers. Open-source firmware for robot joints.",
+    "followers": 2300,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f39",
+    "handle": "carla_evals",
+    "name": "Carla Mendes",
+    "bio": "Writing evals for coding agents. Independent researcher.",
+    "followers": 12800,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f40",
+    "handle": "jun_manip",
+    "name": "Jun Ito",
+    "bio": "Dexterous manipulation. Robot learning lab, Tokyo. Collaborations welcome.",
+    "followers": 95,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f41",
+    "handle": "lan_rag",
+    "name": "Lan Chu",
+    "bio": "Founder building retrieval for Vietnamese legal documents. Seed stage.",
+    "followers": 940,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f42",
+    "handle": "ravi_infra",
+    "name": "Ravi Menon",
+    "bio": "Inference kernels and quantization. Open source. Bengaluru.",
+    "followers": 410,
+    "labels": {
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f43",
+    "handle": "tung_realtor",
+    "name": "Tung Tran",
+    "bio": "Real estate advice in Ho Chi Minh City. DM for listings.",
+    "followers": 3300,
+    "labels": {
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f44",
+    "handle": "nina_chef",
+    "name": "Nina",
+    "bio": "Cooking videos. Weekly recipes. AI filters are fun lol.",
+    "followers": 180,
+    "labels": {
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f45",
+    "handle": "ed_pm",
+    "name": "Ed Foster",
+    "bio": "Product manager at a bank. Opinions my own.",
+    "followers": 5100,
+    "labels": {
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f46",
+    "handle": "hoa_teacher",
+    "name": "Hoa Tran",
+    "bio": "English teacher. Sometimes tries chatbots for lesson plans.",
+    "followers": 760,
+    "labels": {
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f47",
+    "handle": "pete_nft",
+    "name": "Pete",
+    "bio": "NFT collector. gm. AI x crypto soon.",
+    "followers": 7200,
+    "labels": {
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f48",
+    "handle": "sara_recruiter",
+    "name": "Sara Kim",
+    "bio": "Tech recruiter. DM me if you are hiring or looking.",
+    "followers": 2300,
+    "labels": {
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f49",
+    "handle": "bao_gamedev",
+    "name": "Bao",
+    "bio": "Indie game dev. Unity. Not much AI.",
+    "followers": 12800,
+    "labels": {
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f50",
+    "handle": "jensen_not",
+    "name": "Jensen H. (parody)",
+    "bio": "Parody account. Leather jacket enthusiast. Not affiliated with any company.",
+    "followers": 95,
+    "labels": {
+      "own_account": false,
+      "fits_segment": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f51",
+    "handle": "openai_fanzone",
+    "name": "OpenAI Fan Zone",
+    "bio": "Fan page for everything OpenAI. Unofficial.",
+    "followers": 940,
+    "labels": {
+      "own_account": false,
+      "fits_segment": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f52",
+    "handle": "sundar_fake",
+    "name": "Sundar P",
+    "bio": "Unofficial fan account. Not the real Sundar.",
+    "followers": 410,
+    "labels": {
+      "own_account": false,
+      "fits_segment": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f53",
+    "handle": "ai_memes_hub",
+    "name": "AI Memes Hub",
+    "bio": "Daily AI memes. Not affiliated with any lab or company.",
+    "followers": 3300,
+    "labels": {
+      "own_account": false,
+      "fits_segment": false
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f54",
+    "handle": "viai_lab",
+    "name": "VIAI Lab",
+    "bio": "Official account of VIAI Lab, a university robotics lab in Hanoi.",
+    "followers": 180,
+    "labels": {
+      "own_account": true,
+      "fits_segment": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f55",
+    "handle": "startup_hub_sg",
+    "name": "Startup Hub SG",
+    "bio": "Community for founders in Singapore. Events and intros.",
+    "followers": 5100,
+    "labels": {
+      "own_account": true,
+      "fits_segment": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f56",
+    "handle": "gpu_cloud_co",
+    "name": "GPU Cloud Co",
+    "bio": "Cheap GPUs for AI teams. Official account.",
+    "followers": 760,
+    "labels": {
+      "own_account": true,
+      "fits_segment": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f57",
+    "handle": "vc_digest",
+    "name": "VC Digest",
+    "bio": "Weekly newsletter on AI funding.",
+    "followers": 7200,
+    "labels": {
+      "own_account": true,
+      "fits_segment": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f58",
+    "handle": "alex_b",
+    "name": "Alex B",
+    "bio": "Building things. Learning. 🚀",
+    "followers": 2300,
+    "labels": {
+      "own_account": true,
+      "fits_segment": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f59",
+    "handle": "m_tran",
+    "name": "M. Tran",
+    "bio": "Engineer. Coffee.",
+    "followers": 12800,
+    "labels": {
+      "own_account": true,
+      "fits_segment": null
+    },
+    "reviewed": false,
+    "batch": 2
+  },
+  {
+    "id": "f60",
+    "handle": "xyz_labs",
+    "name": "xyz",
+    "bio": "Stealth. Something with models soon.",
+    "followers": 95,
+    "labels": {
+      "own_account": true,
+      "fits_segment": null
+    },
+    "reviewed": false,
+    "batch": 2
   }
 ]
