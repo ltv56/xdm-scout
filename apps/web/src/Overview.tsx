@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
+import type { ReviewQueue } from '../../api/src/review/contract'
 import { getJson, postJson } from './api'
 import FitBadge from './FitBadge'
 import type { Prospect } from './Prospects'
+import { verdict } from './review/labels'
 import { btnLink, btnPrimary, btnSecondary } from './ui'
 
 interface DiscoveryRun {
@@ -46,7 +48,7 @@ const SEGMENTS = [
   { key: 'unscored', label: 'Not scored yet', bar: 'bg-raised ring-1 ring-inset ring-rule' },
 ] as const
 
-export default function Overview({ campaignId, onProspects }: { campaignId: number; onProspects: () => void }) {
+export default function Overview({ campaignId, onReview, onProspects }: { campaignId: number; onReview: () => void; onProspects: () => void }) {
   const qc = useQueryClient()
   const [waitingFor, setWaitingFor] = useState<{ at: string | null } | null>(null)
   const [note, setNote] = useState<string | null>(null)
@@ -62,6 +64,7 @@ export default function Overview({ campaignId, onProspects }: { campaignId: numb
     queryFn: () => getJson(`/campaigns/${campaignId}/prospects`),
     refetchInterval: waiting ? 5000 : false,
   })
+  const queue = useQuery<ReviewQueue>({ queryKey: ['review-queue', campaignId], queryFn: () => getJson(`/review-queue?campaignId=${campaignId}`), retry: false })
   const estimate = useQuery<{ estimatedMicros: number }>({ queryKey: ['estimate', campaignId], queryFn: () => getJson(`/campaigns/${campaignId}/estimate`), retry: false })
 
   const search = useMutation({
@@ -83,6 +86,8 @@ export default function Overview({ campaignId, onProspects }: { campaignId: numb
   const people = prospects.data ?? []
   const counts = { strong: 0, possible: 0, weak: 0, not_a_fit: 0, unscored: 0 }
   for (const p of people) counts[p.fit ?? 'unscored'] += 1
+  const drafts = (queue.data?.items ?? []).filter((i) => i.status === 'pending')
+  const byVerdict = (t: string) => drafts.filter((d) => verdict(d).tone === t).length
   const run = c.lastDiscovery
   const sources = [c.handles.length && plural(c.handles.length, 'handle'), c.seeds?.length && plural(c.seeds.length, 'seed account'), c.queries?.length && plural(c.queries.length, 'search')].filter(Boolean).join(' · ')
   const top = people.filter((p) => p.fit === 'strong' || p.fit === 'possible').slice(0, 5)
@@ -110,7 +115,21 @@ export default function Overview({ campaignId, onProspects }: { campaignId: numb
       {search.error && <p role="alert" className="mt-3 text-sm font-medium text-block">{search.error.message}</p>}
 
       <section aria-label="Next step" className="mt-8 flex flex-wrap items-center justify-between gap-x-10 gap-y-5 rounded-3xl bg-rail px-10 py-9">
-        {counts.unscored > 0 ? (
+        {drafts.length > 0 ? (
+          <>
+            <div>
+              <h2 className="text-2xl font-bold leading-tight">
+                <span className="text-accent">{drafts.length}</span> {drafts.length === 1 ? 'draft is' : 'drafts are'} waiting for your review
+              </h2>
+              <p className="mt-1.5 text-sm text-muted">
+                {[byVerdict('ok') && `${byVerdict('ok')} ready`, byVerdict('warn') && `${byVerdict('warn')} to check`, byVerdict('stop') && `${byVerdict('stop')} to fix`].filter(Boolean).join(' · ')}
+              </p>
+            </div>
+            <button type="button" className={btnPrimary} onClick={onReview}>
+              Review drafts
+            </button>
+          </>
+        ) : counts.unscored > 0 ? (
           <>
             <div>
               <h2 className="text-2xl font-bold leading-tight">{plural(counts.unscored, 'person', 'people')} found, not scored yet</h2>

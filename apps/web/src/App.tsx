@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import type { CampaignSummary } from '../../api/src/review/contract'
+import type { CampaignSummary, ReviewQueue as Queue } from '../../api/src/review/contract'
 import { getJson } from './api'
 import NewCampaign from './NewCampaign'
 import Overview from './Overview'
 import Prospects from './Prospects'
+import ReviewQueue from './review/ReviewQueue'
 import { btnSecondary } from './ui'
 
 interface Health {
@@ -14,6 +15,7 @@ interface Health {
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
+  { id: 'review', label: 'Review' },
   { id: 'prospects', label: 'Prospects' },
 ] as const
 type Tab = (typeof TABS)[number]['id']
@@ -27,6 +29,13 @@ export default function App() {
 
   const list = campaigns.data ?? []
   const active = campaignId ?? list[0]?.id ?? null
+  const queue = useQuery<Queue>({
+    queryKey: ['review-queue', active],
+    queryFn: () => getJson(`/review-queue?campaignId=${active}`),
+    enabled: active !== null,
+    retry: false,
+  })
+  const waiting = (queue.data?.items ?? []).filter((i) => i.status === 'pending').length
 
   const scroll = 'h-full overflow-y-auto px-12 py-10'
 
@@ -47,6 +56,7 @@ export default function App() {
               className={`relative py-1 transition-colors ${tab === t.id && !creating ? "font-semibold text-ink after:absolute after:inset-x-0 after:-bottom-1.5 after:h-0.5 after:rounded-full after:bg-accent" : 'text-muted hover:text-ink'}`}
             >
               {t.label}
+              {t.id === 'review' && waiting > 0 && <span className="ml-1.5 rounded-full bg-accent px-1.5 py-0.5 text-xs font-semibold text-accent-ink">{waiting}</span>}
             </button>
           ))}
         </nav>
@@ -94,8 +104,10 @@ export default function App() {
             </div>
           ) : tab === 'overview' ? (
             <div className={scroll}>
-              <Overview campaignId={active} onProspects={() => setTab('prospects')} />
+              <Overview campaignId={active} onReview={() => setTab('review')} onProspects={() => setTab('prospects')} />
             </div>
+          ) : tab === 'review' ? (
+            <ReviewQueue campaignId={active} />
           ) : (
             <div className={scroll}>
               <Prospects campaignId={active} />
