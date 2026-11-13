@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
-export type SignalAction = 'approve' | 'skip' | 'regenerate' | 'dnc'
+export type SignalAction = 'approve' | 'skip' | 'regenerate' | 'dnc' | 'dismiss'
 
 // Append-only: what the reviewer did to the AI's draft. No handle, no user id.
 @Entity('review_signals')
