@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "dm001",
+    "group": "clear_invite",
+    "text": "Hi! I saw your call for founders. I'm building an eval tool for agents, how do I apply?",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm002",
+    "group": "clear_invite",
+    "text": "Hey, we're a 2-person team making a voice model for Vietnamese. Would love to talk to you about the program.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm003",
+    "group": "clear_invite",
+    "text": "Hello, I'd like to apply to the programme. Who should I send my deck to?",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm004",
+    "group": "clear_invite",
+    "text": "DM as asked: robotics startup in Bangkok, seed stage, looking for intros to investors. Can we chat?",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm005",
+    "group": "clear_invite",
+    "text": "Interested! Can you tell me more about the application timeline and what you offer?",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm006",
+    "group": "clear_invite",
+    "text": "Following your post: yes, I'm building in AI infra. Please get in touch.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm007",
+    "group": "clear_invite",
+    "text": "Hi! I saw your call for founders. I'm building an eval tool for agents, how do I apply? Thank you!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm008",
+    "group": "clear_invite",
+    "text": "Hey, we're a 2-person team making a voice model for Vietnamese. Would love to talk to you about the program. Cheers!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm009",
+    "group": "clear_invite",
+    "text": "Hello, I'd like to apply to the programme. Who should I send my deck to? Thanks.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm010",
+    "group": "clear_invite",
+    "text": "DM as asked: robotics startup in Bangkok, seed stage, looking for intros to investors. Can we chat? Cheers.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm011",
+    "group": "clear_invite",
+    "text": "Interested! Can you tell me more about the application timeline and what you offer? Best, Anh",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm012",
+    "group": "clear_invite",
+    "text": "Following your post: yes, I'm building in AI infra. Please get in touch. - Bao",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm013",
+    "group": "clear_invite",
+    "text": "Hi! I saw your call for founders. I'm building an eval tool for agents, how do I apply? Please reply when you can.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm014",
+    "group": "clear_invite",
+    "text": "Hey, we're a 2-person team making a voice model for Vietnamese. Would love to talk to you about the program. Thank you!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm015",
+    "group": "clear_invite",
+    "text": "Hello, I'd like to apply to the programme. Who should I send my deck to? Cheers!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm016",
+    "group": "clear_invite",
+    "text": "DM as asked: robotics startup in Bangkok, seed stage, looking for intros to investors. Can we chat? Thanks.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm017",
+    "group": "clear_invite",
+    "text": "Interested! Can you tell me more about the application timeline and what you offer? Cheers.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm018",
+    "group": "clear_invite",
+    "text": "Following your post: yes, I'm building in AI infra. Please get in touch. Best, Raj",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm019",
+    "group": "clear_invite",
+    "text": "Hi! I saw your call for founders. I'm building an eval tool for agents, how do I apply? - Mai",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm020",
+    "group": "clear_invite",
+    "text": "Hey, we're a 2-person team making a voice model for Vietnamese. Would love to talk to you about the program. Please reply when you can.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm021",
+    "group": "vague_invite",
+    "text": "Interesting. What is this about?",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm022",
+    "group": "vague_invite",
+    "text": "I might be interested, depends. Tell me more?",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm023",
+    "group": "vague_invite",
+    "text": "Thanks for reaching out. Is this only for startups in the US?",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm024",
+    "group": "vague_invite",
+    "text": "Hmm, maybe. We're still figuring out what we need.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm025",
+    "group": "vague_invite",
+    "text": "Saw your post. Not sure if we qualify, we're a research group not a company.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm026",
+    "group": "vague_invite",
+    "text": "Possibly, send details.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm027",
+    "group": "vague_invite",
+    "text": "Interesting. What is this about? Thank you!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm028",
+    "group": "vague_invite",
+    "text": "I might be interested, depends. Tell me more? Cheers!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm029",
+    "group": "vague_invite",
+    "text": "Thanks for reaching out. Is this only for startups in the US? Thanks.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm030",
+    "group": "vague_invite",
+    "text": "Hmm, maybe. We're still figuring out what we need. Cheers.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm031",
+    "group": "vague_invite",
+    "text": "Saw your post. Not sure if we qualify, we're a research group not a company. Best, Anh",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm032",
+    "group": "vague_invite",
+    "text": "Possibly, send details. - Bao",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm033",
+    "group": "vague_invite",
+    "text": "Interesting. What is this about? Please reply when you can.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm034",
+    "group": "vague_invite",
+    "text": "I might be interested, depends. Tell me more? Thank you!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm035",
+    "group": "vague_invite",
+    "text": "Thanks for reaching out. Is this only for startups in the US? Cheers!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm036",
+    "group": "vague_invite",
+    "text": "Hmm, maybe. We're still figuring out what we need. Thanks.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm037",
+    "group": "vague_invite",
+    "text": "Saw your post. Not sure if we qualify, we're a research group not a company. Cheers.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm038",
+    "group": "vague_invite",
+    "text": "Possibly, send details. Best, Raj",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm039",
+    "group": "vague_invite",
+    "text": "Interesting. What is this about? - Mai",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm040",
+    "group": "vague_invite",
+    "text": "I might be interested, depends. Tell me more? Please reply when you can.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm041",
+    "group": "neutral",
+    "text": "Thanks for the follow!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm042",
+    "group": "neutral",
+    "text": "Nice to meet you. Great thread yesterday.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm043",
+    "group": "neutral",
+    "text": "Which city are you based in?",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm044",
+    "group": "neutral",
+    "text": "lol yes that was my post, thanks for sharing it",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm045",
+    "group": "neutral",
+    "text": "Happy to answer questions about the robotics benchmark I posted.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm046",
+    "group": "neutral",
+    "text": "Hello",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm047",
+    "group": "neutral",
+    "text": "Thanks for the follow! Thank you!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm048",
+    "group": "neutral",
+    "text": "Nice to meet you. Great thread yesterday. Cheers!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm049",
+    "group": "neutral",
+    "text": "Which city are you based in? Thanks.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm050",
+    "group": "neutral",
+    "text": "lol yes that was my post, thanks for sharing it Cheers.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm051",
+    "group": "neutral",
+    "text": "Happy to answer questions about the robotics benchmark I posted. Best, Anh",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm052",
+    "group": "neutral",
+    "text": "Hello - Bao",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm053",
+    "group": "neutral",
+    "text": "Thanks for the follow! Please reply when you can.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm054",
+    "group": "neutral",
+    "text": "Nice to meet you. Great thread yesterday. Thank you!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm055",
+    "group": "neutral",
+    "text": "Which city are you based in? Cheers!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm056",
+    "group": "neutral",
+    "text": "lol yes that was my post, thanks for sharing it Thanks.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm057",
+    "group": "neutral",
+    "text": "Happy to answer questions about the robotics benchmark I posted. Cheers.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm058",
+    "group": "neutral",
+    "text": "Hello Best, Raj",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm059",
+    "group": "neutral",
+    "text": "Thanks for the follow! - Mai",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm060",
+    "group": "neutral",
+    "text": "Nice to meet you. Great thread yesterday. Please reply when you can.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm061",
+    "group": "decline",
+    "text": "Not interested, thanks.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm062",
+    "group": "decline",
+    "text": "Please stop messaging me.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm063",
+    "group": "decline",
+    "text": "Stop. Remove me from your list.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm064",
+    "group": "decline",
+    "text": "No thanks, we are fully funded at the moment.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm065",
+    "group": "decline",
+    "text": "Unsubscribe",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm066",
+    "group": "decline",
+    "text": "I don't take unsolicited DMs. Don't contact me again.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm067",
+    "group": "decline",
+    "text": "Not interested, thanks. Thank you!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm068",
+    "group": "decline",
+    "text": "Please stop messaging me. Cheers!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm069",
+    "group": "decline",
+    "text": "Stop. Remove me from your list. Thanks.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm070",
+    "group": "decline",
+    "text": "No thanks, we are fully funded at the moment. Cheers.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm071",
+    "group": "decline",
+    "text": "Unsubscribe Best, Anh",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm072",
+    "group": "decline",
+    "text": "I don't take unsolicited DMs. Don't contact me again. - Bao",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm073",
+    "group": "decline",
+    "text": "Not interested, thanks. Please reply when you can.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm074",
+    "group": "decline",
+    "text": "Please stop messaging me. Thank you!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm075",
+    "group": "decline",
+    "text": "Stop. Remove me from your list. Cheers!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm076",
+    "group": "decline",
+    "text": "No thanks, we are fully funded at the moment. Thanks.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm077",
+    "group": "decline",
+    "text": "Unsubscribe Cheers.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm078",
+    "group": "decline",
+    "text": "I don't take unsolicited DMs. Don't contact me again. Best, Raj",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm079",
+    "group": "decline",
+    "text": "Not interested, thanks. - Mai",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm080",
+    "group": "decline",
+    "text": "Please stop messaging me. Please reply when you can.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm081",
+    "group": "spam",
+    "text": "Get 10k followers today! Cheap and fast, click here.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm082",
+    "group": "spam",
+    "text": "Dear sir, I have a business proposal that will make you rich. Reply urgently.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm083",
+    "group": "spam",
+    "text": "Join our crypto signals group, guaranteed 100x returns.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm084",
+    "group": "spam",
+    "text": "Hi I am from a marketing agency, we can boost your account for $50.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm085",
+    "group": "spam",
+    "text": "[automated] Your account has been selected for a reward. Verify here.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm086",
+    "group": "spam",
+    "text": "Check my profile for exclusive content",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm087",
+    "group": "spam",
+    "text": "Get 10k followers today! Cheap and fast, click here. Thank you!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm088",
+    "group": "spam",
+    "text": "Dear sir, I have a business proposal that will make you rich. Reply urgently. Cheers!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm089",
+    "group": "spam",
+    "text": "Join our crypto signals group, guaranteed 100x returns. Thanks.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm090",
+    "group": "spam",
+    "text": "Hi I am from a marketing agency, we can boost your account for $50. Cheers.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm091",
+    "group": "spam",
+    "text": "[automated] Your account has been selected for a reward. Verify here. Best, Anh",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm092",
+    "group": "spam",
+    "text": "Check my profile for exclusive content - Bao",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm093",
+    "group": "spam",
+    "text": "Get 10k followers today! Cheap and fast, click here. Please reply when you can.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm094",
+    "group": "spam",
+    "text": "Dear sir, I have a business proposal that will make you rich. Reply urgently. Thank you!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm095",
+    "group": "spam",
+    "text": "Join our crypto signals group, guaranteed 100x returns. Cheers!",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm096",
+    "group": "spam",
+    "text": "Hi I am from a marketing agency, we can boost your account for $50. Thanks.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm097",
+    "group": "spam",
+    "text": "[automated] Your account has been selected for a reward. Verify here. Cheers.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm098",
+    "group": "spam",
+    "text": "Check my profile for exclusive content Best, Raj",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm099",
+    "group": "spam",
+    "text": "Get 10k followers today! Cheap and fast, click here. - Mai",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  },
+  {
+    "id": "dm100",
+    "group": "spam",
+    "text": "Dear sir, I have a business proposal that will make you rich. Reply urgently. Please reply when you can.",
+    "labels": {
+      "invitation": null,
+      "opt_out": null,
+      "reply_class": null
+    }
+  }
+]

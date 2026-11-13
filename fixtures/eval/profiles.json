@@ -1,0 +1,332 @@
+[
+  {
+    "id": "f01",
+    "handle": "mina_builds",
+    "name": "Mina Park",
+    "bio": "Building open-source robotics foundation models. Previously ML at a self-driving startup.",
+    "followers": 320,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f02",
+    "handle": "tomas_agents",
+    "name": "Tomas Reyes",
+    "bio": "Founder. LLM agents and developer tools for infra teams.",
+    "followers": 880,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f03",
+    "handle": "lena_embodied",
+    "name": "Lena Ito",
+    "bio": "Researcher, embodied AI and manipulation. Views my own.",
+    "followers": 4200,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f04",
+    "handle": "linh_ml",
+    "name": "Linh Tran",
+    "bio": "Co-founder @ a Saigon seed-stage startup doing speech models for Vietnamese call centres.",
+    "followers": 15000,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f05",
+    "handle": "arif_ai",
+    "name": "Arif Hakim",
+    "bio": "Building evals for LLM agents. Jakarta. Ex-Gojek.",
+    "followers": 2100,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f06",
+    "handle": "nok_robotics",
+    "name": "Nok Suwan",
+    "bio": "Robotics engineer, Bangkok. Working on low-cost grippers. Open-sourcing everything.",
+    "followers": 610,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f07",
+    "handle": "sam_infers",
+    "name": "Sam Okafor",
+    "bio": "Inference engineer. Making models cheaper to serve. Writing about GPU kernels.",
+    "followers": 9800,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f08",
+    "handle": "priya_vision",
+    "name": "Priya Nair",
+    "bio": "Computer vision for agriculture. Founder, pre-seed.",
+    "followers": 1500,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f09",
+    "handle": "dang_codes",
+    "name": "Dang Minh",
+    "bio": "Indie hacker shipping small AI tools. 3 products live.",
+    "followers": 320,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f10",
+    "handle": "hana_research",
+    "name": "Hana Kim",
+    "bio": "PhD student, RL for locomotion. Open to collaborations.",
+    "followers": 880,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f11",
+    "handle": "ai_news_daily",
+    "name": "AI News Daily",
+    "bio": "Your daily dose of AI news. DM for promo. Not affiliated with any lab.",
+    "followers": 4200,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f12",
+    "handle": "elon_musk_fan",
+    "name": "Elon Musk Fan Page",
+    "bio": "Fan account. Parody. Not the real thing.",
+    "followers": 15000,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f13",
+    "handle": "crypto_alpha",
+    "name": "Alpha Calls",
+    "bio": "100x gems, AI tokens, signals. Join the channel.",
+    "followers": 2100,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f14",
+    "handle": "jess_designs",
+    "name": "Jess Moreno",
+    "bio": "Product designer. Coffee, cats and Figma.",
+    "followers": 610,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f15",
+    "handle": "kai_vc",
+    "name": "Kai Lindqvist",
+    "bio": "Investor at a seed fund. Backing AI infra. Opinions mine.",
+    "followers": 9800,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f16",
+    "handle": "the_real_sama",
+    "name": "Sam A (parody)",
+    "bio": "Unofficial. Tweets in the style of a famous CEO.",
+    "followers": 1500,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f17",
+    "handle": "wei_agents",
+    "name": "Wei Zhang",
+    "bio": "Building a multi-agent framework. Ex-research engineer. Singapore.",
+    "followers": 320,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f18",
+    "handle": "rina_ops",
+    "name": "Rina Putri",
+    "bio": "Head of ops at a logistics company. Interested in AI for supply chains.",
+    "followers": 880,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f19",
+    "handle": "omar_llm",
+    "name": "Omar Haddad",
+    "bio": "Fine-tuning small models for Arabic and Vietnamese. Open weights advocate.",
+    "followers": 4200,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f20",
+    "handle": "ben_commentary",
+    "name": "Ben Walsh",
+    "bio": "Tech commentator. Thread guy. Hot takes on AI every day.",
+    "followers": 15000,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f21",
+    "handle": "tuan_robot",
+    "name": "Tuan Anh Le",
+    "bio": "Robotics founder, Hanoi. Building warehouse pick-and-place arms. Hiring.",
+    "followers": 2100,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f22",
+    "handle": "maya_mlops",
+    "name": "Maya Chen",
+    "bio": "MLOps lead. Talks about deploying models, not training them.",
+    "followers": 610,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f23",
+    "handle": "rob_official",
+    "name": "Rob Labs",
+    "bio": "Official account of Rob Labs. Humanoid robots for factories.",
+    "followers": 9800,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f24",
+    "handle": "dr_ana",
+    "name": "Ana Souza",
+    "bio": "Professor, machine learning theory. Not accepting new students.",
+    "followers": 1500,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f25",
+    "handle": "felix_gamer",
+    "name": "Felix",
+    "bio": "Gamer. Streams on weekends. AI art enjoyer.",
+    "followers": 320,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f26",
+    "handle": "ngoc_ai",
+    "name": "Ngoc Bui",
+    "bio": "Building a retrieval startup in HCMC. YC applicant. Learning in public.",
+    "followers": 880,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f27",
+    "handle": "zane_prompts",
+    "name": "Zane",
+    "bio": "Prompt engineer. Selling a course on prompts.",
+    "followers": 4200,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f28",
+    "handle": "ira_embedded",
+    "name": "Ira Volkov",
+    "bio": "Embedded systems for robots. Firmware, motor control, tiny ML.",
+    "followers": 15000,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f29",
+    "handle": "lucas_notfit",
+    "name": "Lucas Meyer",
+    "bio": "Dentist. Occasionally tweets about AI.",
+    "followers": 2100,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  },
+  {
+    "id": "f30",
+    "handle": "sofia_founder",
+    "name": "Sofia Reyes",
+    "bio": "Second-time founder. Previously sold a robotics company. Now AI agents for finance teams.",
+    "followers": 610,
+    "labels": {
+      "own_account": null,
+      "fits_segment": null
+    }
+  }
+]
