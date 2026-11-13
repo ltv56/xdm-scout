@@ -127,6 +127,17 @@ export class Draft {
   // What the model wrote, kept when the reviewer edits it.
   @Column({ type: 'text', nullable: true })
   originalContent!: string | null
+
+  @Column({ type: 'varchar', length: 2, default: 'en' })
+  language!: 'en' | 'vi' | 'th' | 'id'
+
+  // The English version kept beside a translated draft; null when the draft is in English.
+  @Column({ type: 'text', nullable: true })
+  englishText!: string | null
+
+  // The English sentences, kept so a translated draft can go back to them with their sources.
+  @Column({ type: 'json', nullable: true })
+  englishSentences!: StoredSentence[] | null
 }
 
 export type AttemptStatus =

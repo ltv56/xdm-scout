@@ -19,6 +19,7 @@ function cannedDraft({ opening, profile }: DraftInput) {
 export function cannedHandler(req: LlmRequest): unknown {
   if (req.task === 'verify') return { supported: true }
   if (req.task === 'decide') return { probability: 0.5 }
+  if (req.task === 'translate') return { sentences: (JSON.parse(req.user) as { sentences: string[] }).sentences.map((text) => ({ text })) }
   if (req.task === 'draft') return cannedDraft(JSON.parse(req.user) as DraftInput)
   const evidence = (JSON.parse(req.user) as { evidence: EvidenceItem[] }).evidence
   const bio = evidence.find((e) => e.id.startsWith('bio:'))

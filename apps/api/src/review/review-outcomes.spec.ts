@@ -174,5 +174,6 @@ describe('routes', () => {
     await expect(controller.regenerate(1, { note: '' })).rejects.toBeInstanceOf(BadRequestException)
     await expect(controller.manual(1, { outcome: 'maybe' })).rejects.toBeInstanceOf(BadRequestException)
     await expect(controller.send(1, { contentHash: 'short' })).rejects.toBeInstanceOf(BadRequestException)
+    await expect(controller.language(1, { language: 'fr' })).rejects.toBeInstanceOf(BadRequestException)
   })
 })

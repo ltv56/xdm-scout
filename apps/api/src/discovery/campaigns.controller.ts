@@ -1,7 +1,9 @@
-import { BadRequestException, Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Post } from '@nestjs/common'
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Patch, Post } from '@nestjs/common'
 import { DataSource, IsNull } from 'typeorm'
 import { z } from 'zod'
 import { JobsService } from '../jobs/jobs.service'
+import { campaignLaneBody } from '../review/contract'
+import { resolveLane } from './campaign-lane'
 import { DiscoveryService } from './discovery.service'
 import { Campaign, Prospect } from './entities'
 import { ProspectsService } from './prospects.service'
@@ -15,7 +17,11 @@ const createBody = z
     queries: z.array(z.string().min(1).max(512)).max(10).default([]),
     criteria: z.array(z.string().min(1).max(200)).max(5).default([]),
     budgetUsd: z.number().positive().max(100).optional(),
+    programId: z.number().int().positive().nullable().optional(),
+    callPostUrl: z.string().nullable().optional(),
+    callKeyword: z.string().nullable().optional(),
   })
+  .strict()
   .refine((b) => b.handles.length + b.seeds.length + b.queries.length > 0, {
     message: 'Give at least one handle, seed account or search query',
   })
@@ -35,11 +41,21 @@ export class CampaignsController {
   }
 
   @Post()
-  create(@Body() body: unknown) {
+  async create(@Body() body: unknown) {
     const parsed = createBody.safeParse(body)
     if (!parsed.success) throw new BadRequestException(parsed.error.issues.map((i) => i.message).join('; '))
-    const { budgetUsd, ...rest } = parsed.data
-    return this.ds.getRepository(Campaign).save({ ...rest, ...(budgetUsd && { budgetMicros: Math.round(budgetUsd * 1_000_000) }) })
+    const { budgetUsd, programId, callPostUrl, callKeyword, ...rest } = parsed.data
+    const lane = await resolveLane(this.ds, { programId, callPostUrl, callKeyword })
+    return this.ds.getRepository(Campaign).save({ ...rest, ...lane, ...(budgetUsd && { budgetMicros: Math.round(budgetUsd * 1_000_000) }) })
+  }
+
+  @Patch(':id')
+  async updateLane(@Param('id', ParseIntPipe) id: number, @Body() body: unknown) {
+    await this.campaign(id)
+    const parsed = campaignLaneBody.safeParse(body)
+    if (!parsed.success) throw new BadRequestException(parsed.error.issues.map((i) => i.message).join('; '))
+    await this.ds.getRepository(Campaign).update(id, await resolveLane(this.ds, parsed.data))
+    return this.campaign(id)
   }
 
   @Get(':id')

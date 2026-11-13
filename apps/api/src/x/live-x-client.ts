@@ -54,11 +54,11 @@ function toProfile(u: NonNullable<z.infer<typeof usersResponse>['data']>[number]
 }
 
 const postsResponse = z.object({
-  data: z.array(z.object({ id: z.string(), text: z.string(), created_at: z.string() })).optional(),
+  data: z.array(z.object({ id: z.string(), text: z.string(), created_at: z.string(), lang: z.string().optional() })).optional(),
 })
 
 const searchResponse = z.object({
-  data: z.array(z.object({ id: z.string(), text: z.string(), created_at: z.string(), author_id: z.string() })).optional(),
+  data: z.array(z.object({ id: z.string(), text: z.string(), created_at: z.string(), author_id: z.string(), lang: z.string().optional() })).optional(),
   includes: z.object({ users: usersResponse.shape.data }).optional(),
   meta: z.object({ next_token: z.string().optional() }).optional(),
 })
@@ -99,11 +99,11 @@ export class LiveXClient implements XClient {
   async getRecentPosts(userId: string, max: number): Promise<XPost[]> {
     const query = new URLSearchParams({
       max_results: String(Math.max(5, max)),
-      'tweet.fields': 'created_at',
+      'tweet.fields': 'created_at,lang',
       exclude: 'retweets',
     })
     const parsed = postsResponse.parse(await (await this.call(`/2/users/${userId}/tweets?${query}`, 'GET')).json())
-    return (parsed.data ?? []).slice(0, max).map((p) => ({ id: p.id, userId, text: p.text, createdAt: new Date(p.created_at) }))
+    return (parsed.data ?? []).slice(0, max).map((p) => ({ id: p.id, userId, text: p.text, createdAt: new Date(p.created_at), lang: p.lang }))
   }
 
   async lookupUsers(handles: string[]): Promise<XProfile[]> {
@@ -124,13 +124,13 @@ export class LiveXClient implements XClient {
       const params = new URLSearchParams({
         query,
         max_results: String(Math.min(100, Math.max(10, max - posts.length))),
-        'tweet.fields': 'created_at,author_id',
+        'tweet.fields': 'created_at,author_id,lang',
         expansions: 'author_id',
         'user.fields': USER_FIELDS,
         ...(token && { next_token: token }),
       })
       const parsed = searchResponse.parse(await (await this.call(`/2/tweets/search/recent?${params}`, 'GET')).json())
-      for (const p of parsed.data ?? []) posts.push({ id: p.id, userId: p.author_id, text: p.text, createdAt: new Date(p.created_at) })
+      for (const p of parsed.data ?? []) posts.push({ id: p.id, userId: p.author_id, text: p.text, createdAt: new Date(p.created_at), lang: p.lang })
       for (const u of parsed.includes?.users ?? []) authors.set(u.id, toProfile(u))
       token = parsed.meta?.next_token
     } while (token && posts.length < max)

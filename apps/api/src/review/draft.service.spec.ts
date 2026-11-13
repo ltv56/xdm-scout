@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import { ConflictException, NotFoundException } from '@nestjs/common'
 import { DataSource } from 'typeorm'
 import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 import { Campaign, Prospect } from '../discovery/entities'
@@ -10,6 +11,7 @@ import { Contact, DoNotContact, Draft, SenderAccount, XUser } from '../sending/e
 import { Setting } from '../setting.entity'
 import { createTestDataSource } from '../test/db'
 import { DraftService } from './draft.service'
+import { ReviewSignal } from './review-signal.entity'
 
 let ds: DataSource
 const now = new Date('2026-11-12T03:00:00Z')
@@ -54,9 +56,33 @@ describe('draft generation', () => {
     await service().generate(p.id, now)
     const draft = await ds.getRepository(Draft).findOneByOrFail({ contactId: 1 })
     expect(draft).toMatchObject({ status: 'pending', kind: 'first_message', sendPath: 'HUMAN_HANDOFF', prospectId: p.id, editedByReviewer: false })
-    expect(draft.content).toBe(draft.sentences!.map((s) => s.text).join(' '))
-    expect(draft.sentences![0].source).toEqual({ type: 'evidence', evidenceId: 'post:mai1' })
+    const lines = draft.content.split('\n')
+    expect(lines).toHaveLength(3)
+    expect(lines[0]).toBe(draft.sentences![0].text)
+    expect(lines[1]).toBe(draft.sentences!.slice(1, -1).map((s) => s.text).join(' '))
+    expect(lines[2]).toBe(draft.sentences!.at(-1)!.text)
+    expect(draft.originalContent).toBe(draft.content)
+    expect(draft.sentences![0]).toMatchObject({ source: { type: 'greeting' } })
+    expect(draft.sentences![0].text).toMatch(/^(Hi|Hello|Hey) .*Mai/)
+    expect(draft.sentences![1].source).toEqual({ type: 'evidence', evidenceId: 'post:mai1' })
     expect(draft.sentences!.at(-1)!.source).toEqual({ type: 'opt_out' })
+  })
+
+  it('opens with a greeting made in code from the X display name, and drops the name when it is not a person', async () => {
+    const p = await seed({ handle: 'acme' })
+    await ds.getRepository(XUser).update({ xUserId: 'u-acme' }, { name: 'Acme Labs' })
+    await service().generate(p.id, now)
+    const draft = await ds.getRepository(Draft).findOneByOrFail({ contactId: 1 })
+    expect(draft.sentences![0].source).toEqual({ type: 'greeting' })
+    expect(draft.sentences![0].text).not.toContain('Acme')
+    expect(draft.sentences![0].text).toMatch(/^(Hi|Hello|Hey)/)
+  })
+
+  it('never lets the model write the greeting: the prompt carries no display name', async () => {
+    const p = await seed()
+    const llm = new FakeLlmClient(cannedHandler)
+    await service(llm).generate(p.id, now)
+    expect(JSON.stringify(llm.calls)).not.toContain('"Mai"')
   })
 
   it('creates the contact with the prospect relationship', async () => {
@@ -82,7 +108,9 @@ describe('draft generation', () => {
       ],
     }))
     await service(llm).generate(p.id, now)
-    expect((await ds.getRepository(Draft).findOneByOrFail({ contactId: 1 })).sentences![0].source).toBeNull()
+    const sentences = (await ds.getRepository(Draft).findOneByOrFail({ contactId: 1 })).sentences!
+    expect(sentences[0].source).toEqual({ type: 'greeting' })
+    expect(sentences[1].source).toBeNull()
   })
 
   it('retries once on invalid model output, then fails', async () => {
@@ -119,15 +147,162 @@ describe('draft generation', () => {
   })
 })
 
-describe('queueing drafts for a campaign', () => {
-  it('queues one job per strong or possible prospect with an opening, no live draft and not on the do-not-contact list', async () => {
+describe('the program in the draft prompt', () => {
+  const two = [
+    { id: 1, name: 'Intro to investors', description: 'Intro to investors', link: 'https://genaifund.ai/', deadline: null },
+    { id: 2, name: 'Build week', description: 'Two weeks with our engineers', link: 'https://genaifund.ai/build', deadline: '2026-11-30' },
+  ]
+  const promptProfile = async (programId: number | null) => {
+    const p = await seed()
+    await ds.getRepository(Setting).save({ key: 'sender_profile', value: { intro: 'We back founders.', programs: two, signer: 'Vinh', sampleMessages: [] } })
+    await ds.getRepository(Campaign).update(1, { programId })
+    const llm = new FakeLlmClient(cannedHandler)
+    await service(llm).generate(p.id, now)
+    return (JSON.parse(llm.calls[0].user) as { profile: { programs: Record<string, string | null>[] } }).profile
+  }
+
+  it("offers exactly the campaign's program with its link and deadline", async () => {
+    const profile = await promptProfile(2)
+    expect(profile.programs).toEqual([{ name: 'Build week', description: 'Two weeks with our engineers', link: 'https://genaifund.ai/build', deadline: 'applications close 30 Nov' }])
+  })
+
+  it('falls back to the first program when the campaign has none, with no deadline line', async () => {
+    const profile = await promptProfile(null)
+    expect(profile.programs).toEqual([{ name: 'Intro to investors', description: 'Intro to investors', link: 'https://genaifund.ai/', deadline: null }])
+  })
+})
+
+describe('writing drafts for a campaign', () => {
+  async function field() {
     const ok = await seed()
     await seed({ handle: 'weak', fit: 'weak' })
     await seed({ handle: 'noopen', opening: false })
     await seed({ handle: 'dnc' })
     await ds.getRepository(DoNotContact).save({ xUserId: 'u-dnc', reason: 'asked', source: 'manual' })
-    expect(await service().enqueueForCampaign(1)).toEqual({ queued: 1 })
+    return ok
+  }
+
+  it('counts only people who are ready: Strong or Possible, with an opening, no live draft, not on the do-not-contact list', async () => {
+    await field()
+    expect(await service().ready(1, now)).toHaveLength(1)
+  })
+
+  it('queues one job per chosen person and says what is left and who has no opening', async () => {
+    const ok = await field()
+    expect(await service().writeDrafts(1, 10, now)).toEqual({ drafted: 1, readyToDraft: 0, noOpening: 1 })
     const jobs = await ds.getRepository(Job).find()
     expect(jobs.map((j) => [j.type, j.payload])).toEqual([['draft', { prospectId: ok.id }]])
   })
+
+  it('does not queue the same person twice', async () => {
+    await field()
+    await service().writeDrafts(1, 10, now)
+    expect(await service().writeDrafts(1, 10, now)).toEqual({ drafted: 0, readyToDraft: 0, noOpening: 1 })
+    expect(await ds.getRepository(Job).count()).toBe(1)
+  })
+
+  it('stops at the limit and leaves the rest ready', async () => {
+    await seed({ handle: 'a' })
+    await seed({ handle: 'b' })
+    await seed({ handle: 'c' })
+    expect(await service().writeDrafts(1, 2, now)).toEqual({ drafted: 2, readyToDraft: 1, noOpening: 0 })
+  })
 })
+
+describe('drafting again in the language of the recipient', () => {
+  const translate = (req: { task: string; user: string }) =>
+    req.task === 'translate' ? { sentences: (JSON.parse(req.user) as { sentences: string[] }).sentences.map((text) => ({ text: `[${JSON.parse(req.user).language}] ${text}` })) } : cannedHandler(req as never)
+  const svc = (handler: (req: never) => unknown = translate as never) => service(new FakeLlmClient(handler as never))
+
+  it('translates the same sentences in place, keeps their sources, and keeps the English copy', async () => {
+    const p = await seed()
+    const id = await service().generate(p.id, now)
+    const before = await ds.getRepository(Draft).findOneByOrFail({ id })
+    await svc().redraft(id, 'vi')
+    const after = await ds.getRepository(Draft).findOneByOrFail({ id })
+    expect(after.language).toBe('vi')
+    expect(after.englishText).toBe(before.content)
+    expect(after.content).not.toBe(before.content)
+    expect(after.content.split('\n')).toHaveLength(before.content.split('\n').length)
+    expect(after.sentences!.map((s) => s.source)).toEqual(before.sentences!.map((s) => s.source))
+    expect(after.sentences![0].text).toMatch(/^(Chào|Xin chào)/)
+    expect(after.sentences![1].text).toMatch(/^\[Vietnamese\] /)
+    expect(after.originalContent).toBe(after.content)
+  })
+
+  it('goes back to the English draft exactly, and changes nothing when asked for the language it is in', async () => {
+    const p = await seed()
+    const id = await service().generate(p.id, now)
+    const before = await ds.getRepository(Draft).findOneByOrFail({ id })
+    await svc().redraft(id, 'vi')
+    await svc().redraft(id, 'th')
+    expect((await ds.getRepository(Draft).findOneByOrFail({ id })).englishText).toBe(before.content)
+    await svc().redraft(id, 'en')
+    const back = await ds.getRepository(Draft).findOneByOrFail({ id })
+    expect(back).toMatchObject({ language: 'en', englishText: null, content: before.content, sentences: before.sentences })
+    const llm = new FakeLlmClient(translate as never)
+    await service(llm).redraft(id, 'en')
+    expect(llm.calls).toHaveLength(0)
+  })
+
+  it('refuses a reply, a draft the reviewer edited and a draft that is not pending', async () => {
+    const p = await seed()
+    const id = await service().generate(p.id, now)
+    await ds.getRepository(Draft).update(id, { kind: 'reply' })
+    await expect(svc().redraft(id, 'vi')).rejects.toBeInstanceOf(ConflictException)
+    await ds.getRepository(Draft).update(id, { kind: 'first_message', editedByReviewer: true })
+    await expect(svc().redraft(id, 'vi')).rejects.toBeInstanceOf(ConflictException)
+    await ds.getRepository(Draft).update(id, { editedByReviewer: false, status: 'skipped' })
+    await expect(svc().redraft(id, 'vi')).rejects.toBeInstanceOf(ConflictException)
+    await expect(svc().redraft(9999, 'vi')).rejects.toBeInstanceOf(NotFoundException)
+  })
+
+  it('fails instead of saving a translation with a different number of sentences', async () => {
+    const p = await seed()
+    const id = await service().generate(p.id, now)
+    const before = await ds.getRepository(Draft).findOneByOrFail({ id })
+    await expect(svc(() => ({ sentences: [{ text: 'only one' }] })).redraft(id, 'vi')).rejects.toThrow(/translation/i)
+    expect((await ds.getRepository(Draft).findOneByOrFail({ id })).content).toBe(before.content)
+  })
+})
+describe('drafting one person on request', () => {
+  it('drafts any Fit but Not a fit, and marks the person shortlisted', async () => {
+    const p = await seed({ fit: 'weak' })
+    const id = await service().draftOne(1, p.id, now)
+    expect((await ds.getRepository(Draft).findOneByOrFail({ id })).prospectId).toBe(p.id)
+    expect((await ds.getRepository(Prospect).findOneByOrFail({ id: p.id })).status).toBe('shortlisted')
+  })
+
+  it('says why it cannot', async () => {
+    const unscored = await seed({ handle: 'u' })
+    await ds.getRepository(Prospect).update(unscored.id, { fit: null })
+    await expect(service().draftOne(1, unscored.id, now)).rejects.toThrow('Not scored yet')
+    const bad = await seed({ handle: 'n', fit: 'not_a_fit' })
+    await expect(service().draftOne(1, bad.id, now)).rejects.toThrow('Not a fit')
+    const none = await seed({ handle: 'o', opening: false })
+    await expect(service().draftOne(1, none.id, now)).rejects.toThrow('No reason to reach out yet')
+    const twice = await seed({ handle: 't' })
+    await service().draftOne(1, twice.id, now)
+    await expect(service().draftOne(1, twice.id, now)).rejects.toThrow('already has a draft')
+    await expect(service().draftOne(1, 9999, now)).rejects.toBeInstanceOf(NotFoundException)
+  })
+})
+
+describe('dismissing a person', () => {
+  it('marks them dismissed, leaves them out of the ready list and records one signal with no handle', async () => {
+    const p = await seed()
+    expect(await service().ready(1, now)).toHaveLength(1)
+    await service().dismiss(1, p.id, 'weak_opening')
+    expect((await ds.getRepository(Prospect).findOneByOrFail({ id: p.id })).status).toBe('dismissed')
+    expect(await service().ready(1, now)).toHaveLength(0)
+    const signals = await ds.getRepository(ReviewSignal).find()
+    expect(signals).toHaveLength(1)
+    expect(signals[0]).toMatchObject({ action: 'dismiss', reason: 'weak_opening' })
+    expect(JSON.stringify(signals[0])).not.toContain('u-mai')
+  })
+
+  it('404s for a person who is not in the campaign', async () => {
+    await expect(service().dismiss(1, 9999, 'other')).rejects.toBeInstanceOf(NotFoundException)
+  })
+})
+

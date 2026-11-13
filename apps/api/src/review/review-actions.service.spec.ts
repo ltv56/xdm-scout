@@ -58,14 +58,27 @@ afterAll(async () => {
 describe('edit', () => {
   it('keeps the source of sentences the reviewer left alone and marks the new ones as theirs', async () => {
     const d = await seedDraft()
-    const text = `${d.sentences![0].text} We met at the Saigon meetup last year. No worries if not.`
+    // sentences[0] is the greeting made by the app, sentences[1] the one about their post
+    const text = `${d.sentences![0].text} ${d.sentences![1].text} We met at the Saigon meetup last year. No worries if not.`
     const item = await actions.edit(d.id, text, now)
     expect(item.editedByReviewer).toBe(true)
     expect(item.status).toBe('pending')
     expect(item.text).toBe(text)
     expect(item.contentHash).toBe(hashContent(text))
-    expect(item.sentences.map((s) => s.source?.type ?? null)).toEqual(['evidence', null, 'opt_out'])
+    expect(item.sentences.map((s) => s.source?.type ?? null)).toEqual(['greeting', 'evidence', null, 'opt_out'])
     expect(item.checks.find((c) => c.code === 'unbacked_claim')).toMatchObject({ level: 'warn', needsConfirm: true })
+  })
+
+  it('keeps the line breaks the reviewer typed, and hashes exactly that text', async () => {
+    const d = await seedDraft()
+    const typed = `${d.sentences![0].text}\n\nSaw your eval harness for Vietnamese LLMs.\nNo worries if not.`
+    const item = await actions.edit(d.id, typed, now)
+    expect(item.text).toBe(typed)
+    expect(item.contentHash).toBe(hashContent(typed))
+    expect(item.sentences.map((s) => s.text)).toEqual([d.sentences![0].text, 'Saw your eval harness for Vietnamese LLMs.', 'No worries if not.'])
+    expect(item.sentences.map((s) => s.source?.type ?? null)).toEqual(['greeting', null, 'opt_out'])
+    expect(item.openInXUrl).toContain(encodeURIComponent(typed))
+    expect(await actions.approve(d.id, { contentHash: hashContent(typed), confirmedUnbacked: true }, now)).toBeDefined()
   })
 
   it('sends an approved draft back to pending and cancels its open manual attempt', async () => {
