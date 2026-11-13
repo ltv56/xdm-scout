@@ -10,10 +10,8 @@ import { DiscoveryService } from './discovery/discovery.service'
 import { ProspectsService } from './discovery/prospects.service'
 import { FitService } from './fit/fit.service'
 import { JobsService } from './jobs/jobs.service'
-import { decisionClientFor } from './decisions/llm-decision-client'
 import { DECISION_CLIENT } from './decisions/review-decisions'
-import { cannedHandler, FakeLlmClient } from './llm/fake-llm-client'
-import { AnthropicLlmClient, OpenAiCompatibleLlmClient } from './llm/http-llm-clients'
+import { createDecisionClient, createLlmClient } from './llm/ai-config'
 import { LLM_CLIENT, LlmClient } from './llm/llm-client'
 import { RetentionService } from './retention/retention.service'
 import { CampaignDraftsController } from './review/campaign-drafts.controller'
@@ -29,6 +27,9 @@ import { Worker } from './sending/worker'
 import { FakeXClient } from './x/fake-x-client'
 import { LiveXClient } from './x/live-x-client'
 import { X_CLIENT, XClient } from './x/x-client'
+
+const AI_VARS = ['GOOGLE_API_KEY', 'OPEN_ROUTER_API_KEY', 'ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'LLM_MODEL', 'DECISION_MODEL']
+const aiEnv = (config: ConfigService) => Object.fromEntries(AI_VARS.map((k) => [k, config.get<string>(k, '')]))
 
 @Module({
   imports: [
@@ -67,18 +68,12 @@ import { X_CLIENT, XClient } from './x/x-client'
     {
       provide: LLM_CLIENT,
       inject: [ConfigService],
-      useFactory: (config: ConfigService): LlmClient => {
-        const apiKey = config.get('LLM_API_KEY', '')
-        const model = config.get('LLM_MODEL', '')
-        if (!apiKey || !model) return new FakeLlmClient(cannedHandler)
-        if (config.get('LLM_PROVIDER', 'openai') === 'anthropic') return new AnthropicLlmClient({ apiKey, model })
-        return new OpenAiCompatibleLlmClient({ apiKey, model, baseUrl: config.get('LLM_BASE_URL', 'https://api.openai.com/v1') })
-      },
+      useFactory: (config: ConfigService): LlmClient => createLlmClient(aiEnv(config)),
     },
     {
       provide: DECISION_CLIENT,
       inject: [ConfigService, LLM_CLIENT],
-      useFactory: (config: ConfigService, llm: LlmClient) => decisionClientFor(llm, !!config.get('LLM_API_KEY', '') && !!config.get('LLM_MODEL', ''), { apiKey: config.get('JEV_API_KEY', ''), baseUrl: config.get('JEV_BASE_URL', '') || undefined, model: config.get('JEV_MODEL', '') || undefined }),
+      useFactory: (config: ConfigService, llm: LlmClient) => createDecisionClient(aiEnv(config), llm),
     },
     {
       provide: X_CLIENT,

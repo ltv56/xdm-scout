@@ -1,8 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { FakeLlmClient } from '../llm/fake-llm-client'
-import { FixtureDecisionClient } from './decision-client'
-import { decisionClientFor } from './llm-decision-client'
-import { JevDecisionClient } from './jev-decision-client'
+import { SystemOneDecisionClient } from './system-one-decision-client'
 import { QUESTIONS } from './questions'
 
 // Shape recorded from the OpenRouter System One reference (13 Nov 2026).
@@ -19,9 +16,9 @@ function fakeFetch(body: unknown, status = 200) {
   return { calls, fetchFn }
 }
 
-const make = (f: typeof fetch) => new JevDecisionClient({ apiKey: 'k', baseUrl: 'https://openrouter.ai/api/v1', model: 'typesafe/jev-1.14', fetchFn: f })
+const make = (f: typeof fetch) => new SystemOneDecisionClient({ apiKey: 'k', baseUrl: 'https://openrouter.ai/api/v1', model: 'typesafe/jev-1.14', fetchFn: f })
 
-describe('JevDecisionClient', () => {
+describe('SystemOneDecisionClient', () => {
   it('posts the pinned model, the input as state and the question as a yes/no, and marks the answer jev', async () => {
     const { calls, fetchFn } = fakeFetch(recorded)
     const [a] = await make(fetchFn).decide([ask])
@@ -42,9 +39,4 @@ describe('JevDecisionClient', () => {
     await expect(make(fakeFetch({ error: { code: 402, message: 'Insufficient credits' } }, 402).fetchFn).decide([ask])).rejects.toThrow(/402/)
   })
 
-  it('is used only when a Jev key is set', () => {
-    const llm = new FakeLlmClient(() => ({}))
-    expect(decisionClientFor(llm, false, { apiKey: 'k' })).toBeInstanceOf(JevDecisionClient)
-    expect(decisionClientFor(llm, false)).toBeInstanceOf(FixtureDecisionClient)
-  })
 })
