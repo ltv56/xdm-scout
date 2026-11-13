@@ -4,7 +4,7 @@ import { Contact, DoNotContact, Draft, SendAttempt } from '../sending/entities'
 import { hashContent, SendingService } from '../sending/sending.service'
 import { JobsService } from '../jobs/jobs.service'
 import { StoredSentence } from './checks'
-import { ApproveBody, ReviewItem, SkipBody } from './contract'
+import { ApproveBody, Language, ReviewItem, SkipBody } from './contract'
 import { DraftService } from './draft.service'
 import { ReviewSignal, SignalAction } from './review-signal.entity'
 import { ReviewService } from './review.service'
@@ -35,6 +35,11 @@ export class ReviewActionsService {
       const sentences: StoredSentence[] = splitSentences(text.trim()).map((t) => ({ text: t, source: known.get(t) ?? (OPT_OUT.test(t) ? { type: 'opt_out' } : null) }))
       await em.update(Draft, draftId, { sentences, content: text.trim(), status: 'pending', approvedHash: null, editedByReviewer: true })
     })
+    return this.review.one(draftId, now)
+  }
+
+  async language(draftId: number, language: Language, now = new Date()): Promise<ReviewItem> {
+    await this.drafts.redraft(draftId, language)
     return this.review.one(draftId, now)
   }
 

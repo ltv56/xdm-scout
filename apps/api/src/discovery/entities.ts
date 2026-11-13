@@ -61,6 +61,10 @@ export class XPost {
   @Column({ type: 'datetime', precision: 3 })
   postedAt!: Date
 
+  // X's language guess for the post; null for posts read before we kept it.
+  @Column({ type: 'varchar', length: 8, nullable: true })
+  lang!: string | null
+
   @Column({ type: 'datetime', precision: 3 })
   fetchedAt!: Date
 }

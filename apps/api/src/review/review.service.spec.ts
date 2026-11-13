@@ -93,6 +93,22 @@ describe('review queue', () => {
     expect(linh.openInXUrl).toBeNull()
   })
 
+  it('knows the main language of each person from the language X gave their posts', async () => {
+    await seedPerson('mai')
+    await seedPerson('lan')
+    await ds.getRepository(XPost).update({ xUserId: 'u-mai' }, { lang: 'vi' })
+    const by = Object.fromEntries((await service().queue(1, now)).items.map((i) => [i.prospect.handle, i.prospect.mainLanguage]))
+    expect(by).toEqual({ mai: 'vi', lan: null })
+  })
+
+  it('says what language a draft is in and keeps the English copy beside a translated one', async () => {
+    const mai = await seedPerson('mai')
+    const [first] = (await service().queue(1, now)).items
+    expect(first).toMatchObject({ language: 'en', englishText: null })
+    await ds.getRepository(Draft).update({ prospectId: mai.id }, { language: 'vi', englishText: 'Hi Mai!' })
+    expect((await service().queue(1, now)).items[0]).toMatchObject({ language: 'vi', englishText: 'Hi Mai!' })
+  })
+
   it('shows pending and approved drafts of this campaign only, at most ten', async () => {
     await seedPerson('mai')
     await seedPerson('other', 2)

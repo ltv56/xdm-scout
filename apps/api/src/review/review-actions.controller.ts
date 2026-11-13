@@ -1,6 +1,6 @@
 import { BadRequestException, Body, Controller, Param, ParseIntPipe, Patch, Post } from '@nestjs/common'
 import { z } from 'zod'
-import { approveBody, editBody, manualBody, regenerateBody, skipBody } from './contract'
+import { approveBody, editBody, languageBody, manualBody, regenerateBody, skipBody } from './contract'
 import { ReviewActionsService } from './review-actions.service'
 
 function parse<T>(schema: z.ZodType<T>, body: unknown): T {
@@ -21,6 +21,11 @@ export class ReviewActionsController {
   @Post(':id/approve')
   async approve(@Param('id', ParseIntPipe) id: number, @Body() body: unknown) {
     return this.actions.approve(id, parse(approveBody, body))
+  }
+
+  @Post(':id/language')
+  async language(@Param('id', ParseIntPipe) id: number, @Body() body: unknown) {
+    return this.actions.language(id, parse(languageBody, body).language)
   }
 
   @Post(':id/skip')

@@ -1,4 +1,5 @@
 import 'reflect-metadata'
+import { ConflictException, NotFoundException } from '@nestjs/common'
 import { DataSource } from 'typeorm'
 import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 import { Campaign, Prospect } from '../discovery/entities'
@@ -180,5 +181,62 @@ describe('queueing drafts for a campaign', () => {
     expect(await service().enqueueForCampaign(1)).toEqual({ queued: 1 })
     const jobs = await ds.getRepository(Job).find()
     expect(jobs.map((j) => [j.type, j.payload])).toEqual([['draft', { prospectId: ok.id }]])
+  })
+})
+
+describe('drafting again in the language of the recipient', () => {
+  const translate = (req: { task: string; user: string }) =>
+    req.task === 'translate' ? { sentences: (JSON.parse(req.user) as { sentences: string[] }).sentences.map((text) => ({ text: `[${JSON.parse(req.user).language}] ${text}` })) } : cannedHandler(req as never)
+  const svc = (handler: (req: never) => unknown = translate as never) => service(new FakeLlmClient(handler as never))
+
+  it('translates the same sentences in place, keeps their sources, and keeps the English copy', async () => {
+    const p = await seed()
+    const id = await service().generate(p.id, now)
+    const before = await ds.getRepository(Draft).findOneByOrFail({ id })
+    await svc().redraft(id, 'vi')
+    const after = await ds.getRepository(Draft).findOneByOrFail({ id })
+    expect(after.language).toBe('vi')
+    expect(after.englishText).toBe(before.content)
+    expect(after.content).not.toBe(before.content)
+    expect(after.content.split('\n')).toHaveLength(before.content.split('\n').length)
+    expect(after.sentences!.map((s) => s.source)).toEqual(before.sentences!.map((s) => s.source))
+    expect(after.sentences![0].text).toMatch(/^(Chào|Xin chào)/)
+    expect(after.sentences![1].text).toMatch(/^\[Vietnamese\] /)
+    expect(after.originalContent).toBe(after.content)
+  })
+
+  it('goes back to the English draft exactly, and changes nothing when asked for the language it is in', async () => {
+    const p = await seed()
+    const id = await service().generate(p.id, now)
+    const before = await ds.getRepository(Draft).findOneByOrFail({ id })
+    await svc().redraft(id, 'vi')
+    await svc().redraft(id, 'th')
+    expect((await ds.getRepository(Draft).findOneByOrFail({ id })).englishText).toBe(before.content)
+    await svc().redraft(id, 'en')
+    const back = await ds.getRepository(Draft).findOneByOrFail({ id })
+    expect(back).toMatchObject({ language: 'en', englishText: null, content: before.content, sentences: before.sentences })
+    const llm = new FakeLlmClient(translate as never)
+    await service(llm).redraft(id, 'en')
+    expect(llm.calls).toHaveLength(0)
+  })
+
+  it('refuses a reply, a draft the reviewer edited and a draft that is not pending', async () => {
+    const p = await seed()
+    const id = await service().generate(p.id, now)
+    await ds.getRepository(Draft).update(id, { kind: 'reply' })
+    await expect(svc().redraft(id, 'vi')).rejects.toBeInstanceOf(ConflictException)
+    await ds.getRepository(Draft).update(id, { kind: 'first_message', editedByReviewer: true })
+    await expect(svc().redraft(id, 'vi')).rejects.toBeInstanceOf(ConflictException)
+    await ds.getRepository(Draft).update(id, { editedByReviewer: false, status: 'skipped' })
+    await expect(svc().redraft(id, 'vi')).rejects.toBeInstanceOf(ConflictException)
+    await expect(svc().redraft(9999, 'vi')).rejects.toBeInstanceOf(NotFoundException)
+  })
+
+  it('fails instead of saving a translation with a different number of sentences', async () => {
+    const p = await seed()
+    const id = await service().generate(p.id, now)
+    const before = await ds.getRepository(Draft).findOneByOrFail({ id })
+    await expect(svc(() => ({ sentences: [{ text: 'only one' }] })).redraft(id, 'vi')).rejects.toThrow(/translation/i)
+    expect((await ds.getRepository(Draft).findOneByOrFail({ id })).content).toBe(before.content)
   })
 })

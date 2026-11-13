@@ -161,5 +161,6 @@ describe('routes', () => {
     await expect(controller.skip(1, { reason: 'bored' })).rejects.toBeInstanceOf(BadRequestException)
     await expect(controller.regenerate(1, { note: '' })).rejects.toBeInstanceOf(BadRequestException)
     await expect(controller.manual(1, { outcome: 'maybe' })).rejects.toBeInstanceOf(BadRequestException)
+    await expect(controller.language(1, { language: 'fr' })).rejects.toBeInstanceOf(BadRequestException)
   })
 })
