@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { DataSource, In } from 'typeorm'
-import { Prospect, XPost } from '../discovery/entities'
+import { CriterionResult, Prospect, XPost } from '../discovery/entities'
 import { Evidence } from '../fit/entities'
 import { Contact, Draft, SendAttempt, SenderAccount, XUser } from '../sending/entities'
 import { apiSendBlock, hashContent } from '../sending/sending.service'
@@ -90,11 +90,16 @@ export class ReviewService {
         fit: prospect.fit === 'strong' || prospect.fit === 'possible' || prospect.fit === 'weak' ? prospect.fit : 'no_basis',
         relationship: prospect.relationship,
         permissionNote: permissionNote(contact, now),
+        history: history(contact),
+        bio: user?.bio ?? null,
+        mainLanguage: null,
         daysSinceActive: posts.length ? Math.floor((now.getTime() - Math.max(...posts.map((p) => p.postedAt.getTime()))) / DAY) : null,
         snapshot: snapshot(prospect, user, posts, now),
-        criteria: (prospect.criteria ?? []).map((c) => ({ text: c.text, status: c.status })),
+        criteria: (prospect.criteria ?? []).map((c) => criterion(c, ctx, idOf, evidence.length, now)),
       },
       text: draft.content,
+      language: 'en',
+      englishText: null,
       sentences: sentences.map((s) => ({
         text: s.text,
         source: !s.source ? null : s.source.type === 'evidence' ? (idOf.has(s.source.evidenceId) ? { type: 'evidence', evidenceId: idOf.get(s.source.evidenceId)! } : null) : s.source,
@@ -110,7 +115,7 @@ export class ReviewService {
         approximate: true,
         post: opening?.kind === 'post' ? { text: opening.excerpt || prospect.openingSummary || '', url: opening.url } : null,
       },
-      openInXUrl: draft.sendPath === 'HUMAN_HANDOFF' ? composeUrl(prospect.xUserId, draft.content) : null,
+      openInXUrl: composeUrl(prospect.xUserId, draft.content),
     }
   }
 
@@ -128,14 +133,14 @@ export class ReviewService {
 
   private async context(prospects: Prospect[], drafts: Draft[], live: Draft[]): Promise<Context> {
     const xUserIds = prospects.map((p) => p.xUserId)
-    const evidenceIds = [...prospects.map((p) => p.openingEvidenceId), ...drafts.flatMap((d) => (d.sentences ?? []).map((s) => (s.source?.type === 'evidence' ? s.source.evidenceId : null)))].filter((x): x is string => !!x)
+    const evidenceIds = [...prospects.map((p) => p.openingEvidenceId), ...prospects.flatMap((p) => (p.criteria ?? []).flatMap((c) => c.evidenceIds)), ...drafts.flatMap((d) => (d.sentences ?? []).map((s) => (s.source?.type === 'evidence' ? s.source.evidenceId : null)))].filter((x): x is string => !!x)
     const row = await this.ds.getRepository(Setting).findOneBy({ key: 'sender_profile' })
     const parsed = senderProfile.safeParse(row?.value)
     const posts = xUserIds.length ? await this.ds.getRepository(XPost).findBy({ xUserId: In(xUserIds) }) : []
     const postsBy = new Map<string, XPost[]>()
     for (const p of posts) postsBy.set(p.xUserId, [...(postsBy.get(p.xUserId) ?? []), p])
     return {
-      profile: parsed.success ? parsed.data : { intro: '', offers: [], signer: '', sampleMessages: [] },
+      profile: parsed.success ? parsed.data : { intro: '', programs: [], signer: '', sampleMessages: [] },
       sender: (await this.ds.getRepository(SenderAccount).find({ order: { id: 'ASC' }, take: 1 }))[0] ?? null,
       prospects: new Map(prospects.map((p) => [p.id, p])),
       users: new Map((xUserIds.length ? await this.ds.getRepository(XUser).findBy({ xUserId: In(xUserIds) }) : []).map((u) => [u.xUserId, u])),
@@ -146,6 +151,28 @@ export class ReviewService {
       texts: new Map(live.map((d) => [d.id, (d.sentences ?? []).map((s) => s.text).join(' ') || d.content])),
     }
   }
+}
+
+// Posts a criterion rests on. Ids continue after the draft's own evidence so one number never names two things in an item.
+function criterion(c: CriterionResult, ctx: Context, idOf: Map<string, number>, taken: number, now: Date) {
+  const found = c.status === 'unknown' ? [] : c.evidenceIds.flatMap((key) => ctx.evidence.get(key) ?? [])
+  let next = taken
+  const evidence: EvidenceItem[] = found.map((e) => ({ id: idOf.get(e.id) ?? ++next, kind: e.kind, text: e.excerpt, url: e.url, postedAt: e.postedAt?.toISOString() ?? null }))
+  const dated = found.find((e) => e.postedAt)
+  return { text: c.text, status: c.status, evidence, fact: dated?.postedAt ? dateFact(dated.postedAt, now) : null }
+}
+
+function dateFact(date: Date, now: Date) {
+  const days = Math.floor((now.getTime() - date.getTime()) / DAY)
+  return `Post of ${date.getUTCDate()} ${date.toLocaleString('en-GB', { month: 'short', timeZone: 'UTC' })}, ${days} ${days === 1 ? 'day' : 'days'} ago`
+}
+
+// Only what we stored: the date a person messaged us, and whether they follow or engaged. Nothing is guessed.
+function history(contact: Contact) {
+  if (contact.relationshipContext === 'messaged_us' && contact.invitationAt) return `Messaged you on ${contact.invitationAt.getUTCDate()} ${contact.invitationAt.toLocaleString('en-GB', { month: 'short', timeZone: 'UTC' })}`
+  if (contact.relationshipContext === 'follower') return 'Follows you'
+  if (contact.relationshipContext === 'engaged') return 'Engaged with your posts'
+  return null
 }
 
 function permissionNote(contact: Contact, now: Date) {
