@@ -1,0 +1,159 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { postJson } from './api'
+import { btnPrimary, btnSecondary, field as baseField } from './ui'
+
+const field = `${baseField} mt-1`
+
+const lines = (text: string) => text.split('\n').map((l) => l.trim()).filter(Boolean)
+const handles = (text: string) => lines(text).map((l) => l.replace(/^@/, ''))
+
+interface Props {
+  first: boolean
+  onCreated: (id: number) => void
+  onCancel: () => void
+}
+
+export default function NewCampaign({ first, onCreated, onCancel }: Props) {
+  const qc = useQueryClient()
+  const [name, setName] = useState('')
+  const [keywords, setKeywords] = useState('')
+  const [handleText, setHandleText] = useState('')
+  const [seeds, setSeeds] = useState('')
+  const [queries, setQueries] = useState('')
+  const [criteria, setCriteria] = useState('')
+  const [budget, setBudget] = useState('')
+  const [missing, setMissing] = useState<string | null>(null)
+  const create = useMutation({
+    mutationFn: (body: unknown) => postJson<{ id: number }>('/campaigns', body),
+    onSuccess: async (made) => {
+      await qc.invalidateQueries({ queryKey: ['campaigns'] })
+      onCreated(made.id)
+    },
+  })
+
+  const submit = () => {
+    const budgetUsd = budget.trim() ? Number(budget) : undefined
+    const gap = !name.trim()
+      ? 'Give the campaign a name.'
+      : !lines(keywords).length
+        ? 'Add at least one keyword.'
+        : !lines(handleText).length && !lines(seeds).length && !lines(queries).length
+          ? 'Add at least one handle, seed account or search query.'
+          : budgetUsd !== undefined && !(budgetUsd > 0 && budgetUsd <= 100)
+            ? 'Budget must be above 0 and at most 100 USD.'
+            : null
+    setMissing(gap)
+    create.reset()
+    if (gap) return
+    create.mutate({
+      name: name.trim(),
+      keywords: lines(keywords),
+      handles: handles(handleText),
+      seeds: handles(seeds),
+      queries: lines(queries),
+      criteria: lines(criteria),
+      ...(budgetUsd !== undefined && { budgetUsd }),
+    })
+  }
+
+  return (
+    <form
+      noValidate
+      className="max-w-xl space-y-6"
+      onSubmit={(e) => {
+        e.preventDefault()
+        submit()
+      }}
+    >
+      <div>
+        <h2 className="text-2xl font-bold">{first ? 'Start your first campaign' : 'New campaign'}</h2>
+        <p className="mt-1 text-sm text-muted">
+          {first ? 'A campaign is one search for people to message. Tell us who to look at, then run discovery from the Overview.' : 'Tell us who to look at, then run discovery from the Overview.'}
+        </p>
+      </div>
+
+      <div>
+        <label htmlFor="name" className="text-sm font-medium">
+          Name
+        </label>
+        <input id="name" value={name} maxLength={128} onChange={(e) => setName(e.target.value)} className={field} />
+      </div>
+
+      <div>
+        <label htmlFor="keywords" className="text-sm font-medium">
+          Keywords
+        </label>
+        <textarea id="keywords" rows={3} value={keywords} onChange={(e) => setKeywords(e.target.value)} className={field} />
+        <p className="mt-1 text-xs text-muted">One per line. Topics the people you want write about.</p>
+      </div>
+
+      <fieldset className="space-y-5">
+        <legend className="text-sm font-medium">Where to find people (at least one)</legend>
+        <div>
+          <label htmlFor="handles" className="text-sm text-muted">
+            Handles
+          </label>
+          <textarea id="handles" rows={3} value={handleText} onChange={(e) => setHandleText(e.target.value)} className={field} />
+          <p className="mt-1 text-xs text-muted">One per line, with or without @.</p>
+        </div>
+        <div>
+          <label htmlFor="seeds" className="text-sm text-muted">
+            Seed accounts
+          </label>
+          <textarea id="seeds" rows={2} value={seeds} onChange={(e) => setSeeds(e.target.value)} className={field} />
+          <p className="mt-1 text-xs text-muted">People they follow are added as prospects. Up to 10, one per line.</p>
+        </div>
+        <div>
+          <label htmlFor="queries" className="text-sm text-muted">
+            Search queries
+          </label>
+          <textarea id="queries" rows={2} value={queries} onChange={(e) => setQueries(e.target.value)} className={field} />
+          <p className="mt-1 text-xs text-muted">Recent-post searches on X. Up to 10, one per line.</p>
+        </div>
+      </fieldset>
+
+      <details>
+        <summary className="cursor-pointer text-sm font-medium">Fund criteria (optional)</summary>
+        <textarea
+          aria-label="Fund criteria"
+          placeholder={'Based in or building for Southeast Asia\nPre-Series A, no $100M+ fund yet'}
+          rows={3}
+          value={criteria}
+          onChange={(e) => setCriteria(e.target.value)}
+          className={field}
+        />
+        <p className="mt-1 text-xs text-muted">One per line, up to 5. Each is checked against the person's posts and shown on their Fit card. Write each one so that met is good: “Pre-Series A, no $100M+ fund yet”, not “Has not raised a big round”.</p>
+      </details>
+
+      <div>
+        <label htmlFor="budget" className="text-sm font-medium">
+          Discovery budget in USD (optional)
+        </label>
+        <input id="budget" type="number" inputMode="decimal" min="0" max="100" step="any" value={budget} onChange={(e) => setBudget(e.target.value)} className={`${field} max-w-40`} />
+        <p className="mt-1 text-xs text-muted">Discovery stops when X usage reaches this amount.</p>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <button type="submit" disabled={create.isPending} className={btnPrimary}>
+          Create campaign
+        </button>
+        {!first && (
+          <button type="button" onClick={onCancel} className={btnSecondary}>
+            Cancel
+          </button>
+        )}
+      </div>
+      {missing && (
+        <p role="alert" className="text-sm font-medium text-block">
+          {missing}
+        </p>
+      )}
+      {create.error && (
+        <p role="alert" className="text-sm font-medium text-block">
+          {create.error.message}
+        </p>
+      )}
+    </form>
+  )
+}
