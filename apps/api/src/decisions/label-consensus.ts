@@ -197,16 +197,37 @@ Answer with one JSON array and nothing else, one object for every draft below:
 const block = (items: unknown[]) => '\n## Items\n```json\n' + JSON.stringify(items, null, 1) + '\n```\n'
 const pick = (item: Record<string, unknown>, keys: string[]) => Object.fromEntries(keys.map((k) => [k, item[k]]))
 
-// Labels, groups and fault markers are left out so the chats cannot copy them.
-export function buildPrompts(fixtures: Fixtures, draftsPerPart = 50): { file: string; text: string }[] {
-  const first = [
-    ...fixtures.profiles.map((p) => pick(p, ['id', 'handle', 'name', 'bio', 'followers'])),
-    ...fixtures.dms.map((d) => pick(d, ['id', 'text'])),
-  ]
-  const prompts = [{ file: '1-profiles-and-dms.md', text: PART_1 + block(first) }]
-  for (let i = 0; i * draftsPerPart < fixtures.drafts.length; i++) {
-    const chunk = fixtures.drafts.slice(i * draftsPerPart, (i + 1) * draftsPerPart).map((d) => ({ id: d.id, evidence: d.evidence, draft: d.text }))
-    prompts.push({ file: `${i + 2}-drafts-${String.fromCharCode(97 + i)}.md`, text: DRAFT_PART + block(chunk) })
+// Same order every run, so the prompts can be exported again, but not the order the data was written in.
+function shuffled<T>(items: T[]): T[] {
+  const out = [...items]
+  let seed = 20261113
+  const next = () => {
+    seed = (seed + 0x6d2b79f5) | 0
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
   }
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(next() * (i + 1))
+    ;[out[i], out[j]] = [out[j], out[i]]
+  }
+  return out
+}
+
+const letter = (i: number) => String.fromCharCode(97 + i)
+const chunks = <T>(items: T[], size: number) => Array.from({ length: Math.ceil(items.length / size) }, (_, i) => items.slice(i * size, (i + 1) * size))
+
+// Labels, groups and fault markers are left out so the chats cannot copy them, and DMs and drafts are shuffled so the order does not hint at the group.
+export function buildPrompts(fixtures: Fixtures, draftsPerPart = 50, itemsPerPart = 130): { file: string; text: string }[] {
+  const items = [
+    ...fixtures.profiles.map((p) => pick(p, ['id', 'handle', 'name', 'bio', 'followers'])),
+    ...shuffled(fixtures.dms).map((d) => pick(d, ['id', 'text'])),
+  ]
+  const itemParts = chunks(items, itemsPerPart)
+  const prompts = itemParts.map((part, i) => ({ file: `${i + 1}-profiles-and-dms${itemParts.length > 1 ? '-' + letter(i) : ''}.md`, text: PART_1 + block(part) }))
+  chunks(shuffled(fixtures.drafts), draftsPerPart).forEach((part, i) => {
+    const draftItems = part.map((d) => ({ id: d.id, evidence: d.evidence, draft: d.text }))
+    prompts.push({ file: `${prompts.length + 1}-drafts-${letter(i)}.md`, text: DRAFT_PART + block(draftItems) })
+  })
   return prompts
 }

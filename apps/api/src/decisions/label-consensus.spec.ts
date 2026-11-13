@@ -78,6 +78,9 @@ describe('csv for the human pass', () => {
   })
 })
 
+// The items are the JSON block at the end of a prompt.
+const itemsOf = (text: string) => JSON.parse(text.slice(text.indexOf('```json') + 7, text.lastIndexOf('```'))) as { id: string }[]
+
 describe('buildPrompts', () => {
   const profiles = [{ id: 'f01', handle: 'mina', name: 'Mina', bio: 'Builds robots', followers: 10, labels: { own_account: true, fits_segment: true }, reviewed: false }]
   const dms = [{ id: 'dm001', group: 'clear_invite', text: 'How do I apply?', labels: { invitation: true, opt_out: false, reply_class: 'Question' }, reviewed: false }]
@@ -90,9 +93,25 @@ describe('buildPrompts', () => {
     for (const leak of ['clear_invite', 'planted', 'reviewed', '"labels"']) expect(all).not.toContain(leak)
     expect(prompts[0].text).toContain('own_account')
     expect(prompts[0].text).toContain('How do I apply?')
-    expect(prompts[1].text).toContain('dr000')
-    expect(prompts[1].text).not.toContain('dr002')
-    expect(prompts[2].text).toContain('dr002')
+    const ids = (text: string) => itemsOf(text).map((i) => i.id)
+    expect(ids(prompts[1].text)).toHaveLength(2)
+    expect(ids(prompts[2].text)).toHaveLength(1)
+    expect([...ids(prompts[1].text), ...ids(prompts[2].text)].sort()).toEqual(['dr000', 'dr001', 'dr002'])
+  })
+
+  it('splits profiles and DMs into lettered parts when there are too many for one', () => {
+    const manyDms = Array.from({ length: 5 }, (_, i) => ({ id: `dm00${i}`, group: 'neutral', text: `Hello ${i}`, labels: {}, reviewed: false }))
+    const prompts = buildPrompts({ profiles, dms: manyDms, drafts: [] }, 50, 4)
+    expect(prompts.map((p) => p.file)).toEqual(['1-profiles-and-dms-a.md', '2-profiles-and-dms-b.md'])
+    expect(prompts.flatMap((p) => itemsOf(p.text))).toHaveLength(6)
+  })
+
+  it('shuffles DMs and drafts the same way every time, so the order does not give away the group', () => {
+    const many = Array.from({ length: 20 }, (_, i) => ({ id: `dm${String(i).padStart(3, '0')}`, group: i < 10 ? 'spam' : 'clear_invite', text: `Text ${i}`, labels: {}, reviewed: false }))
+    const order = (text: string) => itemsOf(text).map((i) => i.id).join()
+    const first = buildPrompts({ profiles: [], dms: many, drafts: [] })[0].text
+    expect(order(buildPrompts({ profiles: [], dms: many, drafts: [] })[0].text)).toBe(order(first))
+    expect(order(first)).not.toBe(many.map((d) => d.id).join())
   })
 
   it('tells the chat to answer with one JSON array of the expected shape', () => {
