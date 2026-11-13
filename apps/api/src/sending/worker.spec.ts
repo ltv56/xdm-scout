@@ -21,9 +21,10 @@ let x: FakeXClient
 let service: SendingService
 let worker: Worker
 
-const t0 = new Date('2026-11-12T10:00:00Z')
-const plus = (d: Date, ms: number) => new Date(d.getTime() + ms)
 const MIN = 60_000
+// An hour back, on a whole second: approve() stamps rows with the real clock, and test 6c needs a second boundary.
+const t0 = new Date(Math.floor(Date.now() / 1000) * 1000 - 60 * MIN)
+const plus = (d: Date, ms: number) => new Date(d.getTime() + ms)
 
 beforeEach(async () => {
   ds = await createTestDataSource()
@@ -41,7 +42,8 @@ afterAll(async () => {
 async function approve(content = 'Hi there') {
   x.priorMessage('200', 'Hi, can we talk about your fund?', new Date(Date.now() - 86_400_000))
   const draft = await seedDraft(ds, '200', content)
-  const { attemptId } = await service.approveAndSend(draft.id, sha(content))
+  await service.approve(draft.id, sha(content))
+  const { attemptId } = await service.send(draft.id, sha(content))
   return { draft, attemptId }
 }
 

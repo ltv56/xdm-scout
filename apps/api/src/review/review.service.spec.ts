@@ -10,6 +10,7 @@ import { Contact, Draft, SenderAccount, XUser } from '../sending/entities'
 import { hashContent } from '../sending/sending.service'
 import { Setting } from '../setting.entity'
 import { createTestDataSource } from '../test/db'
+import { FixtureDecisionClient } from '../decisions/decision-client'
 import { reviewQueue } from './contract'
 import { DraftService } from './draft.service'
 import { ReviewController } from './review.controller'
@@ -138,6 +139,15 @@ describe('review queue', () => {
     expect(first).toMatchObject({ language: 'en', englishText: null })
     await ds.getRepository(Draft).update({ prospectId: mai.id }, { language: 'vi', englishText: 'Hi Mai!' })
     expect((await service().queue(1, now)).items[0]).toMatchObject({ language: 'vi', englishText: 'Hi Mai!' })
+  })
+
+  it('adds the model checks when a decision client is there, and none otherwise', async () => {
+    await seedPerson('mai')
+    expect((await service().queue(1, now)).items[0].decisions).toEqual([])
+    const withModel = reviewQueue.parse(await new ReviewService(ds, new FixtureDecisionClient(() => 0.9)).queue(1, now))
+    const codes = withModel.items[0].decisions.map((d) => d.code)
+    expect(codes).toEqual(expect.arrayContaining(['no_sensitive', 'no_familiarity', 'one_person', 'claim_backed', 'own_account']))
+    expect(withModel.items[0].decisions.every((d) => d.answeredBy === 'fixture' && d.band === 'high')).toBe(true)
   })
 
   it('shows pending and approved drafts of this campaign only, at most ten', async () => {

@@ -14,7 +14,7 @@ const OPT_OUT = /no worries|no pressure|not interested|ignore this|feel free to 
 const splitSentences = (text: string) => text.split(/(?<=[.!?])\s+|\s*\n\s*/).map((t) => t.trim()).filter(Boolean)
 
 // Attempts the reviewer can still pull back; once the worker is sending or unsure, the draft is out of their hands.
-const PULLABLE: SendAttempt['status'][] = ['queued', 'manual_pending']
+const PULLABLE: SendAttempt['status'][] = ['approved', 'queued', 'manual_pending']
 const SETTLED: SendAttempt['status'][] = ['cancelled', 'failed']
 
 @Injectable()
@@ -45,7 +45,7 @@ export class ReviewActionsService {
 
   async approve(draftId: number, body: ApproveBody, now = new Date()) {
     const draft = await this.ds.getRepository(Draft).findOneBy({ id: draftId })
-    if (!draft) return this.sending.approveAndSend(draftId, body.contentHash)
+    if (!draft) return this.sending.approve(draftId, body.contentHash)
     if (draft.status !== 'pending') throw new ConflictException('This draft is no longer in the queue')
     if (hashContent(draft.content) !== body.contentHash) throw new ConflictException('The draft changed since you read it. Review it again.')
 
@@ -54,7 +54,7 @@ export class ReviewActionsService {
       if (checks.some((c) => c.level === 'block')) throw new ConflictException('Fix the blocking checks first')
       if (checks.some((c) => c.needsConfirm) && !body.confirmedUnbacked) throw new ConflictException('Confirm the sentences you added')
     }
-    const result = draft.sendPath === 'API_SEND' ? await this.sending.approveAndSend(draftId, body.contentHash) : await this.sending.approveManual(draftId, body.contentHash)
+    const result = await this.sending.approve(draftId, body.contentHash, draft.sendPath === 'API_SEND' ? 'api' : 'manual')
     await this.signal('approve', draft, { finalText: draft.content })
     return result
   }
@@ -99,14 +99,18 @@ export class ReviewActionsService {
     return { ok: true }
   }
 
+  async send(draftId: number, contentHash: string) {
+    return this.sending.send(draftId, contentHash)
+  }
+
   async manual(draftId: number, outcome: 'sent' | 'not_sent', now = new Date()): Promise<ReviewItem> {
     await this.ds.transaction(async (em) => {
       const draft = await em.findOne(Draft, { where: { id: draftId } })
-      if (!draft || draft.sendPath !== 'HUMAN_HANDOFF' || draft.status !== 'approved') throw new ConflictException('Approve a draft you send yourself first')
-      const attempt = await em.findOne(SendAttempt, { where: { draftId, route: 'manual', status: 'manual_pending' } })
+      if (!draft || draft.status !== 'approved') throw new ConflictException('Approve the draft first')
+      const attempt = await em.findOne(SendAttempt, { where: { draftId, status: In(['manual_pending', 'approved']) } })
       if (!attempt) throw new ConflictException('Already recorded')
       if (outcome === 'sent') {
-        await em.update(SendAttempt, attempt.id, { status: 'manual_unverified' })
+        await em.update(SendAttempt, attempt.id, { route: 'manual', status: 'manual_unverified' })
         await this.jobs.enqueue('verify_manual', { attemptId: attempt.id }, now, em)
       } else {
         await em.update(SendAttempt, attempt.id, { status: 'cancelled', error: 'Reviewer did not send it' })
