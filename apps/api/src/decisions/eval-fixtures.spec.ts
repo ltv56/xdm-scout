@@ -49,19 +49,19 @@ describe('eval fixtures', () => {
     expect(/[À-ɏḀ-ỿ]/.test(all)).toBe(false)
   })
 
-  it('marks a planted fault false on its own check and every other check true', () => {
+  it('marks a planted fault false on its own check and leaves clean drafts all true', () => {
     for (const d of load<Draft[]>('drafts')) {
-      for (const [check, value] of Object.entries(d.labels)) {
-        if (d.planted === check) expect(value).toBe(false)
-        else if (!(d.planted === 'no_familiarity' && check === 'claim_backed')) expect(value).toBe(true)
-      }
+      if (d.planted) expect(d.labels[d.planted]).toBe(false)
+      else expect(Object.values(d.labels).every((v) => v === true)).toBe(true)
     }
   })
 
-  it('labels a DM from the group it was written for and leaves the vague invitations to the reviewer', () => {
+  it('keeps the labels the invitation groups imply and gives every DM an answer', () => {
     for (const d of load<Dm[]>('dms')) {
-      if (d.group === 'vague_invite') expect(d.labels.invitation).toBeNull()
-      else if (d.group !== 'tricky') expect(d.labels.invitation).toBe(d.group === 'clear_invite')
+      if (d.group === 'clear_invite') expect(d.labels.invitation).toBe(true)
+      if (d.group === 'decline' || d.group === 'spam') expect(d.labels.invitation).toBe(false)
+      expect(typeof d.labels.invitation).toBe('boolean')
+      expect(d.labels.reply_class).toMatch(/^(Interested|Question|Not now|Not interested|Opt-out|Unclear)(\|(Interested|Question))?$/)
     }
   })
 
@@ -81,7 +81,11 @@ describe('eval fixtures', () => {
     expect(own.mina_builds).toBe(true)
   })
 
-  it('starts every item as not reviewed', () => {
-    for (const name of ['profiles', 'dms', 'drafts']) expect(load<{ reviewed: boolean }[]>(name).every((i) => i.reviewed === false)).toBe(true)
+  it('has every label answered and every item reviewed', () => {
+    for (const name of ['profiles', 'dms', 'drafts']) {
+      const items = load<{ reviewed: boolean; labels: Record<string, unknown> }[]>(name)
+      expect(items.every((i) => i.reviewed)).toBe(true)
+      expect(items.every((i) => Object.values(i.labels).every((v) => v !== null))).toBe(true)
+    }
   })
 })

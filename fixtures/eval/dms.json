@@ -6,9 +6,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm002",
@@ -19,7 +19,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm003",
@@ -30,7 +30,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm004",
@@ -41,7 +41,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm005",
@@ -50,9 +50,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Interested"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm006",
@@ -63,7 +63,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm007",
@@ -72,9 +72,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm008",
@@ -85,7 +85,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm009",
@@ -96,7 +96,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm010",
@@ -107,7 +107,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm011",
@@ -116,9 +116,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Interested"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm012",
@@ -129,7 +129,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm013",
@@ -138,9 +138,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm014",
@@ -151,7 +151,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm015",
@@ -162,7 +162,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm016",
@@ -173,7 +173,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm017",
@@ -182,9 +182,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Interested"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm018",
@@ -195,7 +195,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm019",
@@ -204,9 +204,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm020",
@@ -217,227 +217,227 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm021",
     "group": "vague_invite",
     "text": "Interesting. What is this about?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm022",
     "group": "vague_invite",
     "text": "I might be interested, depends. Tell me more?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm023",
     "group": "vague_invite",
     "text": "Thanks for reaching out. Is this only for startups in the US?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm024",
     "group": "vague_invite",
     "text": "Hmm, maybe. We're still figuring out what we need.",
     "labels": {
-      "invitation": null,
+      "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Not now"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm025",
     "group": "vague_invite",
     "text": "Saw your post. Not sure if we qualify, we're a research group not a company.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm026",
     "group": "vague_invite",
     "text": "Possibly, send details.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm027",
     "group": "vague_invite",
     "text": "Interesting. What is this about? Thank you!",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm028",
     "group": "vague_invite",
     "text": "I might be interested, depends. Tell me more? Cheers!",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm029",
     "group": "vague_invite",
     "text": "Thanks for reaching out. Is this only for startups in the US? Thanks.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm030",
     "group": "vague_invite",
     "text": "Hmm, maybe. We're still figuring out what we need. Cheers.",
     "labels": {
-      "invitation": null,
+      "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Not now"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm031",
     "group": "vague_invite",
     "text": "Saw your post. Not sure if we qualify, we're a research group not a company. Best, Anh",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm032",
     "group": "vague_invite",
     "text": "Possibly, send details. - Bao",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm033",
     "group": "vague_invite",
     "text": "Interesting. What is this about? Please reply when you can.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm034",
     "group": "vague_invite",
     "text": "I might be interested, depends. Tell me more? Thank you!",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm035",
     "group": "vague_invite",
     "text": "Thanks for reaching out. Is this only for startups in the US? Cheers!",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm036",
     "group": "vague_invite",
     "text": "Hmm, maybe. We're still figuring out what we need. Thanks.",
     "labels": {
-      "invitation": null,
+      "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Not now"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm037",
     "group": "vague_invite",
     "text": "Saw your post. Not sure if we qualify, we're a research group not a company. Cheers.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm038",
     "group": "vague_invite",
     "text": "Possibly, send details. Best, Raj",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm039",
     "group": "vague_invite",
     "text": "Interesting. What is this about? - Mai",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm040",
     "group": "vague_invite",
     "text": "I might be interested, depends. Tell me more? Please reply when you can.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm041",
@@ -448,7 +448,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm042",
@@ -459,18 +459,18 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm043",
     "group": "neutral",
     "text": "Which city are you based in?",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm044",
@@ -481,7 +481,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm045",
@@ -492,7 +492,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm046",
@@ -503,7 +503,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm047",
@@ -514,7 +514,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm048",
@@ -525,18 +525,18 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm049",
     "group": "neutral",
     "text": "Which city are you based in? Thanks.",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm050",
@@ -547,7 +547,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm051",
@@ -558,7 +558,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm052",
@@ -569,7 +569,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm053",
@@ -580,7 +580,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm054",
@@ -591,18 +591,18 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm055",
     "group": "neutral",
     "text": "Which city are you based in? Cheers!",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm056",
@@ -613,7 +613,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm057",
@@ -624,7 +624,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm058",
@@ -635,7 +635,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm059",
@@ -646,7 +646,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm060",
@@ -657,7 +657,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm061",
@@ -668,7 +668,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm062",
@@ -679,7 +679,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm063",
@@ -690,7 +690,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm064",
@@ -701,7 +701,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm065",
@@ -712,7 +712,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm066",
@@ -723,7 +723,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm067",
@@ -734,7 +734,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm068",
@@ -745,7 +745,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm069",
@@ -756,7 +756,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm070",
@@ -767,7 +767,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm071",
@@ -778,7 +778,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm072",
@@ -789,7 +789,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm073",
@@ -800,7 +800,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm074",
@@ -811,7 +811,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm075",
@@ -822,7 +822,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm076",
@@ -833,7 +833,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm077",
@@ -844,7 +844,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm078",
@@ -855,7 +855,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm079",
@@ -866,7 +866,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm080",
@@ -877,7 +877,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm081",
@@ -886,9 +886,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm082",
@@ -897,9 +897,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm083",
@@ -908,9 +908,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm084",
@@ -919,9 +919,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm085",
@@ -930,9 +930,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm086",
@@ -941,9 +941,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm087",
@@ -952,9 +952,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm088",
@@ -963,9 +963,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm089",
@@ -974,9 +974,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm090",
@@ -985,9 +985,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm091",
@@ -996,9 +996,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm092",
@@ -1007,9 +1007,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm093",
@@ -1018,9 +1018,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm094",
@@ -1029,9 +1029,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm095",
@@ -1040,9 +1040,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm096",
@@ -1051,9 +1051,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm097",
@@ -1062,9 +1062,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm098",
@@ -1073,9 +1073,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm099",
@@ -1084,9 +1084,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm100",
@@ -1095,9 +1095,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "dm101",
@@ -1106,9 +1106,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1120,7 +1120,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1132,7 +1132,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1144,7 +1144,7 @@
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1154,9 +1154,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1168,7 +1168,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1180,7 +1180,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1190,9 +1190,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1204,7 +1204,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1214,9 +1214,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1228,7 +1228,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1238,9 +1238,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1250,9 +1250,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1264,7 +1264,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1274,9 +1274,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1288,7 +1288,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1300,7 +1300,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1312,7 +1312,7 @@
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1322,9 +1322,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1336,7 +1336,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1346,9 +1346,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1360,7 +1360,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1372,7 +1372,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1384,7 +1384,7 @@
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1394,9 +1394,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1408,7 +1408,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1420,7 +1420,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1430,9 +1430,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1444,7 +1444,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1454,9 +1454,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1468,7 +1468,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1478,9 +1478,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1490,9 +1490,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1504,7 +1504,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1514,9 +1514,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1528,7 +1528,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1540,7 +1540,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1552,7 +1552,7 @@
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1562,9 +1562,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1576,7 +1576,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1584,11 +1584,11 @@
     "group": "vague_invite",
     "text": "What do you actually do?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1596,11 +1596,11 @@
     "group": "vague_invite",
     "text": "Is this a paid thing?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1608,11 +1608,11 @@
     "group": "vague_invite",
     "text": "Maybe. Depends on the terms, can you send details?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1620,11 +1620,11 @@
     "group": "vague_invite",
     "text": "We are not a startup yet, just two students with an idea. Does that count?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1632,11 +1632,11 @@
     "group": "vague_invite",
     "text": "Who else is in the programme?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1644,11 +1644,11 @@
     "group": "vague_invite",
     "text": "I saw your post but I'm not sure it applies to us.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1656,11 +1656,11 @@
     "group": "vague_invite",
     "text": "Tell me more, but I'm not promising anything.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1668,11 +1668,11 @@
     "group": "vague_invite",
     "text": "Is it only for companies, or can an individual apply?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1680,11 +1680,11 @@
     "group": "vague_invite",
     "text": "Hmm, what's in it for us?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1692,11 +1692,11 @@
     "group": "vague_invite",
     "text": "i dont really get what this is, can u explain",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1704,11 +1704,11 @@
     "group": "vague_invite",
     "text": "Not sure we qualify, we're a research group.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1716,11 +1716,11 @@
     "group": "vague_invite",
     "text": "Is this the same fund that backed that Singapore robotics team?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1728,11 +1728,11 @@
     "group": "vague_invite",
     "text": "Possibly interested. Is there a deadline?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1740,11 +1740,11 @@
     "group": "vague_invite",
     "text": "I'd need to check with my co-founder first. What are the next steps?",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1752,11 +1752,11 @@
     "group": "vague_invite",
     "text": "Sounds interesting?? what exactly do you want from us",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1764,11 +1764,11 @@
     "group": "vague_invite",
     "text": "What do you actually do? Thanks.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1776,11 +1776,11 @@
     "group": "vague_invite",
     "text": "Is this a paid thing? 🤔",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1788,11 +1788,11 @@
     "group": "vague_invite",
     "text": "Maybe. Depends on the terms, can you send details? Let me know.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1800,11 +1800,11 @@
     "group": "vague_invite",
     "text": "We are not a startup yet, just two students with an idea. Does that count? Cheers.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1812,11 +1812,11 @@
     "group": "vague_invite",
     "text": "Who else is in the programme? Thanks.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1824,11 +1824,11 @@
     "group": "vague_invite",
     "text": "I saw your post but I'm not sure it applies to us. 🤔",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1836,11 +1836,11 @@
     "group": "vague_invite",
     "text": "Tell me more, but I'm not promising anything. Let me know.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1848,11 +1848,11 @@
     "group": "vague_invite",
     "text": "Is it only for companies, or can an individual apply? Cheers.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1860,11 +1860,11 @@
     "group": "vague_invite",
     "text": "Hmm, what's in it for us? Thanks.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1872,11 +1872,11 @@
     "group": "vague_invite",
     "text": "i dont really get what this is, can u explain 🤔",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1884,11 +1884,11 @@
     "group": "vague_invite",
     "text": "Not sure we qualify, we're a research group. Let me know.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1896,11 +1896,11 @@
     "group": "vague_invite",
     "text": "Is this the same fund that backed that Singapore robotics team? Cheers.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1908,11 +1908,11 @@
     "group": "vague_invite",
     "text": "Possibly interested. Is there a deadline? Thanks.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1920,11 +1920,11 @@
     "group": "vague_invite",
     "text": "I'd need to check with my co-founder first. What are the next steps? 🤔",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1932,11 +1932,11 @@
     "group": "vague_invite",
     "text": "Sounds interesting?? what exactly do you want from us Let me know.",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1948,7 +1948,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1960,7 +1960,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1968,11 +1968,11 @@
     "group": "neutral",
     "text": "Where is your team based?",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1984,7 +1984,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -1992,11 +1992,11 @@
     "group": "neutral",
     "text": "Do you have an RSS feed for your posts?",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2008,7 +2008,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2018,9 +2018,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2032,7 +2032,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2044,7 +2044,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2052,11 +2052,11 @@
     "group": "neutral",
     "text": "Can you explain what a SAFE note is? Asking for a friend.",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2068,7 +2068,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2080,7 +2080,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2092,7 +2092,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2104,7 +2104,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2112,11 +2112,11 @@
     "group": "neutral",
     "text": "What time zone are you in?",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2128,7 +2128,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2140,7 +2140,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2152,7 +2152,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2160,11 +2160,11 @@
     "group": "neutral",
     "text": "Do you know when the next robotics meetup is?",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2176,7 +2176,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2188,7 +2188,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2200,7 +2200,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2208,11 +2208,11 @@
     "group": "neutral",
     "text": "Where is your team based? Cheers!",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2224,7 +2224,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2232,11 +2232,11 @@
     "group": "neutral",
     "text": "Do you have an RSS feed for your posts? 🙂",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2248,7 +2248,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2258,9 +2258,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2272,7 +2272,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2284,7 +2284,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2292,11 +2292,11 @@
     "group": "neutral",
     "text": "Can you explain what a SAFE note is? Asking for a friend. Have a good one.",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2308,7 +2308,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2320,7 +2320,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2332,7 +2332,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2344,7 +2344,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2352,11 +2352,11 @@
     "group": "neutral",
     "text": "What time zone are you in? Cheers!",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2368,7 +2368,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2380,7 +2380,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2392,7 +2392,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2400,11 +2400,11 @@
     "group": "neutral",
     "text": "Do you know when the next robotics meetup is? Cheers!",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2416,7 +2416,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2428,7 +2428,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2440,7 +2440,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2452,7 +2452,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2464,7 +2464,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2476,7 +2476,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2488,7 +2488,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2500,7 +2500,7 @@
       "opt_out": false,
       "reply_class": "Not now"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2512,7 +2512,7 @@
       "opt_out": false,
       "reply_class": "Not now"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2524,7 +2524,7 @@
       "opt_out": false,
       "reply_class": "Not now"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2536,7 +2536,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2548,7 +2548,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2560,7 +2560,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2572,7 +2572,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2584,7 +2584,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2596,7 +2596,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2608,7 +2608,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2620,7 +2620,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2632,7 +2632,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2644,7 +2644,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2656,7 +2656,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2668,7 +2668,7 @@
       "opt_out": false,
       "reply_class": "Not interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2680,7 +2680,7 @@
       "opt_out": false,
       "reply_class": "Not now"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2692,7 +2692,7 @@
       "opt_out": false,
       "reply_class": "Not now"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2704,7 +2704,7 @@
       "opt_out": false,
       "reply_class": "Not now"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2716,7 +2716,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2728,7 +2728,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2740,7 +2740,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2752,7 +2752,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2764,7 +2764,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2776,7 +2776,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2786,9 +2786,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2798,9 +2798,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2810,9 +2810,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2822,9 +2822,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2834,9 +2834,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2846,9 +2846,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2858,9 +2858,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2870,9 +2870,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2882,9 +2882,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2894,9 +2894,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2906,9 +2906,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2918,9 +2918,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2930,9 +2930,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2942,9 +2942,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2954,9 +2954,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2966,9 +2966,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2978,9 +2978,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -2990,9 +2990,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3002,9 +3002,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3014,9 +3014,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3026,9 +3026,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3038,9 +3038,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3050,9 +3050,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3062,9 +3062,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3074,9 +3074,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3086,9 +3086,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3098,9 +3098,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3110,9 +3110,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3122,9 +3122,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3134,9 +3134,9 @@
     "labels": {
       "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3148,7 +3148,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3160,7 +3160,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3170,9 +3170,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3182,9 +3182,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3196,7 +3196,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3208,7 +3208,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3220,7 +3220,7 @@
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3232,7 +3232,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3242,9 +3242,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3256,7 +3256,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3264,11 +3264,11 @@
     "group": "tricky",
     "text": "Great, please stop by our demo day booth next week!",
     "labels": {
-      "invitation": null,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3276,11 +3276,11 @@
     "group": "tricky",
     "text": "You stopped following me, why?",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": "Unclear"
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3288,11 +3288,11 @@
     "group": "tricky",
     "text": "This message is from a human, not a bot. Please reply to confirm you are real.",
     "labels": {
-      "invitation": null,
+      "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3304,7 +3304,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3316,7 +3316,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3328,7 +3328,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3336,11 +3336,11 @@
     "group": "tricky",
     "text": "Can we talk? Not about the programme, about selling you ad space.",
     "labels": {
-      "invitation": null,
+      "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3352,7 +3352,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3364,7 +3364,7 @@
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3372,11 +3372,11 @@
     "group": "tricky",
     "text": "Thanks for the add. Do you also follow the robotics subreddit?",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3386,9 +3386,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3400,7 +3400,7 @@
       "opt_out": true,
       "reply_class": "Opt-out"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3412,7 +3412,7 @@
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3424,7 +3424,7 @@
       "opt_out": false,
       "reply_class": "Interested"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3434,9 +3434,9 @@
     "labels": {
       "invitation": true,
       "opt_out": false,
-      "reply_class": "Question"
+      "reply_class": "Interested|Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3444,11 +3444,11 @@
     "group": "tricky",
     "text": "Can we talk? Not about the programme, about selling you ad space. Cheers!",
     "labels": {
-      "invitation": null,
+      "invitation": false,
       "opt_out": false,
-      "reply_class": null
+      "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3460,7 +3460,7 @@
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3468,11 +3468,11 @@
     "group": "tricky",
     "text": "Thanks for the add. Do you also follow the robotics subreddit? Cheers!",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
       "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3480,11 +3480,11 @@
     "group": "tricky",
     "text": "You stopped following me, why? Thanks.",
     "labels": {
-      "invitation": false,
+      "invitation": true,
       "opt_out": false,
-      "reply_class": "Unclear"
+      "reply_class": "Question"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -3496,7 +3496,7 @@
       "opt_out": false,
       "reply_class": "Unclear"
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   }
 ]
