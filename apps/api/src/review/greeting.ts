@@ -27,16 +27,29 @@ export function usableName(displayName: string | null | undefined): string | nul
   return words.map((w) => w[0].toUpperCase() + w.slice(1)).join(' ')
 }
 
-const NAMED = [
-  (n: string) => `Hi ${n}!`,
-  (n: string) => `Hello ${n}!`,
-  (n: string) => `Hey ${n}!`,
-  (n: string) => `Hi ${n}, hope your week is going well.`,
-  (n: string) => `Hello ${n}, hope you are doing well.`,
-  (n: string) => `Hi there ${n}!`,
-]
+export type GreetingLanguage = 'en' | 'vi'
 
-const NAMELESS = ['Hi!', 'Hello!', 'Hey there!', 'Hi there!', 'Hello there!']
+const NAMED: Record<GreetingLanguage, ((n: string) => string)[]> = {
+  en: [
+    (n) => `Hi ${n}!`,
+    (n) => `Hello ${n}!`,
+    (n) => `Hey ${n}!`,
+    (n) => `Hi ${n}, hope your week is going well.`,
+    (n) => `Hello ${n}, hope you are doing well.`,
+    (n) => `Hi there ${n}!`,
+  ],
+  vi: [
+    (n) => `Chào ${n}!`,
+    (n) => `Xin chào ${n}!`,
+    (n) => `Chào ${n}, hy vọng bạn đang khỏe.`,
+    (n) => `Chào ${n}, chúc bạn một tuần vui.`,
+  ],
+}
+
+const NAMELESS: Record<GreetingLanguage, string[]> = {
+  en: ['Hi!', 'Hello!', 'Hey there!', 'Hi there!', 'Hello there!'],
+  vi: ['Chào bạn!', 'Xin chào!', 'Chào bạn, hy vọng bạn đang khỏe.'],
+}
 
 // Small stable hash, so one person gets the same opener on every render but different people do not all get the same one.
 function hash(seed: string) {
@@ -48,8 +61,10 @@ function hash(seed: string) {
   return h >>> 0
 }
 
-export function greetingFor(displayName: string | null | undefined, seed: string): string {
+export function greetingFor(displayName: string | null | undefined, seed: string, language: GreetingLanguage = 'en'): string {
   const name = usableName(displayName)
   const h = hash(seed)
-  return name ? NAMED[h % NAMED.length](name) : NAMELESS[h % NAMELESS.length]
+  const named = NAMED[language]
+  const nameless = NAMELESS[language]
+  return name ? named[h % named.length](name) : nameless[h % nameless.length]
 }

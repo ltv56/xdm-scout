@@ -10,6 +10,7 @@ import { apiSendBlock } from '../sending/sending.service'
 import { Setting } from '../setting.entity'
 import { StoredSentence, StoredSource } from './checks'
 import { SenderProfile, senderProfile } from './contract'
+import { layoutText } from './draft-text'
 import { greetingFor } from './greeting'
 
 export const DRAFT_SYSTEM = `You write the first direct message from a small fund to one person on X.
@@ -94,7 +95,7 @@ export class DraftService {
     if (!contact) {
       contact = await this.ds.getRepository(Contact).save({ senderAccountId: sender[0].id, xUserId: prospect.xUserId, relationshipContext: prospect.relationship })
     }
-    const content = sentences.map((s) => s.text).join(' ')
+    const content = layoutText(sentences)
     return this.ds.transaction(async (em) => {
       await em.update(Draft, { contactId: contact.id, status: 'pending' }, { status: 'superseded' })
       const saved = await em.save(Draft, {

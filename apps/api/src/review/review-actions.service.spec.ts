@@ -61,6 +61,18 @@ describe('edit', () => {
     expect(item.checks.find((c) => c.code === 'unbacked_claim')).toMatchObject({ level: 'warn', needsConfirm: true })
   })
 
+  it('keeps the line breaks the reviewer typed, and hashes exactly that text', async () => {
+    const d = await seedDraft()
+    const typed = `${d.sentences![0].text}\n\nSaw your eval harness for Vietnamese LLMs.\nNo worries if not.`
+    const item = await actions.edit(d.id, typed, now)
+    expect(item.text).toBe(typed)
+    expect(item.contentHash).toBe(hashContent(typed))
+    expect(item.sentences.map((s) => s.text)).toEqual([d.sentences![0].text, 'Saw your eval harness for Vietnamese LLMs.', 'No worries if not.'])
+    expect(item.sentences.map((s) => s.source?.type ?? null)).toEqual(['greeting', null, 'opt_out'])
+    expect(item.openInXUrl).toContain(encodeURIComponent(typed))
+    expect(await actions.approve(d.id, { contentHash: hashContent(typed), confirmedUnbacked: true }, now)).toBeDefined()
+  })
+
   it('sends an approved draft back to pending and cancels its open manual attempt', async () => {
     const d = await seedDraft()
     const { attemptId } = await actions.approve(d.id, { contentHash: hashContent(d.content), confirmedUnbacked: false }, now)

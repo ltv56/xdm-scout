@@ -57,3 +57,32 @@ describe('greetingFor', () => {
     expect(new Set(seeds.map((s) => greetingFor(null, s))).size).toBeGreaterThanOrEqual(3)
   })
 })
+
+describe('greetingFor in Vietnamese', () => {
+  const seeds = Array.from({ length: 60 }, (_, i) => `u-${i}`)
+
+  it('greets by name with Vietnamese wordings, short and varied', () => {
+    const all = seeds.map((s) => greetingFor('Mai Tran', s, 'vi'))
+    for (const g of all) {
+      expect(g).toMatch(/^(Chào|Xin chào) Mai Tran[!,]/)
+      expect(g).toMatch(/[!.]$/)
+      expect(g.length).toBeLessThanOrEqual(48)
+    }
+    expect(new Set(all).size).toBeGreaterThanOrEqual(3)
+  })
+
+  it('has a version without a name', () => {
+    const all = seeds.map((s) => greetingFor('Acme Labs', s, 'vi'))
+    for (const g of all) {
+      expect(g).not.toContain('Acme')
+      expect(g).toMatch(/^(Chào|Xin chào)/)
+      expect(g).toMatch(/[!.]$/)
+    }
+    expect(new Set(all).size).toBeGreaterThanOrEqual(2)
+  })
+
+  it('stays English by default and keeps one opener per seed', () => {
+    expect(greetingFor('Mai Tran', 'u-1')).toMatch(/^(Hi|Hello|Hey)/)
+    expect(greetingFor('Mai Tran', 'u-1', 'vi')).toBe(greetingFor('Mai Tran', 'u-1', 'vi'))
+  })
+})
