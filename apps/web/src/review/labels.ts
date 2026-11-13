@@ -93,6 +93,7 @@ export function sourceLine(sentence: DraftSentence, evidence: EvidenceItem[]) {
   const s = sentence.source
   if (!s) return 'No source. Nothing in their posts or your profile backs this sentence.'
   if (s.type === 'opt_out') return 'Opt-out line.'
+  if (s.type === 'greeting') return 'Greeting added by xdm-scout from their X name.'
   if (s.type === 'sender_profile') return `From your sender profile (${s.field}).`
   const e = evidence.find((x) => x.id === s.evidenceId)
   if (!e) return 'Evidence is missing.'
