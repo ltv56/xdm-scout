@@ -89,11 +89,14 @@ export function verdict(item: ReviewItem): Verdict {
 
 export const blockers = (checks: CheckResult[]) => checks.filter((c) => c.level === 'block')
 
+const PROFILE_FIELD = { intro: 'who you are', program: 'the program this campaign offers', signer: 'who signs' }
+
 export function sourceLine(sentence: DraftSentence, evidence: EvidenceItem[]) {
   const s = sentence.source
   if (!s) return 'No source. Nothing in their posts or your profile backs this sentence.'
   if (s.type === 'opt_out') return 'Opt-out line.'
-  if (s.type === 'sender_profile') return `From your sender profile (${s.field}).`
+  if (s.type === 'greeting') return 'Greeting added by xdm-scout from their X name.'
+  if (s.type === 'sender_profile') return `From your sender profile (${PROFILE_FIELD[s.field]}).`
   const e = evidence.find((x) => x.id === s.evidenceId)
   if (!e) return 'Evidence is missing.'
   const when = shortDate(e.postedAt)

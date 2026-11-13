@@ -4,6 +4,7 @@ import FitBadge from '../FitBadge'
 import { AlertTriangle, CheckCircle, MinusCircle, XCircle, XLogo } from '../icons'
 import { chip, tone } from '../ui'
 import Frame from './Actions'
+import { ModelChecks, PersonFacts } from './PersonFacts'
 import { activeLabel, evidenceIdOf, RELATIONSHIP_LABEL, shortDate, sourceLine, type Verdict } from './labels'
 
 // The draft-level check says some post is old; only the old ones get the chip.
@@ -151,7 +152,9 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
   const activeEvidence = hoverEvidence ?? (hoverSentence !== null ? evidenceIdOf(item.sentences[hoverSentence]) : pinnedEvidence)
   const stale = item.checks.some((c) => c.code === 'stale_opening')
 
-  const evidence = item.evidence
+  // The bio is shown beside the numbers; it is evidence only when a sentence cites it.
+  const cited = new Set(item.sentences.map(evidenceIdOf))
+  const evidence = item.evidence.filter((e) => e.kind !== 'bio' || cited.has(e.id))
 
   useEffect(() => {
     if (pin === null) return
@@ -196,7 +199,7 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
                 {p.name && <span className="ml-3">{handleLink('text-lg font-normal text-muted')}</span>}
               </h2>
               <p className="mt-1 text-sm text-muted">
-                {RELATIONSHIP_LABEL[p.relationship]} · {activeLabel(p.daysSinceActive)} · {item.kind === 'reply' ? 'Reply to their message' : 'First message'}
+                {p.history ?? RELATIONSHIP_LABEL[p.relationship]} · {activeLabel(p.daysSinceActive)} · {item.kind === 'reply' ? 'Reply to their message' : 'First message'}
                 {item.editedByReviewer && ' · You edited this draft'}
               </p>
             </header>
@@ -225,10 +228,12 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
           </div>
 
           <aside ref={aside} className="scroll-thin min-w-0 space-y-8 px-12 pb-8 lg:overflow-y-auto lg:border-l lg:border-rule lg:px-9 lg:py-6">
+            <PersonFacts prospect={p} />
             <section aria-label="Evidence">
               <h3 className="mb-3 text-sm font-semibold">Why this opening</h3>
               <EvidenceList evidence={evidence} stale={stale} active={activeEvidence} onHover={setHoverEvidence} onPick={pickEvidence} />
             </section>
+            <ModelChecks decisions={item.decisions} sentences={item.sentences} />
           </aside>
         </div>
       )}
