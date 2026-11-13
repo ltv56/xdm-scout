@@ -1,9 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import type { ReviewQueue } from '../../api/src/review/contract'
+import type { CampaignLane, ReadyToDraft, ReviewQueue, SenderProfile, WriteDraftsResult } from '../../api/src/review/contract'
 import { getJson, postJson } from './api'
 import FitBadge from './FitBadge'
-import type { Prospect } from './Prospects'
+import type { Filter as CandidateFilter, Prospect } from './Prospects'
 import { verdict } from './review/labels'
 import { btnLink, btnPrimary, btnSecondary } from './ui'
 
@@ -48,10 +48,11 @@ const SEGMENTS = [
   { key: 'unscored', label: 'Not scored yet', bar: 'bg-raised ring-1 ring-inset ring-rule' },
 ] as const
 
-export default function Overview({ campaignId, onReview, onProspects }: { campaignId: number; onReview: () => void; onProspects: () => void }) {
+export default function Overview({ campaignId, onReview, onProspects }: { campaignId: number; onReview: () => void; onProspects: (filter: CandidateFilter) => void }) {
   const qc = useQueryClient()
   const [waitingFor, setWaitingFor] = useState<{ at: string | null } | null>(null)
   const [note, setNote] = useState<string | null>(null)
+  const [draftNote, setDraftNote] = useState<string | null>(null)
 
   const campaign = useQuery<Campaign>({
     queryKey: ['campaign', campaignId],
@@ -65,6 +66,7 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
     refetchInterval: waiting ? 5000 : false,
   })
   const queue = useQuery<ReviewQueue>({ queryKey: ['review-queue', campaignId], queryFn: () => getJson(`/review-queue?campaignId=${campaignId}`), retry: false })
+  const readyQuery = useQuery<ReadyToDraft>({ queryKey: ['ready', campaignId], queryFn: () => getJson(`/campaigns/${campaignId}/drafts/ready`), retry: false })
   const estimate = useQuery<{ estimatedMicros: number }>({ queryKey: ['estimate', campaignId], queryFn: () => getJson(`/campaigns/${campaignId}/estimate`), retry: false })
 
   const search = useMutation({
@@ -74,23 +76,48 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
       if (r.queued) setWaitingFor({ at: campaign.data?.lastDiscovery?.at ?? null })
     },
   })
+  const write = useMutation({
+    mutationFn: () => postJson<WriteDraftsResult>(`/campaigns/${campaignId}/drafts`, { limit: 10 }),
+    onSuccess: (r) => {
+      setDraftNote(
+        r.drafted === 0
+          ? 'Nobody is ready for a draft.'
+          : `Wrote ${plural(r.drafted, 'draft')}.${r.readyToDraft ? ` ${plural(r.readyToDraft, 'more person', 'more people')} still waiting.` : ''}${r.noOpening ? ` ${plural(r.noOpening, 'person', 'people')} skipped: no reason to reach out yet.` : ''}`,
+      )
+      return Promise.all([qc.invalidateQueries({ queryKey: ['review-queue'] }), qc.invalidateQueries({ queryKey: ['ready'] })])
+    },
+  })
   const score = useMutation({
     mutationFn: () => postJson<{ queued: number }>(`/campaigns/${campaignId}/score`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['prospects', campaignId] }),
   })
 
-  if (campaign.isLoading) return <p className="text-sm text-muted">Loading…</p>
+  if (campaign.isLoading) return <p role="status" className="text-sm text-muted">Loading…</p>
   if (campaign.error || !campaign.data) return <p role="alert" className="text-sm font-medium text-block">{campaign.error?.message ?? 'Campaign not found'}</p>
 
   const c = campaign.data
+  const loadError = prospects.error ?? queue.error ?? readyQuery.error
   const people = prospects.data ?? []
   const counts = { strong: 0, possible: 0, weak: 0, not_a_fit: 0, unscored: 0 }
   for (const p of people) counts[p.fit ?? 'unscored'] += 1
   const drafts = (queue.data?.items ?? []).filter((i) => i.status === 'pending')
+  const ready = readyQuery.data?.ready ?? 0
   const byVerdict = (t: string) => drafts.filter((d) => verdict(d).tone === t).length
   const run = c.lastDiscovery
   const sources = [c.handles.length && plural(c.handles.length, 'handle'), c.seeds?.length && plural(c.seeds.length, 'seed account'), c.queries?.length && plural(c.queries.length, 'search')].filter(Boolean).join(' · ')
   const top = people.filter((p) => p.fit === 'strong' || p.fit === 'possible').slice(0, 5)
+
+  const writeButton =
+    ready > 0 ? (
+      <div className="flex flex-col items-start gap-1 sm:items-end">
+        <button type="button" className={drafts.length > 0 ? 'rounded-lg bg-raised px-4 py-2 text-sm font-medium shadow-soft transition-colors hover:bg-paper disabled:text-muted' : btnPrimary} disabled={write.isPending} onClick={() => write.mutate()}>
+          {write.isPending ? 'Writing…' : 'Write drafts (10)'}
+        </button>
+        <span className="text-xs text-muted">
+          {drafts.length > 0 && `${plural(ready, 'person is', 'people are')} ready. `}Up to 10 at a time, so you can read each one. Strong first, then closer ties, then the newest posts.
+        </span>
+      </div>
+    ) : null
 
   return (
     <div className="pb-16">
@@ -100,6 +127,7 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
           <p className="mt-1 text-sm text-muted">
             {sources || 'No sources yet'} · {run ? `last search ${ago(run.at)}` : 'no search yet'}
           </p>
+          <LaneLine campaignId={campaignId} />
         </div>
         <div>
           <button type="button" className={btnSecondary} disabled={search.isPending || waiting} onClick={() => search.mutate()}>
@@ -110,11 +138,12 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
           </p>
         </div>
       </header>
+      {loadError && <p role="alert" className="mt-3 text-sm font-medium text-block">Some numbers could not be loaded: {loadError.message}</p>}
       {waiting && <p className="mt-3 text-sm text-muted" role="status">The search is queued. This page updates when it finishes.</p>}
       {note && <p className="mt-3 text-sm font-medium text-warn" role="status">{note}</p>}
       {search.error && <p role="alert" className="mt-3 text-sm font-medium text-block">{search.error.message}</p>}
 
-      <section aria-label="Next step" className="mt-8 flex flex-wrap items-center justify-between gap-x-10 gap-y-5 rounded-3xl bg-rail px-10 py-9">
+      <section aria-label="Next step" className="mt-8 flex flex-wrap items-center justify-between gap-x-10 gap-y-5 rounded-3xl bg-rail px-5 py-6 sm:px-10 sm:py-9">
         {drafts.length > 0 ? (
           <>
             <div>
@@ -125,9 +154,12 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
                 {[byVerdict('ok') && `${byVerdict('ok')} ready`, byVerdict('warn') && `${byVerdict('warn')} to check`, byVerdict('stop') && `${byVerdict('stop')} to fix`].filter(Boolean).join(' · ')}
               </p>
             </div>
-            <button type="button" className={btnPrimary} onClick={onReview}>
-              Review drafts
-            </button>
+            <div className="flex flex-col items-start gap-2 sm:items-end">
+              <button type="button" className={btnPrimary} onClick={onReview}>
+                Review drafts
+              </button>
+              {writeButton}
+            </div>
           </>
         ) : counts.unscored > 0 ? (
           <>
@@ -141,17 +173,43 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
           </>
         ) : (
           <div>
-            <h2 className="text-2xl font-bold leading-tight">{people.length ? 'Nothing waiting for you' : 'No one found yet'}</h2>
-            <p className="mt-1.5 text-sm text-muted">{people.length ? 'Search again to find more people.' : 'Run the first search to find people for this campaign.'}</p>
+            <h2 className="text-2xl font-bold leading-tight">
+              {loadError ? 'The numbers did not load' : ready > 0 ? `${plural(ready, 'person is', 'people are')} ready for a draft` : people.length ? 'Nothing waiting for you' : 'No one found yet'}
+            </h2>
+            <p className="mt-1.5 text-sm text-muted">
+              {loadError
+                ? 'Reload the page when the server is back.'
+                : ready > 0
+                ? 'Nothing is written by itself. Write drafts for several people at once, or pick one person in Candidates.'
+                : people.length
+                  ? 'Search again to find more people.'
+                  : 'Run the first search to find people for this campaign.'}
+            </p>
+            {ready > 0 && (
+              <button type="button" className={`${btnLink} mt-3`} onClick={() => onProspects('ready')}>
+                View these {ready}
+              </button>
+            )}
           </div>
+        )}
+        {drafts.length === 0 && counts.unscored === 0 && ready > 0 && writeButton}
+        {draftNote && (
+          <p className="basis-full text-sm font-medium" role="status">
+            {draftNote}
+          </p>
+        )}
+        {write.error && (
+          <p className="basis-full text-sm font-medium text-block" role="alert">
+            {write.error.message}
+          </p>
         )}
       </section>
 
       <section aria-label="What we found" className="mt-12">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="text-lg font-bold">What we found</h2>
-          <button type="button" className={btnLink} onClick={onProspects}>
-            See all {people.length}
+          <button type="button" className={btnLink} onClick={() => onProspects('all')}>
+            View candidates
           </button>
         </div>
         {people.length === 0 ? (
@@ -248,3 +306,27 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
   )
 }
 
+const shortDay = (iso: string) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+
+// The program this campaign offers and its call post. Only shown where the API can say (the review stub for now).
+function LaneLine({ campaignId }: { campaignId: number }) {
+  const lane = useQuery<CampaignLane>({ queryKey: ['lane', campaignId], queryFn: () => getJson(`/campaign-lane/${campaignId}`), retry: false })
+  const profile = useQuery<SenderProfile>({ queryKey: ['sender-profile'], queryFn: () => getJson('/sender-profile'), retry: false })
+  const l = lane.data
+  if (!l) return null
+  const program = profile.data?.programs.find((p) => p.id === l.programId)
+  return (
+    <p className="mt-1 text-sm text-muted">
+      {program ? `Offers ${program.name}${program.deadline ? `, closes ${shortDay(program.deadline)}` : ''}` : 'No program chosen'}
+      {l.callPostUrl && l.callPostedAt && (
+        <>
+          {' · '}
+          <a className="underline underline-offset-4" href={l.callPostUrl} target="_blank" rel="noreferrer">
+            Call post
+          </a>{' '}
+          of {shortDay(l.callPostedAt)}, keyword “{l.callKeyword}”
+        </>
+      )}
+    </p>
+  )
+}

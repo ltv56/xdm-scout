@@ -4,7 +4,8 @@ import FitBadge from '../FitBadge'
 import { AlertTriangle, CheckCircle, MinusCircle, XCircle, XLogo } from '../icons'
 import { chip, tone } from '../ui'
 import Frame from './Actions'
-import { activeLabel, evidenceIdOf, RELATIONSHIP_LABEL, shortDate, sourceLine, type Verdict } from './labels'
+import { ModelChecks, PersonFacts } from './PersonFacts'
+import { activeLabel, evidenceIdOf, LANGUAGE_NAME, RELATIONSHIP_LABEL, shortDate, sourceLine, type Verdict } from './labels'
 
 // The draft-level check says some post is old; only the old ones get the chip.
 const isOld = (postedAt: string | null) => postedAt !== null && Date.now() - Date.parse(postedAt) > 30 * 86_400_000
@@ -80,7 +81,7 @@ function StatusChip({ verdict }: { verdict: Verdict }) {
 }
 
 // The writing rule aims for about 450 characters. Longer text steps the size down, never below 16px, and the card scrolls past that.
-const textSize = (chars: number) => (chars <= 240 ? 'text-xl leading-[1.65]' : chars <= 360 ? 'text-lg leading-[1.6]' : 'text-base leading-relaxed')
+const textSize = (chars: number) => (chars <= 240 ? 'text-base leading-relaxed sm:text-xl sm:leading-[1.65]' : chars <= 360 ? 'text-base leading-relaxed sm:text-lg sm:leading-[1.6]' : 'text-base leading-relaxed')
 
 function Draft({ item, shownSentence, setHoverSentence, pinnedSentence, onPick, activeEvidence }: {
   item: ReviewItem
@@ -100,7 +101,7 @@ function Draft({ item, shownSentence, setHoverSentence, pinnedSentence, onPick, 
   ).gaps
   return (
     <>
-      <p className={`max-w-[58ch] whitespace-pre-line ${textSize(item.text.length)}`}>
+      <p lang={item.language} className={`max-w-[58ch] whitespace-pre-line ${textSize(item.text.length)}`}>
         {item.sentences.map((s, i) => {
           const linked = activeEvidence !== null && evidenceIdOf(s) === activeEvidence
           return (
@@ -151,7 +152,9 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
   const activeEvidence = hoverEvidence ?? (hoverSentence !== null ? evidenceIdOf(item.sentences[hoverSentence]) : pinnedEvidence)
   const stale = item.checks.some((c) => c.code === 'stale_opening')
 
-  const evidence = item.evidence
+  // The bio is shown beside the numbers; it is evidence only when a sentence cites it.
+  const cited = new Set(item.sentences.map(evidenceIdOf))
+  const evidence = item.evidence.filter((e) => e.kind !== 'bio' || cited.has(e.id))
 
   useEffect(() => {
     if (pin === null) return
@@ -185,7 +188,7 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
     <Frame key={item.contentHash} item={item} nav={nav} onFinished={onFinished}>
       {(api) => (
         <div className="grid lg:h-full lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_400px] lg:grid-rows-[minmax(0,1fr)]">
-          <div className="scroll-thin min-w-0 px-12 pb-6 pt-6 lg:overflow-y-auto">
+          <div className="scroll-thin min-w-0 px-5 pb-6 pt-6 sm:px-12 lg:overflow-y-auto">
             <header>
               <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
                 <FitBadge fit={p.fit} size="lg" />
@@ -196,7 +199,7 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
                 {p.name && <span className="ml-3">{handleLink('text-lg font-normal text-muted')}</span>}
               </h2>
               <p className="mt-1 text-sm text-muted">
-                {RELATIONSHIP_LABEL[p.relationship]} · {activeLabel(p.daysSinceActive)} · {item.kind === 'reply' ? 'Reply to their message' : 'First message'}
+                {p.history ?? RELATIONSHIP_LABEL[p.relationship]} · {activeLabel(p.daysSinceActive)} · {item.kind === 'reply' ? 'Reply to their message' : 'First message'}
                 {item.editedByReviewer && ' · You edited this draft'}
               </p>
             </header>
@@ -205,13 +208,22 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
               <p className="mb-2 flex items-center gap-2 text-sm font-semibold">
                 <XLogo className="size-4" />
                 {item.kind === 'reply' ? 'Reply to' : 'Direct message to'} @{p.handle}
+                {item.language !== 'en' && <span className="font-normal text-muted">· in {LANGUAGE_NAME[item.language]}</span>}
                 {(item.status === 'pending' || item.status === 'approved') && <span className="font-normal text-muted">· not sent yet</span>}
               </p>
               {!api.editing && (
                 <>
-                  <div ref={card} className="max-h-[min(42vh,360px)] max-w-[62ch] scroll-thin overflow-y-auto rounded-2xl border border-rule bg-paper px-6 py-4">
+                  <div ref={card} className="max-h-[min(55vh,420px)] sm:max-h-[min(42vh,360px)] max-w-[62ch] scroll-thin overflow-y-auto rounded-2xl border border-rule bg-paper px-6 py-4">
                     <Draft item={item} shownSentence={shownSentence} setHoverSentence={setHoverSentence} pinnedSentence={pinnedSentence} onPick={pickSentence} activeEvidence={activeEvidence} />
                   </div>
+                  {item.englishText !== null && (
+                    <div className="mt-3 max-w-[62ch] rounded-2xl bg-rail px-6 py-4">
+                      <p className="text-xs font-semibold text-muted">{item.editedByReviewer ? 'English version of the draft before your edit' : 'English version, for you to read. It is not what gets sent.'}</p>
+                      <p lang="en" className="mt-1 whitespace-pre-line text-sm leading-snug">
+                        {item.englishText}
+                      </p>
+                    </div>
+                  )}
                   <div className="mt-3 max-w-[62ch] text-sm">
                     <p>
                       <span className="font-semibold">Weakest point.</span> {item.weakestPoint}
@@ -224,11 +236,13 @@ export default function DraftView({ item, nav, onFinished }: { item: ReviewItem;
             </section>
           </div>
 
-          <aside ref={aside} className="scroll-thin min-w-0 space-y-8 px-12 pb-8 lg:overflow-y-auto lg:border-l lg:border-rule lg:px-9 lg:py-6">
+          <aside ref={aside} className="scroll-thin min-w-0 space-y-8 px-5 pb-8 sm:px-12 lg:overflow-y-auto lg:border-l lg:border-rule lg:px-9 lg:py-6">
+            <PersonFacts prospect={p} />
             <section aria-label="Evidence">
               <h3 className="mb-3 text-sm font-semibold">Why this opening</h3>
               <EvidenceList evidence={evidence} stale={stale} active={activeEvidence} onHover={setHoverEvidence} onPick={pickEvidence} />
             </section>
+            <ModelChecks decisions={item.decisions} sentences={item.sentences} />
           </aside>
         </div>
       )}

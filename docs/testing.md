@@ -163,7 +163,7 @@ docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT xUserId, LEFT(text, 
 
 ## Review screens with fixed data
 
-Set `REVIEW_STUB=1` in `.env` and restart the API. The review routes then return six fixed drafts (one per screen state) kept in memory; a restart resets them. The real `POST /api/drafts/:id/approve` is off in this mode. Shapes: `apps/api/src/review/contract.ts`.
+Set `REVIEW_STUB=1` in `.env` and restart the API. The review routes then return seven fixed drafts (six for the screen states, one with every field full) kept in memory; a restart resets them. The real `POST /api/drafts/:id/approve` is off in this mode. Shapes: `apps/api/src/review/contract.ts`.
 
 ```
 B=http://localhost:3001/api
@@ -177,30 +177,46 @@ curl -s -XPOST $B/drafts/102/skip -H 'content-type: application/json' -d '{"reas
 curl -s $B/sender-profile
 ```
 
+Web app against the same data: run the API with `REVIEW_STUB=1`, then `npm run dev -w apps/web` and open http://localhost:3000. The left and right arrow keys move between drafts.
+
+`REVIEW_STUB_EMPTY=1` starts with no drafts. With it, `POST /api/campaigns/:id/drafts` and `POST /api/campaigns/:id/prospects/:pid/draft` make drafts from the campaign's own prospects (in memory, reset on restart).
+
 ## Review with real data (fake X, canned LLM)
 
 Start the API and the worker with `X_MODE=fake` and `REVIEW_STUB=0`. Without `LLM_MODEL` the draft text is a fixed template built from the person's opening post, so no model is called.
 
 ```
 B=http://localhost:3001/api; J='content-type: application/json'
-curl -XPUT $B/sender-profile -H "$J" -d '{"intro":"GenAI Fund backs early AI founders in Southeast Asia.","offers":["Intro to investors"],"signer":"Vinh","sampleMessages":[]}'
+curl -XPUT $B/sender-profile -H "$J" -d '{"intro":"GenAI Fund backs early AI founders in Southeast Asia.","programs":[{"id":1,"name":"Intro to investors","description":"Intro to investors","link":"https://genaifund.ai/","deadline":null}],"signer":"Vinh","sampleMessages":[]}'
 # create a campaign, discover and score as in section 6 and 7, then:
-curl -XPOST $B/campaigns/1/drafts            # {"queued":N}; the worker writes the drafts
-curl "$B/review-queue?campaignId=1"          # drafts with checks, evidence, weakest point, Open in X link
-curl -XPATCH $B/drafts/1 -H "$J" -d '{"text":"Saw your post. We met at the meetup. No worries if not."}'   # unbacked sentence: warn to confirm
+curl $B/campaigns/1/drafts/ready                                  # {"ready":N}
+curl -XPOST $B/campaigns/1/drafts -H "$J" -d '{"limit":3}'        # {"drafted","readyToDraft","noOpening"}; the worker writes the drafts
+curl -XPOST $B/campaigns/1/prospects/5/draft                      # one person from Candidates; 409 says why not
+curl -XPOST $B/campaigns/1/prospects/6/dismiss -H "$J" -d '{"reason":"weak_opening"}'
+curl "$B/review-queue?campaignId=1"                               # drafts with checks, evidence, weakest point, Open in X link
 curl -XPOST $B/drafts/1/approve -H "$J" -d '{"contentHash":"<contentHash from the queue>","confirmedUnbacked":true}'
-curl -XPOST $B/drafts/1/manual -H "$J" -d '{"outcome":"sent"}'     # after you sent it in X
-curl -XPOST $B/drafts/2/skip -H "$J" -d '{"reason":"weak_opening"}'
-curl -XPOST $B/drafts/2/skip -H "$J" -d '{"reason":"bored"}'       # 400, not in the list
 ```
 
-- A person who has not messaged first gets `sendPath: HUMAN_HANDOFF`: approving opens a manual attempt (`manual_pending`) and nothing is queued for the API. "I sent it" marks it `manual_unverified`; the worker upgrades it to `sent` once the message shows in the conversation.
-- A stale `contentHash` answers `409`; a draft with a blocking check (no source, no opt-out line, "big fan") answers `409` until it is edited.
-- Every approve, skip, regenerate and Do not contact adds a row to `review_signals` (no handle):
+- Nothing is drafted by scoring; drafts exist only after the calls above.
+- A stale `contentHash` answers `409`; a draft with a blocking check answers `409` until it is edited.
+- Skip, dismiss, approve, regenerate and Do not contact add a row to `review_signals` (no handle).
+
+## Browser walkthroughs (web)
+
+Playwright in `apps/web/e2e` with its own `package.json` and `node_modules`: New campaign, Candidates, Review, a phone-sized screen, and the error and empty states. It drives the installed Edge, so no browser is downloaded. The API runs the review mock on its own port:
 
 ```
-docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT action, reason, note FROM review_signals"
+cd apps/api
+REVIEW_STUB=1 X_MODE=fake PORT=3021 node dist/main.js
+X_MODE=fake PORT=3021 node dist/worker-main.js
+cd ../web/e2e
+npm install                         # once
+E2E_API_URL=http://localhost:3021 npm run e2e
 ```
+
+- The tests create the `robotics demo` campaign through the API when it is missing and wait for discovery and scoring on the fake X.
+- Vite starts on port 3020 (`E2E_WEB_PORT`) and proxies `/api` to `E2E_API_URL`.
+- The mock keeps its state in memory. Approving or skipping uses up the pending draft; when none is left the Review tests are skipped. Restart the API to get it back.
 
 ## Automated tests
 

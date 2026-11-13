@@ -2,10 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 import type { ReviewItem, SkipReason } from '../../../api/src/review/contract'
 import { patchJson, postJson } from '../api'
-import { Check, Copy, Pencil, Refresh, XLogo } from '../icons'
+import { Check, Copy, Globe, Pencil, Refresh, XLogo } from '../icons'
 import { btnLink, btnSecondary, btnToolbar, btnApprove, field, tone } from '../ui'
 import MoreMenu from './MoreMenu'
-import { blockers, SKIP_LABEL, SKIP_REASONS, verdict, type Verdict } from './labels'
+import { blockers, LANGUAGE_NAME, SKIP_LABEL, SKIP_REASONS, verdict, type Verdict } from './labels'
 
 type Panel = 'none' | 'edit' | 'regenerate' | 'skip'
 
@@ -20,6 +20,7 @@ function useDraftMutations(item: ReviewItem, onFinished: () => void) {
     }),
     edit: useMutation({ mutationFn: (text: string) => patchJson(`${base}`, { text }), onSuccess: refresh }),
     regenerate: useMutation({ mutationFn: (note: string) => postJson(`${base}/regenerate`, { note }), onSuccess: refresh }),
+    language: useMutation({ mutationFn: (language: string) => postJson(`${base}/language`, { language }), onSuccess: refresh }),
     skip: useMutation({
       mutationFn: (v: { reason: SkipReason; note: string }) => postJson(`${base}/skip`, { reason: v.reason, ...(v.note && { note: v.note }) }),
       onSuccess: () => refresh().then(onFinished),
@@ -111,6 +112,9 @@ export default function ReviewFrame({ item, nav, onFinished, children }: {
 
   const toggle = (p: Panel) => setPanel((cur) => (cur === p ? 'none' : p))
   const handoff = item.status === 'approved'
+  // Offered when they mostly write in another language, and also to go back once the draft has been translated.
+  const main = item.prospect.mainLanguage
+  const other = main && main !== 'en' ? main : item.language !== 'en' ? item.language : null
 
   const copyText = () =>
     navigator.clipboard.writeText(item.text).then(() => {
@@ -204,10 +208,23 @@ export default function ReviewFrame({ item, nav, onFinished, children }: {
                 <Refresh className="size-4" />
                 Regenerate
               </button>
+              {other && (
+                <button
+                  type="button"
+                  className={bar}
+                  disabled={item.editedByReviewer || m.language.isPending}
+                  title={item.editedByReviewer ? 'You edited this draft. Regenerate it first, because a new language replaces the text.' : undefined}
+                  onClick={() => m.language.mutate(item.language === 'en' ? other : 'en')}
+                >
+                  <Globe className="size-4" />
+                  {item.language === 'en' ? `Draft in ${LANGUAGE_NAME[other]}` : 'Back to English'}
+                </button>
+              )}
             </>
           )}
         </div>
       )}
+      <ErrorLine error={m.language.error} />
     </div>
   )
 
@@ -256,7 +273,7 @@ export default function ReviewFrame({ item, nav, onFinished, children }: {
 
   return (
     <div className="flex h-full min-h-0 min-w-0 flex-1 flex-col">
-      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-rule px-8 py-3 min-h-[62px]">
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-rule px-5 py-3 min-h-[62px] sm:px-8">
         {nav}
         <div className="flex flex-wrap items-center gap-x-1 gap-y-2">
           {pending && (
@@ -274,7 +291,7 @@ export default function ReviewFrame({ item, nav, onFinished, children }: {
       </div>
 
       {pending && v.points.length > 0 && (
-        <div className={`flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-8 py-3 text-sm ${tone[v.tone].chip}`}>
+        <div className={`flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-3 text-sm sm:px-8 ${tone[v.tone].chip}`}>
           <ul className="flex flex-wrap gap-x-6 gap-y-0.5">
             {v.points.map((pt) => (
               <li key={pt} className="before:mr-2 before:content-['•']">
@@ -289,12 +306,12 @@ export default function ReviewFrame({ item, nav, onFinished, children }: {
           )}
         </div>
       )}
-      <div className="px-8 empty:hidden">
+      <div className="px-5 empty:hidden sm:px-8">
         <ErrorLine error={m.approve.error} />
       </div>
 
       {panel === 'skip' && (
-        <div className="max-h-[45%] shrink-0 overflow-y-auto border-b border-rule bg-paper px-8 py-6">
+        <div className="max-h-[45%] shrink-0 overflow-y-auto border-b border-rule bg-paper px-5 py-6 sm:px-8">
           {panel === 'skip' && (
             <form
               onSubmit={(e) => {
@@ -329,7 +346,7 @@ export default function ReviewFrame({ item, nav, onFinished, children }: {
       )}
 
       <div className="min-h-0 flex-1 overflow-y-auto lg:overflow-hidden">{children({ verdict: v, editing: panel === 'edit', tools })}</div>
-      {send && <div className="shrink-0 border-t border-rule bg-raised px-8 py-3">{send}</div>}
+      {send && <div className="shrink-0 border-t border-rule bg-raised px-5 py-3 sm:px-8">{send}</div>}
       {confirmDnc && <DncDialog handle={item.prospect.handle} busy={m.dnc.isPending} error={m.dnc.error} onConfirm={() => m.dnc.mutate()} onCancel={() => setConfirmDnc(false)} />}
     </div>
   )
