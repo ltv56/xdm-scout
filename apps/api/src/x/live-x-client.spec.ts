@@ -138,5 +138,13 @@ describe('LiveXClient discovery reads', () => {
     expect(url.pathname).toBe('/2/tweets/search/recent')
     expect(url.searchParams.get('query')).toBe('"robot arm" -is:retweet')
     expect(url.searchParams.get('expansions')).toBe('author_id')
+    expect(url.searchParams.get('tweet.fields')).toBe('created_at,author_id,lang')
+  })
+
+  it('asks for the language of each post and keeps it', async () => {
+    const { client, calls } = clientWith(() => json(200, { data: [{ id: 'p1', text: 'xin chao', created_at: '2026-11-11T00:00:00Z', lang: 'vi' }, { id: 'p2', text: 'hi', created_at: '2026-11-11T01:00:00Z' }] }))
+    const posts = await client.getRecentPosts('1', 10)
+    expect(posts.map((p) => p.lang)).toEqual(['vi', undefined])
+    expect(new URL(calls[0].url).searchParams.get('tweet.fields')).toBe('created_at,lang')
   })
 })

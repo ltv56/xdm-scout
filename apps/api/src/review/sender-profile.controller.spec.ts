@@ -39,4 +39,13 @@ describe('sender profile', () => {
   it('rejects a profile without programs', async () => {
     await expect(controller.save({ ...profile, programs: [] })).rejects.toBeInstanceOf(BadRequestException)
   })
+
+  it('keeps programs to 8, with a link that is a URL and a deadline that is a date', async () => {
+    const p = profile.programs[0]
+    await expect(controller.save({ ...profile, programs: Array.from({ length: 9 }, (_, i) => ({ ...p, id: i + 1 })) })).rejects.toBeInstanceOf(BadRequestException)
+    await expect(controller.save({ ...profile, programs: [{ ...p, link: 'genaifund.ai' }] })).rejects.toBeInstanceOf(BadRequestException)
+    await expect(controller.save({ ...profile, programs: [{ ...p, deadline: '30 Nov' }] })).rejects.toBeInstanceOf(BadRequestException)
+    const ok = { ...profile, programs: [{ ...p, deadline: '2026-11-30' }] }
+    expect(await controller.save(ok)).toEqual(ok)
+  })
 })

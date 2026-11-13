@@ -69,7 +69,8 @@ describe('review queue', () => {
     expect(item.contentHash).toBe(hashContent(item.text))
     expect(item.prospect).toMatchObject({ handle: 'mai', name: 'MAI', fit: 'strong', relationship: 'cold', daysSinceActive: 4 })
     expect(item.evidence).toEqual([{ id: 1, kind: 'post', text: 'Shipped v2 of our eval harness', url: 'https://x.com/mai/status/1', postedAt: '2026-11-08T00:00:00.000Z' }])
-    expect(item.sentences[0].source).toEqual({ type: 'evidence', evidenceId: 1 })
+    expect(item.sentences[0].source).toEqual({ type: 'greeting' })
+    expect(item.sentences[1].source).toEqual({ type: 'evidence', evidenceId: 1 })
     expect(item.prospect.criteria).toEqual([{ text: 'Based in SEA', status: 'unknown', evidence: [], fact: null }])
   })
 
@@ -121,6 +122,22 @@ describe('review queue', () => {
     expect(based.evidence[0].id).toBeGreaterThan(1)
     expect(based.fact).toBeNull()
     expect(seed).toMatchObject({ evidence: [], fact: null })
+  })
+
+  it('knows the main language of each person from the language X gave their posts', async () => {
+    await seedPerson('mai')
+    await seedPerson('lan')
+    await ds.getRepository(XPost).update({ xUserId: 'u-mai' }, { lang: 'vi' })
+    const by = Object.fromEntries((await service().queue(1, now)).items.map((i) => [i.prospect.handle, i.prospect.mainLanguage]))
+    expect(by).toEqual({ mai: 'vi', lan: null })
+  })
+
+  it('says what language a draft is in and keeps the English copy beside a translated one', async () => {
+    const mai = await seedPerson('mai')
+    const [first] = (await service().queue(1, now)).items
+    expect(first).toMatchObject({ language: 'en', englishText: null })
+    await ds.getRepository(Draft).update({ prospectId: mai.id }, { language: 'vi', englishText: 'Hi Mai!' })
+    expect((await service().queue(1, now)).items[0]).toMatchObject({ language: 'vi', englishText: 'Hi Mai!' })
   })
 
   it('shows pending and approved drafts of this campaign only, at most ten', async () => {

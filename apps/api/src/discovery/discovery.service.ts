@@ -116,7 +116,7 @@ export class DiscoveryService {
       const posts = await this.x.getRecentPosts(user.xUserId, MAX_POSTS_PER_USER)
       if (posts.length) {
         await this.ds.getRepository(XPost).save(
-          posts.map((p) => ({ postId: p.id, xUserId: p.userId, text: p.text, postedAt: p.createdAt, fetchedAt: now })),
+          posts.map((p) => ({ postId: p.id, xUserId: p.userId, text: p.text, postedAt: p.createdAt, lang: p.lang ?? null, fetchedAt: now })),
         )
         await this.recordUsage(campaignId, 'post', posts.length, PRICES.post)
       }

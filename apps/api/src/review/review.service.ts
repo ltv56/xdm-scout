@@ -5,6 +5,7 @@ import { Evidence } from '../fit/entities'
 import { Contact, Draft, SendAttempt, SenderAccount, XUser } from '../sending/entities'
 import { apiSendBlock, hashContent } from '../sending/sending.service'
 import { Setting } from '../setting.entity'
+import { mainLanguage } from './main-language'
 import { runChecks, StoredSentence } from './checks'
 import { EvidenceItem, MetricsSnapshot, ReviewItem, ReviewQueue, SenderProfile, senderProfile } from './contract'
 
@@ -92,14 +93,14 @@ export class ReviewService {
         permissionNote: permissionNote(contact, now),
         history: history(contact),
         bio: user?.bio ?? null,
-        mainLanguage: null,
+        mainLanguage: mainLanguage(posts),
         daysSinceActive: posts.length ? Math.floor((now.getTime() - Math.max(...posts.map((p) => p.postedAt.getTime()))) / DAY) : null,
         snapshot: snapshot(prospect, user, posts, now),
         criteria: (prospect.criteria ?? []).map((c) => criterion(c, ctx, idOf, evidence.length, now)),
       },
       text: draft.content,
-      language: 'en',
-      englishText: null,
+      language: draft.language,
+      englishText: draft.englishText,
       sentences: sentences.map((s) => ({
         text: s.text,
         source: !s.source ? null : s.source.type === 'evidence' ? (idOf.has(s.source.evidenceId) ? { type: 'evidence', evidenceId: idOf.get(s.source.evidenceId)! } : null) : s.source,

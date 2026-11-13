@@ -4,13 +4,14 @@ import { Contact, DoNotContact, Draft, SendAttempt } from '../sending/entities'
 import { hashContent, SendingService } from '../sending/sending.service'
 import { JobsService } from '../jobs/jobs.service'
 import { StoredSentence } from './checks'
-import { ApproveBody, ReviewItem, SkipBody } from './contract'
+import { ApproveBody, Language, ReviewItem, SkipBody } from './contract'
 import { DraftService } from './draft.service'
 import { ReviewSignal, SignalAction } from './review-signal.entity'
 import { ReviewService } from './review.service'
 
 const OPT_OUT = /no worries|no pressure|not interested|ignore this|feel free to ignore|no reply needed/i
-const splitSentences = (text: string) => text.split(/(?<=[.!?])\s+/).filter(Boolean)
+// Sentences only map the text back to its sources; the stored text is what the reviewer typed, line breaks and all.
+const splitSentences = (text: string) => text.split(/(?<=[.!?])\s+|\s*\n\s*/).map((t) => t.trim()).filter(Boolean)
 
 // Attempts the reviewer can still pull back; once the worker is sending or unsure, the draft is out of their hands.
 const PULLABLE: SendAttempt['status'][] = ['queued', 'manual_pending']
@@ -32,8 +33,13 @@ export class ReviewActionsService {
       await this.pullBack(em, draftId)
       const known = new Map((draft.sentences ?? []).map((s) => [s.text, s.source]))
       const sentences: StoredSentence[] = splitSentences(text.trim()).map((t) => ({ text: t, source: known.get(t) ?? (OPT_OUT.test(t) ? { type: 'opt_out' } : null) }))
-      await em.update(Draft, draftId, { sentences, content: sentences.map((s) => s.text).join(' '), status: 'pending', approvedHash: null, editedByReviewer: true })
+      await em.update(Draft, draftId, { sentences, content: text.trim(), status: 'pending', approvedHash: null, editedByReviewer: true })
     })
+    return this.review.one(draftId, now)
+  }
+
+  async language(draftId: number, language: Language, now = new Date()): Promise<ReviewItem> {
+    await this.drafts.redraft(draftId, language)
     return this.review.one(draftId, now)
   }
 
