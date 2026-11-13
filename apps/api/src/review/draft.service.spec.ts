@@ -145,6 +145,31 @@ describe('draft generation', () => {
   })
 })
 
+describe('the program in the draft prompt', () => {
+  const two = [
+    { id: 1, name: 'Intro to investors', description: 'Intro to investors', link: 'https://genaifund.ai/', deadline: null },
+    { id: 2, name: 'Build week', description: 'Two weeks with our engineers', link: 'https://genaifund.ai/build', deadline: '2026-11-30' },
+  ]
+  const promptProfile = async (programId: number | null) => {
+    const p = await seed()
+    await ds.getRepository(Setting).save({ key: 'sender_profile', value: { intro: 'We back founders.', programs: two, signer: 'Vinh', sampleMessages: [] } })
+    await ds.getRepository(Campaign).update(1, { programId })
+    const llm = new FakeLlmClient(cannedHandler)
+    await service(llm).generate(p.id, now)
+    return (JSON.parse(llm.calls[0].user) as { profile: { programs: Record<string, string | null>[] } }).profile
+  }
+
+  it("offers exactly the campaign's program with its link and deadline", async () => {
+    const profile = await promptProfile(2)
+    expect(profile.programs).toEqual([{ name: 'Build week', description: 'Two weeks with our engineers', link: 'https://genaifund.ai/build', deadline: 'applications close 30 Nov' }])
+  })
+
+  it('falls back to the first program when the campaign has none, with no deadline line', async () => {
+    const profile = await promptProfile(null)
+    expect(profile.programs).toEqual([{ name: 'Intro to investors', description: 'Intro to investors', link: 'https://genaifund.ai/', deadline: null }])
+  })
+})
+
 describe('queueing drafts for a campaign', () => {
   it('queues one job per strong or possible prospect with an opening, no live draft and not on the do-not-contact list', async () => {
     const ok = await seed()

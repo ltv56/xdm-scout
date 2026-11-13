@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { DataSource, In } from 'typeorm'
 import { z } from 'zod'
-import { Prospect } from '../discovery/entities'
+import { Campaign, Prospect } from '../discovery/entities'
 import { Claim, Evidence } from '../fit/entities'
 import { JobsService } from '../jobs/jobs.service'
 import { LLM_CLIENT, LlmClient } from '../llm/llm-client'
@@ -20,7 +20,7 @@ If the user message has a "reviewer_note", follow it; it comes from the person r
 Write at most 4 sentences and about 450 characters:
 1. one concrete sentence about what they just did, taken from the opening;
 2. one sentence saying who we are, from profile.intro;
-3. one question they can answer in a line, or one concrete offer from profile.programs;
+3. one question they can answer in a line, or the one program in profile.programs (say when applications close if it has a deadline; never write a link);
 4. one line that lets them say no.
 Answer with one JSON object: {"sentences": [{"text": string, "source": {"type": "evidence", "evidence_id": string} | {"type": "sender_profile", "field": "intro" | "program" | "signer"} | {"type": "opt_out"} | null}]}.
 Use a source of null for any sentence you cannot trace to a source.`
@@ -76,13 +76,14 @@ export class DraftService {
 
     const opening = prospect.openingEvidenceId ? await this.ds.getRepository(Evidence).findOneBy({ id: prospect.openingEvidenceId }) : null
     if (!opening) throw new Error('This person has no opening to write about')
+    const campaign = await this.ds.getRepository(Campaign).findOneBy({ id: prospect.campaignId })
     const claims = (await this.ds.getRepository(Claim).findBy({ prospectId, side: 'for', status: 'verified' })).filter((c) => c.evidenceIds.length)
 
     const allowed = new Set([opening.id, ...claims.flatMap((c) => c.evidenceIds)])
     const user = JSON.stringify({
       opening: { evidence_id: opening.id, text: opening.excerpt, date: opening.postedAt?.toISOString().slice(0, 10) ?? null, summary: prospect.openingSummary },
       claims: claims.map((c) => ({ text: c.text, evidence_ids: c.evidenceIds })),
-      profile: { intro: profile.intro, programs: profile.programs.map(({ name, description }) => ({ name, description })), signer: profile.signer },
+      profile: { intro: profile.intro, programs: [offered(profile, campaign?.programId ?? null)], signer: profile.signer },
       ...(reviewerNote && { reviewer_note: reviewerNote }),
     })
     const asked = await this.ask(user, allowed)
@@ -135,6 +136,14 @@ export class DraftService {
     return (await this.ds.getRepository(Draft).countBy({ prospectId, status: In(LIVE) })) > 0
   }
 }
+
+// The one program the draft may offer: the campaign's, else the first in the profile.
+function offered(profile: SenderProfile, programId: number | null) {
+  const { name, description, link, deadline } = profile.programs.find((p) => p.id === programId) ?? profile.programs[0]
+  return { name, description, link, deadline: deadline ? `applications close ${Number(deadline.slice(8))} ${MONTHS[Number(deadline.slice(5, 7)) - 1]}` : null }
+}
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 // The model may only cite the opening or a verified claim; anything else becomes "no source".
 function cleanSource(source: z.infer<typeof draftOutput>['sentences'][number]['source'], allowed: Set<string>): StoredSource | null {

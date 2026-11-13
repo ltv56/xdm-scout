@@ -30,6 +30,20 @@ export class Campaign {
 
   @Column({ type: 'int', default: 1_000_000 })
   budgetMicros!: number
+
+  // The program the draft offers; null until the operator picks one.
+  @Column({ type: 'int', nullable: true })
+  programId!: number | null
+
+  // The post people answer by DM, its keyword, and when it was posted (read off the post id, never typed).
+  @Column({ type: 'varchar', length: 300, nullable: true })
+  callPostUrl!: string | null
+
+  @Column({ type: 'varchar', length: 40, nullable: true })
+  callKeyword!: string | null
+
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  callPostedAt!: Date | null
 }
 
 @Entity('x_posts')
