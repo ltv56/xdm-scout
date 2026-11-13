@@ -6,9 +6,10 @@
     "bio": "Building open-source robotics foundation models. Previously ML at a self-driving startup.",
     "followers": 320,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f02",
@@ -17,9 +18,10 @@
     "bio": "Founder. LLM agents and developer tools for infra teams.",
     "followers": 880,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f03",
@@ -28,9 +30,10 @@
     "bio": "Researcher, embodied AI and manipulation. Views my own.",
     "followers": 4200,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f04",
@@ -39,9 +42,10 @@
     "bio": "Co-founder @ a Saigon seed-stage startup doing speech models for Vietnamese call centres.",
     "followers": 15000,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f05",
@@ -50,9 +54,10 @@
     "bio": "Building evals for LLM agents. Jakarta. Ex-Gojek.",
     "followers": 2100,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f06",
@@ -61,9 +66,10 @@
     "bio": "Robotics engineer, Bangkok. Working on low-cost grippers. Open-sourcing everything.",
     "followers": 610,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f07",
@@ -72,9 +78,10 @@
     "bio": "Inference engineer. Making models cheaper to serve. Writing about GPU kernels.",
     "followers": 9800,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f08",
@@ -83,9 +90,10 @@
     "bio": "Computer vision for agriculture. Founder, pre-seed.",
     "followers": 1500,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f09",
@@ -94,9 +102,10 @@
     "bio": "Indie hacker shipping small AI tools. 3 products live.",
     "followers": 320,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f10",
@@ -105,9 +114,10 @@
     "bio": "PhD student, RL for locomotion. Open to collaborations.",
     "followers": 880,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f11",
@@ -116,9 +126,10 @@
     "bio": "Your daily dose of AI news. DM for promo. Not affiliated with any lab.",
     "followers": 4200,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": false,
+      "fits_segment": false
+    },
+    "reviewed": false
   },
   {
     "id": "f12",
@@ -127,9 +138,10 @@
     "bio": "Fan account. Parody. Not the real thing.",
     "followers": 15000,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": false,
+      "fits_segment": false
+    },
+    "reviewed": false
   },
   {
     "id": "f13",
@@ -138,9 +150,10 @@
     "bio": "100x gems, AI tokens, signals. Join the channel.",
     "followers": 2100,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false
   },
   {
     "id": "f14",
@@ -149,9 +162,10 @@
     "bio": "Product designer. Coffee, cats and Figma.",
     "followers": 610,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false
   },
   {
     "id": "f15",
@@ -160,9 +174,10 @@
     "bio": "Investor at a seed fund. Backing AI infra. Opinions mine.",
     "followers": 9800,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false
   },
   {
     "id": "f16",
@@ -171,9 +186,10 @@
     "bio": "Unofficial. Tweets in the style of a famous CEO.",
     "followers": 1500,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": false,
+      "fits_segment": false
+    },
+    "reviewed": false
   },
   {
     "id": "f17",
@@ -182,9 +198,10 @@
     "bio": "Building a multi-agent framework. Ex-research engineer. Singapore.",
     "followers": 320,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f18",
@@ -193,9 +210,10 @@
     "bio": "Head of ops at a logistics company. Interested in AI for supply chains.",
     "followers": 880,
     "labels": {
-      "own_account": null,
+      "own_account": true,
       "fits_segment": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "f19",
@@ -204,9 +222,10 @@
     "bio": "Fine-tuning small models for Arabic and Vietnamese. Open weights advocate.",
     "followers": 4200,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f20",
@@ -215,9 +234,10 @@
     "bio": "Tech commentator. Thread guy. Hot takes on AI every day.",
     "followers": 15000,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false
   },
   {
     "id": "f21",
@@ -226,9 +246,10 @@
     "bio": "Robotics founder, Hanoi. Building warehouse pick-and-place arms. Hiring.",
     "followers": 2100,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f22",
@@ -237,9 +258,10 @@
     "bio": "MLOps lead. Talks about deploying models, not training them.",
     "followers": 610,
     "labels": {
-      "own_account": null,
+      "own_account": true,
       "fits_segment": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "f23",
@@ -248,9 +270,10 @@
     "bio": "Official account of Rob Labs. Humanoid robots for factories.",
     "followers": 9800,
     "labels": {
-      "own_account": null,
+      "own_account": true,
       "fits_segment": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "f24",
@@ -259,9 +282,10 @@
     "bio": "Professor, machine learning theory. Not accepting new students.",
     "followers": 1500,
     "labels": {
-      "own_account": null,
+      "own_account": true,
       "fits_segment": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "f25",
@@ -270,9 +294,10 @@
     "bio": "Gamer. Streams on weekends. AI art enjoyer.",
     "followers": 320,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false
   },
   {
     "id": "f26",
@@ -281,9 +306,10 @@
     "bio": "Building a retrieval startup in HCMC. YC applicant. Learning in public.",
     "followers": 880,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f27",
@@ -292,9 +318,10 @@
     "bio": "Prompt engineer. Selling a course on prompts.",
     "followers": 4200,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false
   },
   {
     "id": "f28",
@@ -303,9 +330,10 @@
     "bio": "Embedded systems for robots. Firmware, motor control, tiny ML.",
     "followers": 15000,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   },
   {
     "id": "f29",
@@ -314,9 +342,10 @@
     "bio": "Dentist. Occasionally tweets about AI.",
     "followers": 2100,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": false
+    },
+    "reviewed": false
   },
   {
     "id": "f30",
@@ -325,8 +354,9 @@
     "bio": "Second-time founder. Previously sold a robotics company. Now AI agents for finance teams.",
     "followers": 610,
     "labels": {
-      "own_account": null,
-      "fits_segment": null
-    }
+      "own_account": true,
+      "fits_segment": true
+    },
+    "reviewed": false
   }
 ]

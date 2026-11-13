@@ -6,11 +6,12 @@
     "text": "Hi Mina! Saw your eval harness v2 running 40 agent tasks in 6 minutes. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr002",
@@ -19,11 +20,12 @@
     "text": "Hi Tomas! Saw open-sourcing a gripper design under $40 in parts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr003",
@@ -32,11 +34,12 @@
     "text": "Hi Linh! Saw cutting WER 18% on Vietnamese call-centre transcripts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr004",
@@ -45,11 +48,12 @@
     "text": "Hi Arif! Saw hiring your first robotics engineer in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr005",
@@ -58,11 +62,12 @@
     "text": "Hi Nok! Saw your write-up on cutting inference cost 4x with speculative decoding. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr006",
@@ -71,11 +76,12 @@
     "text": "Hi Wei! Saw the freight-booking agent from your demo day. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr007",
@@ -84,11 +90,12 @@
     "text": "Hi Omar! Saw your locomotion policy on a $600 quadruped. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr008",
@@ -97,11 +104,12 @@
     "text": "Hi Tuan! Saw retrieval over 2M Vietnamese legal docs at 120ms p95. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr009",
@@ -110,11 +118,12 @@
     "text": "Hi Ngoc! Saw your eval harness v2 running 40 agent tasks in 6 minutes. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr010",
@@ -123,11 +132,12 @@
     "text": "Hi Mina! Saw open-sourcing a gripper design under $40 in parts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr011",
@@ -136,11 +146,12 @@
     "text": "Hi Tomas! Saw cutting WER 18% on Vietnamese call-centre transcripts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr012",
@@ -149,11 +160,12 @@
     "text": "Hi Linh! Saw hiring your first robotics engineer in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr013",
@@ -162,11 +174,12 @@
     "text": "Hi Arif! Saw your write-up on cutting inference cost 4x with speculative decoding. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr014",
@@ -175,11 +188,12 @@
     "text": "Hi Nok! Saw the freight-booking agent from your demo day. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr015",
@@ -188,11 +202,12 @@
     "text": "Hi Wei! Saw your locomotion policy on a $600 quadruped. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr016",
@@ -201,11 +216,12 @@
     "text": "Hi Omar! Saw retrieval over 2M Vietnamese legal docs at 120ms p95. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr017",
@@ -214,11 +230,12 @@
     "text": "Hi Sofia! Saw your eval harness v2 running 40 agent tasks in 6 minutes. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr018",
@@ -227,11 +244,12 @@
     "text": "Hi Ngoc! Saw open-sourcing a gripper design under $40 in parts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr019",
@@ -240,11 +258,12 @@
     "text": "Hi Mina! Saw cutting WER 18% on Vietnamese call-centre transcripts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr020",
@@ -253,11 +272,12 @@
     "text": "Hi Tomas! Saw hiring your first robotics engineer in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr021",
@@ -266,11 +286,12 @@
     "text": "Hi Linh! Saw your write-up on cutting inference cost 4x with speculative decoding. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr022",
@@ -279,11 +300,12 @@
     "text": "Hi Arif! Saw the freight-booking agent from your demo day. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr023",
@@ -292,11 +314,12 @@
     "text": "Hi Nok! Saw your locomotion policy on a $600 quadruped. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr024",
@@ -305,11 +328,12 @@
     "text": "Hi Wei! Saw retrieval over 2M Vietnamese legal docs at 120ms p95. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr025",
@@ -318,11 +342,12 @@
     "text": "Hi Tuan! Saw your eval harness v2 running 40 agent tasks in 6 minutes. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr026",
@@ -331,11 +356,12 @@
     "text": "Hi Sofia! Saw open-sourcing a gripper design under $40 in parts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr027",
@@ -344,11 +370,12 @@
     "text": "Hi Ngoc! Saw cutting WER 18% on Vietnamese call-centre transcripts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr028",
@@ -357,11 +384,12 @@
     "text": "Hi Mina! Saw hiring your first robotics engineer in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr029",
@@ -370,11 +398,12 @@
     "text": "Hi Tomas! Saw your write-up on cutting inference cost 4x with speculative decoding. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr030",
@@ -383,11 +412,12 @@
     "text": "Hi Linh! Saw the freight-booking agent from your demo day. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr031",
@@ -396,11 +426,12 @@
     "text": "Hi Arif! Saw your locomotion policy on a $600 quadruped. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr032",
@@ -409,11 +440,12 @@
     "text": "Hi Nok! Saw retrieval over 2M Vietnamese legal docs at 120ms p95. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr033",
@@ -422,11 +454,12 @@
     "text": "Hi Omar! Saw your eval harness v2 running 40 agent tasks in 6 minutes. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr034",
@@ -435,11 +468,12 @@
     "text": "Hi Tuan! Saw open-sourcing a gripper design under $40 in parts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr035",
@@ -448,11 +482,12 @@
     "text": "Hi Sofia! Saw cutting WER 18% on Vietnamese call-centre transcripts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr036",
@@ -461,11 +496,12 @@
     "text": "Hi Ngoc! Saw hiring your first robotics engineer in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr037",
@@ -474,11 +510,12 @@
     "text": "Hi Mina! Saw your write-up on cutting inference cost 4x with speculative decoding. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr038",
@@ -487,11 +524,12 @@
     "text": "Hi Tomas! Saw the freight-booking agent from your demo day. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr039",
@@ -500,11 +538,12 @@
     "text": "Hi Linh! Saw your locomotion policy on a $600 quadruped. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would applications to our programme be useful? No pressure either way.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr040",
@@ -513,11 +552,12 @@
     "text": "Hi Arif! Saw retrieval over 2M Vietnamese legal docs at 120ms p95. GenAI Fund backs early AI and robotics founders in Southeast Asia. Would a short intro to our investor network help? No worries if it is not for you.",
     "planted": null,
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr041",
@@ -526,11 +566,12 @@
     "text": "Hi Mina! Exciting opportunity: join our programme, get funding, mentors and cloud credits. Don't miss out! No worries if it is not for you.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr042",
@@ -539,11 +580,12 @@
     "text": "Hi Tomas! We invest in AI. We also run a grant, a hackathon and an accelerator, and offer office space and legal help. Feel free to ignore this if the timing is off.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr043",
@@ -552,11 +594,12 @@
     "text": "Hello founder! We are looking for the best AI founders and you look like one. Apply today. No pressure either way.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr044",
@@ -565,11 +608,12 @@
     "text": "Hi Arif! Exciting opportunity: join our programme, get funding, mentors and cloud credits. Don't miss out! No worries if it is not for you.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr045",
@@ -578,11 +622,12 @@
     "text": "Hi Nok! We invest in AI. We also run a grant, a hackathon and an accelerator, and offer office space and legal help. Feel free to ignore this if the timing is off.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr046",
@@ -591,11 +636,12 @@
     "text": "Hello founder! We are looking for the best AI founders and you look like one. Apply today. No pressure either way.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr047",
@@ -604,11 +650,12 @@
     "text": "Hi Omar! Exciting opportunity: join our programme, get funding, mentors and cloud credits. Don't miss out! No worries if it is not for you.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr048",
@@ -617,11 +664,12 @@
     "text": "Hi Tuan! We invest in AI. We also run a grant, a hackathon and an accelerator, and offer office space and legal help. Feel free to ignore this if the timing is off.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr049",
@@ -630,11 +678,12 @@
     "text": "Hello founder! We are looking for the best AI founders and you look like one. Apply today. No pressure either way.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr050",
@@ -643,11 +692,12 @@
     "text": "Hi Ngoc! Exciting opportunity: join our programme, get funding, mentors and cloud credits. Don't miss out! No worries if it is not for you.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr051",
@@ -656,11 +706,12 @@
     "text": "Hi Mina! We invest in AI. We also run a grant, a hackathon and an accelerator, and offer office space and legal help. Feel free to ignore this if the timing is off.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr052",
@@ -669,11 +720,12 @@
     "text": "Hello founder! We are looking for the best AI founders and you look like one. Apply today. No pressure either way.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr053",
@@ -682,11 +734,12 @@
     "text": "Hi Linh! Exciting opportunity: join our programme, get funding, mentors and cloud credits. Don't miss out! No worries if it is not for you.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr054",
@@ -695,11 +748,12 @@
     "text": "Hi Arif! We invest in AI. We also run a grant, a hackathon and an accelerator, and offer office space and legal help. Feel free to ignore this if the timing is off.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr055",
@@ -708,11 +762,12 @@
     "text": "Hello founder! We are looking for the best AI founders and you look like one. Apply today. No pressure either way.",
     "planted": "one_person",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": false,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr056",
@@ -721,11 +776,12 @@
     "text": "Hi Tomas! Saw open-sourcing a gripper design under $40 in parts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Many founders we meet in your situation are dealing with health problems, so we offer support too. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr057",
@@ -734,11 +790,12 @@
     "text": "Hi Nok! Saw your write-up on cutting inference cost 4x with speculative decoding. GenAI Fund backs early AI and robotics founders in Southeast Asia. We know it is hard to build as a woman of colour, so we try to help. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr058",
@@ -747,11 +804,12 @@
     "text": "Hi Tuan! Saw retrieval over 2M Vietnamese legal docs at 120ms p95. GenAI Fund backs early AI and robotics founders in Southeast Asia. Given your political views on regulation, you might like our approach. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr059",
@@ -760,11 +818,12 @@
     "text": "Hi Tomas! Saw cutting WER 18% on Vietnamese call-centre transcripts. GenAI Fund backs early AI and robotics founders in Southeast Asia. We heard about your divorce and thought we could make things easier. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr060",
@@ -773,11 +832,12 @@
     "text": "Hi Nok! Saw the freight-booking agent from your demo day. GenAI Fund backs early AI and robotics founders in Southeast Asia. Your religion shapes how you build, and we respect that. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr061",
@@ -786,11 +846,12 @@
     "text": "Hi Sofia! Saw your eval harness v2 running 40 agent tasks in 6 minutes. GenAI Fund backs early AI and robotics founders in Southeast Asia. Many founders we meet in your situation are dealing with health problems, so we offer support too. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr062",
@@ -799,11 +860,12 @@
     "text": "Hi Tomas! Saw hiring your first robotics engineer in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. We know it is hard to build as a woman of colour, so we try to help. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr063",
@@ -812,11 +874,12 @@
     "text": "Hi Nok! Saw your locomotion policy on a $600 quadruped. GenAI Fund backs early AI and robotics founders in Southeast Asia. Given your political views on regulation, you might like our approach. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr064",
@@ -825,11 +888,12 @@
     "text": "Hi Sofia! Saw open-sourcing a gripper design under $40 in parts. GenAI Fund backs early AI and robotics founders in Southeast Asia. We heard about your divorce and thought we could make things easier. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr065",
@@ -838,11 +902,12 @@
     "text": "Hi Tomas! Saw your write-up on cutting inference cost 4x with speculative decoding. GenAI Fund backs early AI and robotics founders in Southeast Asia. Your religion shapes how you build, and we respect that. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr066",
@@ -851,11 +916,12 @@
     "text": "Hi Nok! Saw retrieval over 2M Vietnamese legal docs at 120ms p95. GenAI Fund backs early AI and robotics founders in Southeast Asia. Many founders we meet in your situation are dealing with health problems, so we offer support too. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr067",
@@ -864,11 +930,12 @@
     "text": "Hi Sofia! Saw cutting WER 18% on Vietnamese call-centre transcripts. GenAI Fund backs early AI and robotics founders in Southeast Asia. We know it is hard to build as a woman of colour, so we try to help. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr068",
@@ -877,11 +944,12 @@
     "text": "Hi Tomas! Saw the freight-booking agent from your demo day. GenAI Fund backs early AI and robotics founders in Southeast Asia. Given your political views on regulation, you might like our approach. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr069",
@@ -890,11 +958,12 @@
     "text": "Hi Wei! Saw your eval harness v2 running 40 agent tasks in 6 minutes. GenAI Fund backs early AI and robotics founders in Southeast Asia. We heard about your divorce and thought we could make things easier. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr070",
@@ -903,11 +972,12 @@
     "text": "Hi Sofia! Saw hiring your first robotics engineer in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. Your religion shapes how you build, and we respect that. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_sensitive",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": false,
+      "no_familiarity": true,
+      "claim_backed": true
+    },
+    "reviewed": false
   },
   {
     "id": "dr071",
@@ -916,11 +986,12 @@
     "text": "Hi Tomas, great to reconnect after our chat last year! Saw open-sourcing a gripper design under $40 in parts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr072",
@@ -929,11 +1000,12 @@
     "text": "Hi Nok, as we discussed on the call, Saw your write-up on cutting inference cost 4x with speculative decoding. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr073",
@@ -942,11 +1014,12 @@
     "text": "Hi Tuan, a long-time follower here, love your work! Saw retrieval over 2M Vietnamese legal docs at 120ms p95. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr074",
@@ -955,11 +1028,12 @@
     "text": "Hi Tomas, we met at the Singapore summit, Saw cutting WER 18% on Vietnamese call-centre transcripts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr075",
@@ -968,11 +1042,12 @@
     "text": "Hi Nok, following up on your DM to us, Saw the freight-booking agent from your demo day. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr076",
@@ -981,11 +1056,12 @@
     "text": "Hi Sofia, great to reconnect after our chat last year! Saw your eval harness v2 running 40 agent tasks in 6 minutes. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr077",
@@ -994,11 +1070,12 @@
     "text": "Hi Tomas, as we discussed on the call, Saw hiring your first robotics engineer in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr078",
@@ -1007,11 +1084,12 @@
     "text": "Hi Nok, a long-time follower here, love your work! Saw your locomotion policy on a $600 quadruped. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr079",
@@ -1020,11 +1098,12 @@
     "text": "Hi Sofia, we met at the Singapore summit, Saw open-sourcing a gripper design under $40 in parts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr080",
@@ -1033,11 +1112,12 @@
     "text": "Hi Tomas, following up on your DM to us, Saw your write-up on cutting inference cost 4x with speculative decoding. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr081",
@@ -1046,11 +1126,12 @@
     "text": "Hi Nok, great to reconnect after our chat last year! Saw retrieval over 2M Vietnamese legal docs at 120ms p95. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr082",
@@ -1059,11 +1140,12 @@
     "text": "Hi Sofia, as we discussed on the call, Saw cutting WER 18% on Vietnamese call-centre transcripts. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr083",
@@ -1072,11 +1154,12 @@
     "text": "Hi Tomas, a long-time follower here, love your work! Saw the freight-booking agent from your demo day. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr084",
@@ -1085,11 +1168,12 @@
     "text": "Hi Wei, we met at the Singapore summit, Saw your eval harness v2 running 40 agent tasks in 6 minutes. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr085",
@@ -1098,11 +1182,12 @@
     "text": "Hi Sofia, following up on your DM to us, Saw hiring your first robotics engineer in Hanoi. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "no_familiarity",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": false,
       "claim_backed": null
-    }
+    },
+    "reviewed": false
   },
   {
     "id": "dr086",
@@ -1111,11 +1196,12 @@
     "text": "Hi Tomas! Saw you raised a $5M seed round. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr087",
@@ -1124,11 +1210,12 @@
     "text": "Hi Nok! Saw you have 50 customers already. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr088",
@@ -1137,11 +1224,12 @@
     "text": "Hi Tuan! Saw you are a former Google engineer. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr089",
@@ -1150,11 +1238,12 @@
     "text": "Hi Tomas! Saw your team grew to 30 people this year. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr090",
@@ -1163,11 +1252,12 @@
     "text": "Hi Nok! Saw you won a national robotics prize. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr091",
@@ -1176,11 +1266,12 @@
     "text": "Hi Sofia! Saw you raised a $5M seed round. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr092",
@@ -1189,11 +1280,12 @@
     "text": "Hi Tomas! Saw you have 50 customers already. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr093",
@@ -1202,11 +1294,12 @@
     "text": "Hi Nok! Saw you are a former Google engineer. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr094",
@@ -1215,11 +1308,12 @@
     "text": "Hi Sofia! Saw your team grew to 30 people this year. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr095",
@@ -1228,11 +1322,12 @@
     "text": "Hi Tomas! Saw you won a national robotics prize. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr096",
@@ -1241,11 +1336,12 @@
     "text": "Hi Nok! Saw you raised a $5M seed round. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr097",
@@ -1254,11 +1350,12 @@
     "text": "Hi Sofia! Saw you have 50 customers already. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr098",
@@ -1267,11 +1364,12 @@
     "text": "Hi Tomas! Saw you are a former Google engineer. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr099",
@@ -1280,11 +1378,12 @@
     "text": "Hi Wei! Saw your team grew to 30 people this year. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   },
   {
     "id": "dr100",
@@ -1293,10 +1392,11 @@
     "text": "Hi Sofia! Saw you won a national robotics prize. GenAI Fund backs early AI and robotics founders in Southeast Asia. Are you raising or planning to? Feel free to ignore this if the timing is off.",
     "planted": "claim_backed",
     "labels": {
-      "one_person": null,
-      "no_sensitive": null,
-      "no_familiarity": null,
-      "claim_backed": null
-    }
+      "one_person": true,
+      "no_sensitive": true,
+      "no_familiarity": true,
+      "claim_backed": false
+    },
+    "reviewed": false
   }
 ]
