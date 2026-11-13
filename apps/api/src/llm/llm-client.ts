@@ -1,4 +1,4 @@
-export type LlmRequest = { task: 'fit' | 'verify' | 'draft'; system: string; user: string }
+export type LlmRequest = { task: 'fit' | 'verify' | 'draft' | 'decide' | 'translate'; system: string; user: string }
 
 export interface LlmClient {
   completeJson(req: LlmRequest): Promise<unknown>

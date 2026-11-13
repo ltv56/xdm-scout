@@ -19,7 +19,8 @@ export type XProfile = {
   receivesYourDm: boolean
 }
 
-export type XPost = { id: string; userId: string; text: string; createdAt: Date }
+// lang is X's own language guess for the post ("und" when it has none).
+export type XPost = { id: string; userId: string; text: string; createdAt: Date; lang?: string }
 
 export class XRateLimitError extends Error {
   constructor(readonly retryAt: Date) {

@@ -37,6 +37,14 @@ async function seedDraft(handle = 'mai') {
   return ds.getRepository(Draft).findOneByOrFail({ prospectId: prospect.id })
 }
 
+// A person who messaged first, so the draft goes out through the API.
+async function apiDraft(handle = 'mai') {
+  const d = await seedDraft(handle)
+  await ds.getRepository(Contact).update(d.contactId, { recipientPermission: 'requested_dm', invitationEventId: 'e1', invitationAt: new Date(Date.now() - 86_400_000) })
+  await ds.getRepository(Draft).update(d.id, { sendPath: 'API_SEND' })
+  return ds.getRepository(Draft).findOneByOrFail({ id: d.id })
+}
+
 beforeEach(async () => {
   ds = await createTestDataSource()
   const jobs = new JobsService(ds)
@@ -50,14 +58,27 @@ afterAll(async () => {
 describe('edit', () => {
   it('keeps the source of sentences the reviewer left alone and marks the new ones as theirs', async () => {
     const d = await seedDraft()
-    const text = `${d.sentences![0].text} We met at the Saigon meetup last year. No worries if not.`
+    // sentences[0] is the greeting made by the app, sentences[1] the one about their post
+    const text = `${d.sentences![0].text} ${d.sentences![1].text} We met at the Saigon meetup last year. No worries if not.`
     const item = await actions.edit(d.id, text, now)
     expect(item.editedByReviewer).toBe(true)
     expect(item.status).toBe('pending')
     expect(item.text).toBe(text)
     expect(item.contentHash).toBe(hashContent(text))
-    expect(item.sentences.map((s) => s.source?.type ?? null)).toEqual(['evidence', null, 'opt_out'])
+    expect(item.sentences.map((s) => s.source?.type ?? null)).toEqual(['greeting', 'evidence', null, 'opt_out'])
     expect(item.checks.find((c) => c.code === 'unbacked_claim')).toMatchObject({ level: 'warn', needsConfirm: true })
+  })
+
+  it('keeps the line breaks the reviewer typed, and hashes exactly that text', async () => {
+    const d = await seedDraft()
+    const typed = `${d.sentences![0].text}\n\nSaw your eval harness for Vietnamese LLMs.\nNo worries if not.`
+    const item = await actions.edit(d.id, typed, now)
+    expect(item.text).toBe(typed)
+    expect(item.contentHash).toBe(hashContent(typed))
+    expect(item.sentences.map((s) => s.text)).toEqual([d.sentences![0].text, 'Saw your eval harness for Vietnamese LLMs.', 'No worries if not.'])
+    expect(item.sentences.map((s) => s.source?.type ?? null)).toEqual(['greeting', null, 'opt_out'])
+    expect(item.openInXUrl).toContain(encodeURIComponent(typed))
+    expect(await actions.approve(d.id, { contentHash: hashContent(typed), confirmedUnbacked: true }, now)).toBeDefined()
   })
 
   it('sends an approved draft back to pending and cancels its open manual attempt', async () => {
@@ -86,13 +107,21 @@ describe('approve', () => {
     expect(await ds.getRepository(Job).countBy({ type: 'send' })).toBe(0)
   })
 
-  it('queues an API send for a person who messaged first', async () => {
-    const d = await seedDraft()
-    await ds.getRepository(Contact).update(d.contactId, { recipientPermission: 'requested_dm', invitationEventId: 'e1', invitationAt: new Date(Date.now() - 86_400_000) })
-    await ds.getRepository(Draft).update(d.id, { sendPath: 'API_SEND' })
+  it('only approves a draft the app could send: the send right is held, nothing is queued', async () => {
+    const d = await apiDraft()
     const { attemptId } = await actions.approve(d.id, { contentHash: hashContent(d.content), confirmedUnbacked: false }, new Date())
-    expect(await ds.getRepository(SendAttempt).findOneByOrFail({ id: attemptId })).toMatchObject({ route: 'api', status: 'queued' })
-    expect(await ds.getRepository(Job).countBy({ type: 'send' })).toBe(1)
+    expect(await ds.getRepository(SendAttempt).findOneByOrFail({ id: attemptId })).toMatchObject({ route: 'api', status: 'approved' })
+    expect((await ds.getRepository(Contact).findOneByOrFail({ id: d.contactId })).activeAttemptId).toBe(attemptId)
+    expect(await ds.getRepository(Job).countBy({ type: 'send' })).toBe(0)
+  })
+
+  it('an edit after approving a draft the app could send frees the send right', async () => {
+    const d = await apiDraft()
+    const { attemptId } = await actions.approve(d.id, { contentHash: hashContent(d.content), confirmedUnbacked: false }, new Date())
+    const item = await actions.edit(d.id, `${d.sentences![0].text} No worries if not.`, now)
+    expect(item.status).toBe('pending')
+    expect(await ds.getRepository(SendAttempt).findOneByOrFail({ id: attemptId })).toMatchObject({ status: 'cancelled' })
+    expect((await ds.getRepository(Contact).findOneByOrFail({ id: d.contactId })).activeAttemptId).toBeNull()
   })
 
   it('refuses a draft with a blocking check', async () => {
@@ -118,6 +147,11 @@ describe('approve', () => {
     const body = { contentHash: hashContent(d.content), confirmedUnbacked: false }
     await actions.approve(d.id, body, now)
     await expect(actions.approve(d.id, body, now)).rejects.toBeInstanceOf(ConflictException)
+    const api = await apiDraft('ken')
+    const apiBody = { contentHash: hashContent(api.content), confirmedUnbacked: false }
+    await actions.approve(api.id, apiBody, new Date())
+    await expect(actions.approve(api.id, apiBody, new Date())).rejects.toBeInstanceOf(ConflictException)
+    expect(await ds.getRepository(SendAttempt).countBy({ draftId: api.id })).toBe(1)
   })
 
   it('refuses a person on the do-not-contact list', async () => {

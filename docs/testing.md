@@ -125,7 +125,7 @@ curl localhost:3001/api/campaigns/<id>/prospects
 
 ## 7. Fit scoring (fake mode)
 
-Needs a campaign with prospects from section 6 and the worker running. Without `LLM_API_KEY` and `LLM_MODEL` in `.env` a canned stand-in answers: every Fit is `possible`, the opening is the latest stored post.
+Needs a campaign with prospects from section 6 and the worker running. Without `LLM_MODEL` in `.env` a canned stand-in answers: every Fit is `possible`, the opening is the latest stored post.
 
 ```
 curl -XPOST localhost:3001/api/campaigns/1/score
@@ -142,11 +142,12 @@ curl localhost:3001/api/campaigns/1/prospects
 With a real model, set in `.env`:
 
 ```
-LLM_PROVIDER=openai        # or anthropic
-LLM_BASE_URL=https://...   # OpenAI-compatible base URL, ignored for anthropic
-LLM_MODEL=...
-LLM_API_KEY=...
+GOOGLE_API_KEY=           # also OPEN_ROUTER_API_KEY, ANTHROPIC_API_KEY, OPENAI_API_KEY; leave unused ones empty
+LLM_MODEL=gemini-4-hydrogen
+DECISION_MODEL=gemini-decision-1
 ```
+
+`claude-*`, `gpt-*` and `gemini-*` names use their own key first, then OpenRouter; a `vendor/model` name goes to OpenRouter. `DECISION_MODEL` takes `gemini-decision-1` (Google), a System One model on OpenRouter (`typesafe/jev-1.14`), or any text model. Empty: the text model answers, or fixtures if `LLM_MODEL` is empty too.
 
 ## 8. Retention of X data
 
@@ -182,7 +183,7 @@ Web app against the same data: run the API with `REVIEW_STUB=1`, then `npm run d
 
 ## Review with real data (fake X, canned LLM)
 
-Start the API and the worker with `X_MODE=fake` and `REVIEW_STUB=0`. Without `LLM_API_KEY` the draft text is a fixed template built from the person's opening post, so no model is called.
+Start the API and the worker with `X_MODE=fake` and `REVIEW_STUB=0`. Without `LLM_MODEL` the draft text is a fixed template built from the person's opening post, so no model is called.
 
 ```
 B=http://localhost:3001/api; J='content-type: application/json'
