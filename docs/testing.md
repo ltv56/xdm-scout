@@ -182,9 +182,23 @@ curl -XPOST $B/drafts/1/approve -H "$J" -d '{"contentHash":"<contentHash from th
 - A stale `contentHash` answers `409`; a draft with a blocking check answers `409` until it is edited.
 - Skip, dismiss, approve, regenerate and Do not contact add a row to `review_signals` (no handle).
 
+## Inbox: Check in X
+
+After approving drafts as above:
+
+```
+curl -XPOST $B/drafts/1/manual -H "$J" -d '{"outcome":"sent"}'  # "I sent it": the send waits in Check in X
+curl "$B/inbox/checks?campaignId=1"                               # {"toCheck":[...],"delivered":[...]}
+curl -XPOST $B/send-attempts/1/confirm -H "$J" -d '{"outcome":"sent"}'      # Delivered, verifiedBy "operator"
+curl -XPOST $B/send-attempts/2/confirm -H "$J" -d '{"outcome":"not_sent"}'  # draft goes back to Review
+```
+
+- Check in X lists sends marked as sent by hand that the API has not seen, and API sends X never confirmed (`needs_decision`).
+- Confirming a send that is not waiting for a check answers `409`.
+
 ## Browser walkthroughs (web)
 
-Playwright in `apps/web/e2e` with its own `package.json` and `node_modules`: New campaign, Candidates, Review, a phone-sized screen, and the error and empty states. It drives the installed Edge, so no browser is downloaded. The API and the worker run in fake mode on the database `xdm_e2e`:
+Playwright in `apps/web/e2e` with its own `package.json` and `node_modules`: New campaign, Candidates, Review, Inbox, a phone-sized screen, and the error and empty states. It drives the installed Edge, so no browser is downloaded. The API and the worker run in fake mode on the database `xdm_e2e`:
 
 ```
 docker exec xdm-scout-db-1 mysql -uxdm -pxdm -e "CREATE DATABASE IF NOT EXISTS xdm_e2e"   # once
@@ -200,7 +214,8 @@ E2E_API_URL=http://localhost:3021 npm run e2e
 
 - Before the tests, `global-setup.ts` empties every table of `E2E_DATABASE_URL` (default `xdm_e2e`) except `migrations`. It refuses a database whose name does not end in `_e2e`.
 - The tests create the `robotics demo` campaign through the API and wait for discovery and scoring on the fake X.
-- Review and the phone-sized test each create their own campaign, connect the fake sender (`POST /api/auth/x/fake`) and wait for the worker to write the drafts.
+- Review, Inbox and the phone-sized test each create their own campaign, connect the fake sender (`POST /api/auth/x/fake`) and wait for the worker to write the drafts.
+- Inbox empties the database again when it ends: it marks people as sent, and the fake X has only three people to draft for.
 - Vite starts on port 3020 (`E2E_WEB_PORT`) and proxies `/api` to `E2E_API_URL`.
 
 ## Automated tests

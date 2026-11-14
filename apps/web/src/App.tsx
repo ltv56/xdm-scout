@@ -5,6 +5,7 @@ import { getJson } from './api'
 import Account from './Account'
 import CampaignPicker from './CampaignPicker'
 import { User as UserIcon } from './icons'
+import Inbox from './Inbox'
 import NewCampaign from './NewCampaign'
 import Overview from './Overview'
 import Prospects, { type Filter as CandidateFilter } from './Prospects'
@@ -18,6 +19,7 @@ interface Health {
 const TABS = [
   { id: 'overview', label: 'Overview' },
   { id: 'review', label: 'Review' },
+  { id: 'inbox', label: 'Inbox' },
   { id: 'prospects', label: 'Candidates' },
   { id: 'profile', label: 'Account' },
 ] as const
@@ -135,6 +137,10 @@ export default function App() {
             </div>
           ) : tab === 'review' ? (
             <ReviewQueue campaignId={active} />
+          ) : tab === 'inbox' ? (
+            <div className={scroll}>
+              <Inbox campaignId={active} />
+            </div>
           ) : (
             <div className={scroll}>
               <Prospects key={candidateFilter} campaignId={active} onReview={() => setTab('review')} initialFilter={candidateFilter} />

@@ -180,6 +180,10 @@ export class SendAttempt {
   @Column({ type: 'varchar', length: 32, nullable: true })
   xEventId!: string | null
 
+  // How we know a sent message arrived: seen through X's API, or the operator checked in X.
+  @Column({ type: 'varchar', length: 8, nullable: true })
+  verifiedBy!: 'api' | 'operator' | null
+
   @Column({ type: 'datetime', precision: 3, nullable: true })
   runAt!: Date | null
 
