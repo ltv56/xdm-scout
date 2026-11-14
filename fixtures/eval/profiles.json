@@ -9,7 +9,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f02",
@@ -21,7 +21,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f03",
@@ -33,7 +33,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f04",
@@ -45,7 +45,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f05",
@@ -57,7 +57,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f06",
@@ -69,7 +69,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f07",
@@ -81,7 +81,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f08",
@@ -93,7 +93,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f09",
@@ -105,7 +105,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f10",
@@ -117,7 +117,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f11",
@@ -129,7 +129,7 @@
       "own_account": false,
       "fits_segment": false
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f12",
@@ -141,7 +141,7 @@
       "own_account": false,
       "fits_segment": false
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f13",
@@ -153,7 +153,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f14",
@@ -165,7 +165,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f15",
@@ -177,7 +177,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f16",
@@ -189,7 +189,7 @@
       "own_account": false,
       "fits_segment": false
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f17",
@@ -201,7 +201,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f18",
@@ -211,9 +211,9 @@
     "followers": 880,
     "labels": {
       "own_account": true,
-      "fits_segment": null
+      "fits_segment": false
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f19",
@@ -225,7 +225,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f20",
@@ -237,7 +237,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f21",
@@ -249,7 +249,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f22",
@@ -259,9 +259,9 @@
     "followers": 610,
     "labels": {
       "own_account": true,
-      "fits_segment": null
+      "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f23",
@@ -271,9 +271,9 @@
     "followers": 9800,
     "labels": {
       "own_account": true,
-      "fits_segment": null
+      "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f24",
@@ -283,9 +283,9 @@
     "followers": 1500,
     "labels": {
       "own_account": true,
-      "fits_segment": null
+      "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f25",
@@ -297,7 +297,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f26",
@@ -309,7 +309,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f27",
@@ -321,7 +321,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f28",
@@ -333,7 +333,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f29",
@@ -345,7 +345,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f30",
@@ -357,7 +357,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "f31",
@@ -369,7 +369,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -382,7 +382,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -395,7 +395,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -408,7 +408,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -421,7 +421,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -434,7 +434,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -447,7 +447,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -460,7 +460,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -473,7 +473,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -486,7 +486,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -499,7 +499,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -512,7 +512,7 @@
       "own_account": true,
       "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -525,7 +525,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -538,7 +538,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -551,7 +551,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -564,7 +564,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -577,7 +577,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -590,7 +590,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -603,7 +603,7 @@
       "own_account": true,
       "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -616,7 +616,7 @@
       "own_account": false,
       "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -629,7 +629,7 @@
       "own_account": false,
       "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -642,7 +642,7 @@
       "own_account": false,
       "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -655,7 +655,7 @@
       "own_account": false,
       "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -666,9 +666,9 @@
     "followers": 180,
     "labels": {
       "own_account": true,
-      "fits_segment": null
+      "fits_segment": true
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -679,9 +679,9 @@
     "followers": 5100,
     "labels": {
       "own_account": true,
-      "fits_segment": null
+      "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -692,9 +692,9 @@
     "followers": 760,
     "labels": {
       "own_account": true,
-      "fits_segment": null
+      "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -705,9 +705,9 @@
     "followers": 7200,
     "labels": {
       "own_account": true,
-      "fits_segment": null
+      "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -718,9 +718,9 @@
     "followers": 2300,
     "labels": {
       "own_account": true,
-      "fits_segment": null
+      "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -731,9 +731,9 @@
     "followers": 12800,
     "labels": {
       "own_account": true,
-      "fits_segment": null
+      "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   },
   {
@@ -744,9 +744,9 @@
     "followers": 95,
     "labels": {
       "own_account": true,
-      "fits_segment": null
+      "fits_segment": false
     },
-    "reviewed": false,
+    "reviewed": true,
     "batch": 2
   }
 ]

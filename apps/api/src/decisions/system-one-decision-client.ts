@@ -36,6 +36,6 @@ export class SystemOneDecisionClient implements DecisionClient {
     const parsed = response.safeParse(await res.json())
     const answer = parsed.success ? parsed.data.answers[ask.code] : undefined
     if (!answer || answer.type !== 'noul' || answer.noul === undefined) throw new Error(`invalid decision answer for ${ask.code}`)
-    return { ...ask, probability: answer.noul, answeredBy: 'jev' }
+    return { ...ask, probability: answer.noul, answeredBy: 'jev', model: this.model }
   }
 }

@@ -47,6 +47,19 @@ export function precisionCoverage(examples: Labelled[], threshold: number) {
   }
 }
 
+export const THRESHOLD_GRID = Array.from({ length: 10 }, (_, i) => (50 + i * 5) / 100)
+
+// Fewer yes answers than this make the interval too wide to trust.
+const MIN_YES = 10
+
+export function pickThreshold(examples: Labelled[], { target, grid = THRESHOLD_GRID }: { target: number; grid?: number[] }): number | null {
+  for (const threshold of grid) {
+    const p = precisionCoverage(examples, threshold)
+    if (p.answeredYes >= MIN_YES && p.precisionInterval.low >= target) return threshold
+  }
+  return null
+}
+
 export function splitHalves<T>(items: T[]) {
   const cut = Math.floor(items.length / 2)
   return { pick: items.slice(0, cut), report: items.slice(cut) }

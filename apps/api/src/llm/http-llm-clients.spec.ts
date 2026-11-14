@@ -31,6 +31,16 @@ describe('OpenAiCompatibleLlmClient', () => {
     ])
   })
 
+  it('sends temperature 0, except to OpenAI reasoning models that only take the default', async () => {
+    const bodyFor = async (model: string) => {
+      const { fetchFn, calls } = fetchReturning(200, { choices: [{ message: { content: '{}' } }] })
+      await new OpenAiCompatibleLlmClient({ baseUrl: 'https://x/v1', apiKey: 'k', model }, fetchFn).completeJson(req)
+      return JSON.parse(String(calls[0].init.body))
+    }
+    expect((await bodyFor('m1')).temperature).toBe(0)
+    for (const model of ['gpt-5-nano', 'openai/gpt-5-mini', 'o4-mini']) expect(await bodyFor(model)).not.toHaveProperty('temperature')
+  })
+
   it('accepts JSON wrapped in a code fence', async () => {
     const { fetchFn } = fetchReturning(200, { choices: [{ message: { content: '```json\n{"a":1}\n```' } }] })
     const client = new OpenAiCompatibleLlmClient({ baseUrl: 'https://x/v1', apiKey: 'k', model: 'm' }, fetchFn)

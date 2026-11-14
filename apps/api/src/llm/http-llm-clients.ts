@@ -23,6 +23,9 @@ async function post(fetchFn: typeof fetch, url: string, headers: Record<string, 
   return res.json()
 }
 
+// OpenAI reasoning models reject any temperature but the default.
+const fixedTemperature = (model: string) => /^(openai\/)?(gpt-5|o\d)/i.test(model)
+
 export class OpenAiCompatibleLlmClient implements LlmClient {
   constructor(
     private readonly cfg: { baseUrl: string; apiKey: string; model: string },
@@ -36,7 +39,7 @@ export class OpenAiCompatibleLlmClient implements LlmClient {
       { Authorization: `Bearer ${this.cfg.apiKey}` },
       {
         model: this.cfg.model,
-        temperature: 0,
+        ...(fixedTemperature(this.cfg.model) ? {} : { temperature: 0 }),
         response_format: { type: 'json_object' },
         messages: [
           { role: 'system', content: req.system },

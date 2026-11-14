@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { brier, calibrationTable, precisionCoverage, splitHalves, wilson } from './eval'
+import { brier, calibrationTable, pickThreshold, precisionCoverage, splitHalves, wilson } from './eval'
 
 const ex = (probability: number, yes: boolean) => ({ probability, yes })
 
@@ -51,6 +51,24 @@ describe('precisionCoverage', () => {
 
   it('has no precision when nothing reaches the threshold', () => {
     expect(precisionCoverage([ex(0.1, true)], 0.7)).toMatchObject({ answeredYes: 0, precision: null, coverage: 0 })
+  })
+})
+
+describe('pickThreshold', () => {
+  const many = (n: number, probability: number, yes: boolean) => Array.from({ length: n }, () => ex(probability, yes))
+
+  it('takes the lowest threshold whose precision lower bound reaches the target', () => {
+    const examples = [...many(20, 0.95, true), ...many(10, 0.6, false)]
+    expect(pickThreshold(examples, { target: 0.7 })).toBe(0.65)
+  })
+
+  it('gives null when no threshold reaches the target', () => {
+    expect(pickThreshold(many(30, 0.9, false), { target: 0.7 })).toBeNull()
+  })
+
+  it('needs at least ten yes answers at the threshold', () => {
+    expect(pickThreshold(many(5, 0.95, true), { target: 0.3 })).toBeNull()
+    expect(pickThreshold(many(10, 0.95, true), { target: 0.3 })).toBe(0.5)
   })
 })
 

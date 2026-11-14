@@ -19,6 +19,12 @@ describe('routeText', () => {
     expect(routeText('gemini-4-hydrogen', { openRouter: 'o' })).toEqual({ provider: 'openrouter', model: 'google/gemini-4-hydrogen' })
   })
 
+  it('uses the DeepSeek key for deepseek-* names, else OpenRouter', () => {
+    expect(routeText('deepseek-chat', { ...all, deepseek: 'd' })).toEqual({ provider: 'deepseek', model: 'deepseek-chat' })
+    expect(routeText('deepseek-chat', { openRouter: 'o' })).toEqual({ provider: 'openrouter', model: 'deepseek/deepseek-chat' })
+    expect(() => routeText('deepseek-chat', { google: 'g' })).toThrow(/DEEPSEEK_API_KEY or OPEN_ROUTER_API_KEY/)
+  })
+
   it('sends vendor/model names to OpenRouter as they are', () => {
     expect(routeText('nvidia/nemotron-3-ultra:free', all)).toEqual({ provider: 'openrouter', model: 'nvidia/nemotron-3-ultra:free' })
   })
@@ -38,11 +44,23 @@ describe('routeText', () => {
   })
 })
 
+describe('createLlmClient with DeepSeek', () => {
+  it('reads the key from DEEPSEEK_API_KEY or LLM_API_KEY', () => {
+    expect(createLlmClient({ LLM_MODEL: 'deepseek-chat', DEEPSEEK_API_KEY: 'd' })).toBeInstanceOf(OpenAiCompatibleLlmClient)
+    expect(createLlmClient({ LLM_MODEL: 'deepseek-chat', LLM_API_KEY: 'd' })).toBeInstanceOf(OpenAiCompatibleLlmClient)
+  })
+})
+
 describe('routeDecision', () => {
   it('sends gemini-decision-1 to Google and System One models to OpenRouter', () => {
     expect(routeDecision('gemini-decision-1', all)).toEqual({ kind: 'google-decision', model: 'gemini-decision-1' })
     expect(routeDecision('typesafe/jev-1.14', all)).toEqual({ kind: 'system-one', model: 'typesafe/jev-1.14' })
     expect(routeDecision('perplexity/pplx-decider-v1.3:free', all)).toEqual({ kind: 'system-one', model: 'perplexity/pplx-decider-v1.3:free' })
+  })
+
+  it('sends gpt-6-luna to the OpenAI Decisions API and needs the OpenAI key for it', () => {
+    expect(routeDecision('gpt-6-luna', all)).toEqual({ kind: 'openai-decision', model: 'gpt-6-luna' })
+    expect(() => routeDecision('gpt-6-luna', { google: 'g' })).toThrow(/OPENAI_API_KEY/)
   })
 
   it('asks an ordinary model through the LLM route, so its figure is not calibrated', () => {
