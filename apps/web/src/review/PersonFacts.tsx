@@ -178,22 +178,6 @@ const BAND = {
 const WORST_FIRST = { low: 0, middle: 1, high: 2 }
 const pctOf = (x: number) => Math.round(x * 100)
 
-// What was measured, or why there is nothing to show. The numbers belong to one question and one model version.
-function Measured({ d }: { d: Decision }) {
-  const m = d.calibration
-  if (whoAnswers(d) === 'llm') return <>An AI model gave this, so only the band is shown: its own percentage is not calibrated.{!m && ' Not measured yet.'}</>
-  if (!m) return <>Not measured yet.</>
-  const when = new Date(m.measuredOn).toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'short',
-  })
-  return (
-    <>
-      Measured on {m.examples} examples: at 70%, right {m.right} ({pctOf(m.low)}–{pctOf(m.high)}%), {when}.
-    </>
-  )
-}
-
 function CheckDetail({ d }: { d: Decision }) {
   const ref = useReveal()
   return (
@@ -203,9 +187,6 @@ function CheckDetail({ d }: { d: Decision }) {
       <p className="mt-3 text-xs text-muted">
         Answer: {whoAnswers(d) === 'jev' ? `${pctOf(d.probability)}% yes. ` : ''}
         {BAND[d.band].say}. From {ANSWERER[whoAnswers(d)]}.
-      </p>
-      <p className="mt-1 text-xs text-muted">
-        <Measured d={d} />
       </p>
     </div>
   )
