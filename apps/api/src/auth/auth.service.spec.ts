@@ -104,4 +104,13 @@ describe('AuthService', () => {
   it('fails clearly when no account is connected', async () => {
     await expect(service.session()).rejects.toThrow('No X account connected')
   })
+
+  it('connects one made-up sender account for fake mode without calling X', async () => {
+    await service.connectFake()
+    await service.connectFake()
+    const rows = await ds.getRepository(SenderAccount).find()
+    expect(rows).toHaveLength(1)
+    expect(rows[0]).toMatchObject({ handle: 'sandbox_sender', accessTokenEnc: null })
+    expect(calls).toHaveLength(0)
+  })
 })

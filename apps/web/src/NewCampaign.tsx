@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useRef, useState } from 'react'
-import type { CampaignLane, SenderProfile } from '../../api/src/review/contract'
-import { getJson, postJson, putJson } from './api'
+import { useState } from 'react'
+import type { SenderProfile } from '../../api/src/review/contract'
+import { getJson, postJson } from './api'
 import { btnPrimary, btnSecondary, field as baseField } from './ui'
 
 const field = `${baseField} mt-1`
@@ -29,21 +29,16 @@ export default function NewCampaign({ first, onCreated, onCancel }: Props) {
   const [callUrl, setCallUrl] = useState('')
   const [callKeyword, setCallKeyword] = useState('')
   const [missing, setMissing] = useState<string | null>(null)
-  // If the campaign was made but its program and call post failed to save, a second try saves those again instead of making another campaign.
-  const made = useRef<number | null>(null)
 
   const profile = useQuery<SenderProfile>({ queryKey: ['sender-profile'], queryFn: () => getJson('/sender-profile'), retry: false })
   const programs = profile.data?.programs ?? []
   const chosen = programId ?? programs[0]?.id ?? null
 
   const create = useMutation({
-    mutationFn: async (v: { campaign: unknown; lane: { programId: number | null; callPostUrl: string | null; callKeyword: string | null } }) => {
-      if (made.current === null) made.current = (await postJson<{ id: number }>('/campaigns', v.campaign)).id
+    mutationFn: async (campaign: unknown) => {
+      const { id } = await postJson<{ id: number }>('/campaigns', campaign)
       await qc.invalidateQueries({ queryKey: ['campaigns'] })
-      await putJson<CampaignLane>(`/campaign-lane/${made.current}`, v.lane).catch((e: Error) => {
-        throw new Error(`The campaign was created, but its program and call post were not saved: ${e.message}`)
-      })
-      return made.current
+      return id
     },
     onSuccess: (id) => onCreated(id),
   })
@@ -69,16 +64,16 @@ export default function NewCampaign({ first, onCreated, onCancel }: Props) {
     create.reset()
     if (gap) return
     create.mutate({
-      campaign: {
-        name: name.trim(),
-        keywords: lines(keywords),
-        handles: handles(handleText),
-        seeds: handles(seeds),
-        queries: lines(queries),
-        criteria: lines(criteria),
-        ...(budgetUsd !== undefined && { budgetUsd }),
-      },
-      lane: { programId: chosen, callPostUrl: callUrl.trim() || null, callKeyword: callKeyword.trim() || null },
+      name: name.trim(),
+      keywords: lines(keywords),
+      handles: handles(handleText),
+      seeds: handles(seeds),
+      queries: lines(queries),
+      criteria: lines(criteria),
+      ...(budgetUsd !== undefined && { budgetUsd }),
+      programId: chosen,
+      callPostUrl: callUrl.trim() || null,
+      callKeyword: callKeyword.trim() || null,
     })
   }
 

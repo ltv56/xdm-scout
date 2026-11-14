@@ -16,7 +16,7 @@ interface DiscoveryRun {
   postsPending: number
 }
 
-interface Campaign {
+interface Campaign extends CampaignLane {
   id: number
   name: string
   handles: string[]
@@ -127,7 +127,7 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
           <p className="mt-1 text-sm text-muted">
             {sources || 'No sources yet'} · {run ? `last search ${ago(run.at)}` : 'no search yet'}
           </p>
-          <LaneLine campaignId={campaignId} />
+          <LaneLine lane={c} />
         </div>
         <div>
           <button type="button" className={btnSecondary} disabled={search.isPending || waiting} onClick={() => search.mutate()}>
@@ -308,12 +308,9 @@ export default function Overview({ campaignId, onReview, onProspects }: { campai
 
 const shortDay = (iso: string) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 
-// The program this campaign offers and its call post. Only shown where the API can say (the review stub for now).
-function LaneLine({ campaignId }: { campaignId: number }) {
-  const lane = useQuery<CampaignLane>({ queryKey: ['lane', campaignId], queryFn: () => getJson(`/campaign-lane/${campaignId}`), retry: false })
+// The program this campaign offers and its call post.
+function LaneLine({ lane: l }: { lane: CampaignLane }) {
   const profile = useQuery<SenderProfile>({ queryKey: ['sender-profile'], queryFn: () => getJson('/sender-profile'), retry: false })
-  const l = lane.data
-  if (!l) return null
   const program = profile.data?.programs.find((p) => p.id === l.programId)
   return (
     <p className="mt-1 text-sm text-muted">
