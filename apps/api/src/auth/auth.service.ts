@@ -19,6 +19,7 @@ export type XSession = { userId: string; token: string }
 
 const SCOPE = 'dm.read dm.write tweet.read users.read follows.read offline.access'
 const REFRESH_MARGIN_MS = 120_000
+const FAKE_SENDER_ID = '1000000000000000001'
 
 const tokenResponse = z.object({
   access_token: z.string(),
@@ -71,6 +72,12 @@ export class AuthService {
     account.handle = me.username
     this.applyTokens(account, tokens)
     await repo.save(account)
+  }
+
+  // Fake X needs no tokens; drafts and the ledger only need a sender row to hang contacts on.
+  async connectFake(): Promise<SenderAccount> {
+    const repo = this.ds.getRepository(SenderAccount)
+    return (await repo.findOneBy({ xUserId: FAKE_SENDER_ID })) ?? repo.save({ xUserId: FAKE_SENDER_ID, handle: 'sandbox_sender' })
   }
 
   async session(now = new Date()): Promise<XSession> {
