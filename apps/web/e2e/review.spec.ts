@@ -1,11 +1,12 @@
 import { expect, test, type Page } from '@playwright/test'
-import { ensureCampaign } from './setup.ts'
+import { draftCampaign } from './setup.ts'
 
-// The stub keeps its state in memory: restart the API to get the seven pending drafts back.
+let campaign = ''
+
 async function openPendingDraft(page: Page) {
   const approve = page.getByRole('button', { name: 'Approve', exact: true })
   const next = page.getByRole('button', { name: 'Next draft' })
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 10; i++) {
     if ((await approve.count()) > 0 && (await approve.isEnabled())) return true
     if (await next.isDisabled()) break
     await next.click()
@@ -13,12 +14,17 @@ async function openPendingDraft(page: Page) {
   return false
 }
 
-test.beforeEach(async ({ page, request }) => {
-  await ensureCampaign(request)
+test.beforeAll(async ({ request }) => {
+  campaign = await draftCampaign(request)
+})
+
+test.beforeEach(async ({ page }) => {
   await page.goto('/')
+  await page.getByRole('button', { name: /^Campaign/ }).click()
+  await page.getByRole('button', { name: campaign, exact: true }).click()
   await page.getByRole('navigation').getByRole('button', { name: /^Review/ }).click()
   await expect(page.getByRole('region', { name: 'Draft message' })).toBeVisible()
-  test.skip(!(await openPendingDraft(page)), 'No pending draft left: restart the stub API')
+  expect(await openPendingDraft(page)).toBe(true)
 })
 
 test('Review: reading a draft, the source of a sentence, and approving it', async ({ page }) => {

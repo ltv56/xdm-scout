@@ -161,32 +161,13 @@ The worker sweeps on start and every hour:
 docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT xUserId, LEFT(text, 20) FROM x_posts; SELECT id, LEFT(excerpt, 20) FROM evidence"
 ```
 
-## Review screens with fixed data
-
-Set `REVIEW_STUB=1` in `.env` and restart the API. The review routes then return seven fixed drafts (six for the screen states, one with every field full) kept in memory; a restart resets them. The real `POST /api/drafts/:id/approve` is off in this mode. Shapes: `apps/api/src/review/contract.ts`.
-
-```
-B=http://localhost:3001/api
-curl -s $B/campaigns
-curl -s "$B/review-queue?campaignId=1"
-H=$(curl -s "$B/review-queue?campaignId=1" | node -e "console.log(JSON.parse(require('fs').readFileSync(0)).items[0].contentHash)")
-curl -s -XPOST $B/drafts/101/approve -H 'content-type: application/json' -d "{\"contentHash\":\"$H\"}"
-curl -s -XPOST $B/drafts/101/manual -H 'content-type: application/json' -d '{"outcome":"sent"}'
-curl -s -XPATCH $B/drafts/105 -H 'content-type: application/json' -d '{"text":"Saw your GPU post. We are a small fund. No worries if not."}'
-curl -s -XPOST $B/drafts/102/skip -H 'content-type: application/json' -d '{"reason":"bored"}'   # 400, reason not in the list
-curl -s $B/sender-profile
-```
-
-Web app against the same data: run the API with `REVIEW_STUB=1`, then `npm run dev -w apps/web` and open http://localhost:3000. The left and right arrow keys move between drafts.
-
-`REVIEW_STUB_EMPTY=1` starts with no drafts. With it, `POST /api/campaigns/:id/drafts` and `POST /api/campaigns/:id/prospects/:pid/draft` make drafts from the campaign's own prospects (in memory, reset on restart).
-
 ## Review with real data (fake X, canned LLM)
 
-Start the API and the worker with `X_MODE=fake` and `REVIEW_STUB=0`. Without `LLM_MODEL` the draft text is a fixed template built from the person's opening post, so no model is called.
+Start the API and the worker with `X_MODE=fake`. Without `LLM_MODEL` the draft text is a fixed template built from the person's opening post, so no model is called.
 
 ```
 B=http://localhost:3001/api; J='content-type: application/json'
+curl -XPOST $B/auth/x/fake                                        # fake mode only: made-up sender @sandbox_sender, no X call; 404 with X_MODE=live
 curl -XPUT $B/sender-profile -H "$J" -d '{"intro":"GenAI Fund backs early AI founders in Southeast Asia.","programs":[{"id":1,"name":"Intro to investors","description":"Intro to investors","link":"https://genaifund.ai/","deadline":null}],"signer":"Vinh","sampleMessages":[]}'
 # create a campaign, discover and score as in section 6 and 7, then:
 curl $B/campaigns/1/drafts/ready                                  # {"ready":N}
@@ -203,11 +184,14 @@ curl -XPOST $B/drafts/1/approve -H "$J" -d '{"contentHash":"<contentHash from th
 
 ## Browser walkthroughs (web)
 
-Playwright in `apps/web/e2e` with its own `package.json` and `node_modules`: New campaign, Candidates, Review, a phone-sized screen, and the error and empty states. It drives the installed Edge, so no browser is downloaded. The API runs the review mock on its own port:
+Playwright in `apps/web/e2e` with its own `package.json` and `node_modules`: New campaign, Candidates, Review, a phone-sized screen, and the error and empty states. It drives the installed Edge, so no browser is downloaded. The API and the worker run in fake mode on a new database `xdm_e2e` for every run:
 
 ```
+docker exec xdm-scout-db-1 mysql -uxdm -pxdm -e "DROP DATABASE IF EXISTS xdm_e2e; CREATE DATABASE xdm_e2e"
 cd apps/api
-REVIEW_STUB=1 X_MODE=fake PORT=3021 node dist/main.js
+export DATABASE_URL='mysql://xdm:xdm@127.0.0.1:3306/xdm_e2e?allowPublicKeyRetrieval=true'
+npx typeorm -d dist/data-source.js migration:run
+X_MODE=fake PORT=3021 node dist/main.js
 X_MODE=fake PORT=3021 node dist/worker-main.js
 cd ../web/e2e
 npm install                         # once
@@ -215,8 +199,9 @@ E2E_API_URL=http://localhost:3021 npm run e2e
 ```
 
 - The tests create the `robotics demo` campaign through the API when it is missing and wait for discovery and scoring on the fake X.
+- Review and the phone-sized test each create their own campaign, connect the fake sender (`POST /api/auth/x/fake`) and wait for the worker to write the drafts.
+- Discovery skips people an earlier run approved, so a second run on the same database fails with "recreate the e2e database". Run the first four commands again.
 - Vite starts on port 3020 (`E2E_WEB_PORT`) and proxies `/api` to `E2E_API_URL`.
-- The mock keeps its state in memory. Approving or skipping uses up the pending draft; when none is left the Review tests are skipped. Restart the API to get it back.
 
 ## Automated tests
 

@@ -1,13 +1,13 @@
 import { expect, test } from '@playwright/test'
-import { ensureCampaign } from './setup.ts'
+import { draftCampaign } from './setup.ts'
 
 test.use({ viewport: { width: 390, height: 844 } })
 
 test('On a phone-sized screen nothing scrolls sideways and the draft is readable in full', async ({ page, request }) => {
-  await ensureCampaign(request)
+  const campaign = await draftCampaign(request)
   await page.goto('/')
   await page.getByRole('button', { name: /^Campaign/ }).click()
-  await page.getByRole('button', { name: 'robotics demo', exact: true }).click()
+  await page.getByRole('button', { name: campaign, exact: true }).click()
   const sideways = () => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   const nav = page.getByRole('navigation')
 

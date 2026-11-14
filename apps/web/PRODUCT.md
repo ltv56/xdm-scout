@@ -18,11 +18,10 @@ Every sentence of a draft traces to a post, to the sender profile, or is marked 
 ## Capabilities and Constraints
 - Review actions: Approve, Edit, Regenerate, Skip (with reason), Do not contact.
 - Two send paths: "Send from xdm-scout" (only to people who messaged first) and "Send it yourself in X" (copy the DM, open the X compose screen, then report "I sent it" or "I didn't send").
-- The review UI reads fixed data from the API stub until real draft generation exists.
 - UI text is English. Labels use plain words (spec section 11), not code names.
 
 ## Evidence on Hand
-Six fixed stub drafts in `apps/api/src/review/review-stub.controller.ts`. No real screenshots, brand assets or logo exist.
+Drafts made in fake mode from the fixtures in `fixtures/` (see docs/testing.md). No real screenshots, brand assets or logo exist.
 
 ## Product Principles
 1. Show the evidence next to the claim; unsupported sentences are visible at a glance.

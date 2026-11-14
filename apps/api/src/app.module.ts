@@ -21,7 +21,6 @@ import { ReviewActionsController } from './review/review-actions.controller'
 import { ReviewActionsService } from './review/review-actions.service'
 import { ReviewController } from './review/review.controller'
 import { ReviewService } from './review/review.service'
-import { ReviewStubController } from './review/review-stub.controller'
 import { SenderProfileController } from './review/sender-profile.controller'
 import { SendingService } from './sending/sending.service'
 import { Worker } from './sending/worker'
@@ -37,10 +36,13 @@ const aiEnv = (config: ConfigService) => Object.fromEntries(AI_VARS.map((k) => [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env', '../../.env'] }),
     TypeOrmModule.forRoot({ ...dataSourceOptions, migrations: [] }),
   ],
-  // REVIEW_STUB=1 serves fixed review data (see review/contract.ts) instead of the real draft routes.
   controllers: [
     HealthController,
-    ...(process.env.REVIEW_STUB === '1' ? [ReviewStubController] : [ReviewActionsController, SenderProfileController, CampaignDraftsController, ProspectDraftController, ReviewController]),
+    ReviewActionsController,
+    SenderProfileController,
+    CampaignDraftsController,
+    ProspectDraftController,
+    ReviewController,
     AuthController,
     CampaignsController,
   ],
