@@ -57,30 +57,45 @@ test('Inbox: messages sent by hand are checked in X, then marked sent or not sen
 })
 
 // The worker's fake X lives in its own process, so the reply it would store is written to the e2e database directly.
-async function storeReply(text: string) {
+async function storeReply(text: string, eventId: string, replyClass: string, classBy: string, optOut = false) {
   const db = await createConnection(E2E_DATABASE_URL)
   try {
-    const [rows] = await db.query("SELECT id, contactId FROM send_attempts WHERE status = 'sent' ORDER BY id LIMIT 1")
-    const [{ id, contactId }] = rows as { id: number; contactId: number }[]
-    await db.query("INSERT INTO replies (contactId, attemptId, xEventId, text, source, at) VALUES (?, ?, 'e2e-1', ?, 'api', NOW(3))", [contactId, id, text])
+    const [rows] = await db.query("SELECT a.id, a.contactId, c.xUserId FROM send_attempts a JOIN contacts c ON c.id = a.contactId WHERE a.status = 'sent' ORDER BY a.id LIMIT 1")
+    const [{ id, contactId, xUserId }] = rows as { id: number; contactId: number; xUserId: string }[]
+    await db.query(
+      "INSERT INTO replies (contactId, attemptId, xEventId, text, source, at, replyClass, classBy, handledAt) VALUES (?, ?, ?, ?, 'api', NOW(3), ?, ?, IF(?, NOW(3), NULL))",
+      [contactId, id, eventId, text, replyClass, classBy, optOut],
+    )
+    if (optOut) await db.query("INSERT INTO do_not_contact (xUserId, reason, source) VALUES (?, 'Replied: Opt-out', 'reply')", [xUserId])
   } finally {
     await db.end()
   }
 }
 
 test('Inbox: a reply shows with the message we sent and can be marked handled', async ({ page }) => {
-  await storeReply('Sounds interesting, tell me more')
+  await storeReply('Sounds interesting, tell me more', 'e2e-1', 'Interested', 'llm')
   await openInbox(page)
 
   const reply = page.getByRole('region', { name: /^Replies/ }).getByRole('listitem')
   await expect(reply).toHaveCount(1)
   await expect(reply.getByText('Sounds interesting, tell me more')).toBeVisible()
   await expect(reply.getByText('You wrote')).toBeVisible()
+  await expect(reply.getByLabel('Class')).toHaveValue('Interested')
   await expect(page.getByRole('region', { name: 'Delivered' }).getByText('Replied', { exact: true })).toBeVisible()
 
   await reply.getByRole('button', { name: 'Mark handled' }).click()
   await expect(reply.getByText('Handled', { exact: true })).toBeVisible()
   await expect(reply.getByRole('button', { name: 'Mark handled' })).toHaveCount(0)
+})
+
+test('Inbox: a stop reply shows as Opt-out and the person as Do not contact', async ({ page }) => {
+  await storeReply('Please stop messaging me', 'e2e-2', 'Opt-out', 'rule', true)
+  await openInbox(page)
+
+  const reply = page.getByRole('region', { name: /^Replies/ }).getByRole('listitem').filter({ hasText: 'Please stop messaging me' })
+  await expect(reply.getByLabel('Class')).toHaveValue('Opt-out')
+  await expect(reply.getByText('Do not contact', { exact: true })).toBeVisible()
+  await expect(reply.getByText('Handled', { exact: true })).toBeVisible()
 })
 
 test('Inbox: Check now reads the open chats, and "They replied" records a reply the API cannot see', async ({ page, request }) => {
@@ -96,7 +111,10 @@ test('Inbox: Check now reads the open chats, and "They replied" records a reply 
   const delivered = page.getByRole('region', { name: 'Delivered' })
   await delivered.getByRole('button', { name: 'They replied' }).click()
   await expect(delivered.getByText('Replied', { exact: true })).toHaveCount(2)
-  await expect(replies.getByRole('listitem').first().getByText('They replied in an encrypted chat. Read it in X.')).toBeVisible()
+  const encrypted = replies.getByRole('listitem').first()
+  await expect(encrypted.getByText('They replied in an encrypted chat. Read it in X.')).toBeVisible()
+  await encrypted.getByLabel('Class').selectOption('Question')
+  await expect(encrypted.getByTitle('Set by you')).toHaveText('Question')
 
   await replies.getByRole('button', { name: 'Check now' }).click()
   await expect(replies.getByRole('status')).toHaveText('No chats to check')

@@ -1,14 +1,27 @@
-import { ConflictException, Injectable } from '@nestjs/common'
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
 import { DataSource, In, IsNull } from 'typeorm'
 import { Prospect } from '../discovery/entities'
-import { AttemptStatus, Contact, Draft, SendAttempt, XUser } from '../sending/entities'
+import { AttemptStatus, Contact, DoNotContact, Draft, SendAttempt, XUser } from '../sending/entities'
 import { CheckItem, ConfirmBody, DeliveredItem, InboxChecks, ReplyItem } from './contract'
+import { ClassBy, ENDS_CONTACT, NO_ACTION, ReplyClass } from './reply-class'
 import { Reply } from './reply.entity'
 
 const TO_CHECK: AttemptStatus[] = ['manual_unverified', 'needs_decision']
 
 type Row = { id: number; status: AttemptStatus; verifiedBy: 'api' | 'operator' | null; at: Date; xUserId: string; handle: string | null; name: string | null; text: string; replied: number | string }
-type ReplyRow = { replyId: number; theirText: string | null; at: Date; handledAt: Date | null; xUserId: string; handle: string | null; name: string | null; ourText: string }
+type ReplyRow = {
+  replyId: number
+  theirText: string | null
+  at: Date
+  handledAt: Date | null
+  replyClass: ReplyClass | null
+  classBy: ClassBy | null
+  dnc: number | string
+  xUserId: string
+  handle: string | null
+  name: string | null
+  ourText: string
+}
 
 const openInX = (xUserId: string) => `https://x.com/messages/compose?recipient_id=${xUserId}`
 
@@ -47,6 +60,19 @@ export class InboxService {
     if (!res.affected) throw new ConflictException('This reply is not waiting to be handled')
   }
 
+  // Moving a reply out of Opt-out does not lift Do not contact: spec s8 wants a reason and a log entry for that.
+  async setClass(replyId: number, replyClass: ReplyClass): Promise<void> {
+    await this.ds.transaction(async (em) => {
+      const reply = await em.findOne(Reply, { where: { id: replyId }, lock: { mode: 'pessimistic_write' } })
+      if (!reply) throw new NotFoundException('Reply not found')
+      const closes = NO_ACTION.includes(replyClass) && reply.handledAt === null
+      await em.update(Reply, reply.id, { replyClass, classBy: 'operator', ...(closes ? { handledAt: new Date() } : {}) })
+      if (!ENDS_CONTACT.includes(replyClass)) return
+      const { xUserId } = await em.findOneByOrFail(Contact, { id: reply.contactId })
+      await em.createQueryBuilder().insert().into(DoNotContact).values({ xUserId, reason: `Reply marked ${replyClass}`, source: 'operator' }).orIgnore().execute()
+    })
+  }
+
   // The operator looked at the chat in X. Encrypted chats hide hand-sent messages from the API, so their word decides.
   async confirm(attemptId: number, outcome: ConfirmBody['outcome']): Promise<void> {
     await this.ds.transaction(async (em) => {
@@ -70,8 +96,12 @@ export class InboxService {
       .innerJoin(Prospect, 'p', 'p.id = d.prospectId AND p.campaignId = :campaignId', { campaignId })
       .innerJoin(Contact, 'c', 'c.id = r.contactId')
       .leftJoin(XUser, 'u', 'u.xUserId = c.xUserId')
-      .select(['r.id AS replyId', 'r.text AS theirText', 'r.at AS at', 'r.handledAt AS handledAt', 'c.xUserId AS xUserId', 'u.handle AS handle', 'u.name AS name', 'd.content AS ourText'])
-      .orderBy('r.at', 'DESC')
+      .leftJoin(DoNotContact, 'n', 'n.xUserId = c.xUserId')
+      .select(['r.id AS replyId', 'r.text AS theirText', 'r.at AS at', 'r.handledAt AS handledAt', 'r.replyClass AS replyClass', 'r.classBy AS classBy', 'c.xUserId AS xUserId', 'u.handle AS handle', 'u.name AS name', 'd.content AS ourText'])
+      .addSelect('n.xUserId IS NOT NULL', 'dnc')
+      .orderBy('r.handledAt IS NULL', 'DESC')
+      .addOrderBy("CASE r.replyClass WHEN 'Interested' THEN 0 WHEN 'Question' THEN 1 ELSE 2 END", 'ASC')
+      .addOrderBy('r.at', 'DESC')
       .addOrderBy('r.id', 'DESC')
       .getRawMany<ReplyRow>()
     return rows.map((r) => ({
@@ -82,6 +112,9 @@ export class InboxService {
       ourText: r.ourText,
       at: new Date(r.at).toISOString(),
       handled: r.handledAt !== null,
+      replyClass: r.replyClass,
+      classBy: r.classBy,
+      doNotContact: Number(r.dnc) === 1,
       openInX: openInX(r.xUserId),
     }))
   }

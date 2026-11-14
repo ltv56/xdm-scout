@@ -1,10 +1,10 @@
 import 'reflect-metadata'
-import { ConflictException } from '@nestjs/common'
+import { ConflictException, NotFoundException } from '@nestjs/common'
 import { DataSource } from 'typeorm'
 import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 import { Campaign, Prospect } from '../discovery/entities'
 import { JobsService } from '../jobs/jobs.service'
-import { AttemptStatus, Contact, Draft, SendAttempt } from '../sending/entities'
+import { AttemptStatus, Contact, DoNotContact, Draft, SendAttempt } from '../sending/entities'
 import { SendingService } from '../sending/sending.service'
 import { createTestDataSource } from '../test/db'
 import { seedDraft, sha } from '../test/seed'
@@ -80,6 +80,56 @@ describe('replies', () => {
       ['u202', true],
       ['u201', true],
     ])
+  })
+
+  it('puts open Interested, then Question replies first, and shows the class and Do not contact', async () => {
+    const a = await seedAttempt(1, '201', 'sent', 'api')
+    const b = await seedAttempt(1, '202', 'sent', 'api')
+    const c = await seedAttempt(1, '203', 'sent', 'api')
+    const d = await seedAttempt(1, '204', 'sent', 'api')
+    const at = (h: number) => new Date(`2026-11-14T0${h}:00:00Z`)
+    const reply = (s: typeof a, h: number, extra: Partial<Reply>) => ({ contactId: s.draft.contactId, attemptId: s.attempt.id, xEventId: `e${h}`, text: 't', source: 'api' as const, at: at(h), ...extra })
+    await ds.getRepository(Reply).save([
+      reply(a, 4, { replyClass: 'Unclear', classBy: 'llm' }),
+      reply(b, 1, { replyClass: 'Interested', classBy: 'llm' }),
+      reply(c, 3, { replyClass: 'Question', classBy: 'llm' }),
+      reply(d, 5, { replyClass: 'Opt-out', classBy: 'rule', handledAt: at(5) }),
+    ])
+    await ds.getRepository(DoNotContact).save({ xUserId: '204', reason: 'Replied: Opt-out', source: 'reply' })
+
+    const res = await inbox.checks(1)
+
+    expect(res.replies.map((r) => [r.handle, r.replyClass, r.classBy, r.doNotContact])).toEqual([
+      ['u202', 'Interested', 'llm', false],
+      ['u203', 'Question', 'llm', false],
+      ['u201', 'Unclear', 'llm', false],
+      ['u204', 'Opt-out', 'rule', true],
+    ])
+  })
+
+  it('the operator can change the class; Opt-out puts them on Do not contact and closes the reply', async () => {
+    const a = await seedAttempt(1, '201', 'sent', 'api')
+    const reply = await ds.getRepository(Reply).save({ contactId: a.draft.contactId, attemptId: a.attempt.id, source: 'operator', at: new Date() })
+
+    await inbox.setClass(reply.id, 'Opt-out')
+
+    expect(await ds.getRepository(Reply).findOneByOrFail({ id: reply.id })).toMatchObject({ replyClass: 'Opt-out', classBy: 'operator', handledAt: expect.any(Date) })
+    expect(await ds.getRepository(DoNotContact).find()).toEqual([expect.objectContaining({ xUserId: '201', source: 'operator', reason: 'Reply marked Opt-out' })])
+  })
+
+  it('moving a reply out of Opt-out keeps the person on Do not contact', async () => {
+    const a = await seedAttempt(1, '201', 'sent', 'api')
+    const reply = await ds.getRepository(Reply).save({ contactId: a.draft.contactId, attemptId: a.attempt.id, xEventId: 'e1', text: 'stop', source: 'api', at: new Date(), replyClass: 'Opt-out', classBy: 'rule' })
+    await ds.getRepository(DoNotContact).save({ xUserId: '201', reason: 'Replied: Opt-out', source: 'reply' })
+
+    await inbox.setClass(reply.id, 'Interested')
+
+    const [item] = (await inbox.checks(1)).replies
+    expect(item).toMatchObject({ replyClass: 'Interested', classBy: 'operator', doNotContact: true })
+  })
+
+  it('refuses an unknown reply', async () => {
+    await expect(inbox.setClass(9999, 'Question')).rejects.toBeInstanceOf(NotFoundException)
   })
 
   it('"Mark handled" keeps the reply but marks it done, once', async () => {

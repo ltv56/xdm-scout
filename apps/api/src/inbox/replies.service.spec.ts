@@ -3,8 +3,9 @@ import { ConflictException } from '@nestjs/common'
 import { DataSource } from 'typeorm'
 import { afterAll, beforeEach, describe, expect, it } from 'vitest'
 import { ApiUsage, Campaign, Prospect } from '../discovery/entities'
+import { FakeLlmClient } from '../llm/fake-llm-client'
 import { JobsService } from '../jobs/jobs.service'
-import { AttemptStatus, Contact, Draft, SendAttempt } from '../sending/entities'
+import { AttemptStatus, Contact, DoNotContact, Draft, SendAttempt } from '../sending/entities'
 import { SendingService } from '../sending/sending.service'
 import { createTestDataSource } from '../test/db'
 import { seedDraft, sha } from '../test/seed'
@@ -18,6 +19,7 @@ const HOUR = 60 * MIN
 let ds: DataSource
 let x: FakeXClient
 let replies: RepliesService
+let llmAnswer: unknown
 
 async function seedSent(xUserId: string, sentAt: Date, status: AttemptStatus = 'sent') {
   if (!(await ds.getRepository(Campaign).findOneBy({ id: 1 }))) {
@@ -35,7 +37,8 @@ async function seedSent(xUserId: string, sentAt: Date, status: AttemptStatus = '
 beforeEach(async () => {
   ds = await createTestDataSource()
   x = new FakeXClient()
-  replies = new RepliesService(ds, x, new JobsService(ds))
+  llmAnswer = { class: 'Unclear', probability: 0.5 }
+  replies = new RepliesService(ds, x, new JobsService(ds), new FakeLlmClient(() => llmAnswer))
 })
 
 afterAll(async () => {
@@ -163,6 +166,43 @@ describe('read', () => {
     await x.sendDm('201', 'Hi 201')
     await replies.read(contactId, new Date('2026-11-14T01:00:00Z'))
     expect(await ds.getRepository(ApiUsage).find()).toEqual([expect.objectContaining({ campaignId: 1, kind: 'dm_event', count: 1, costMicros: 10_000 })])
+  })
+})
+
+describe('read: reply class', () => {
+  async function replyWith(text: string) {
+    const { contactId } = await seedSent('201', new Date('2026-11-14T00:00:00Z'))
+    x.priorMessage('201', text, new Date('2026-11-14T00:40:00Z'))
+    await replies.read(contactId, new Date('2026-11-14T01:00:00Z'))
+    return ds.getRepository(Reply).findOneByOrFail({ contactId })
+  }
+
+  it('marks a stop request Opt-out by rule, puts them on Do not contact and closes the reply', async () => {
+    llmAnswer = { class: 'Interested', probability: 0.99 }
+    const reply = await replyWith('Please stop messaging me')
+    expect(reply).toMatchObject({ replyClass: 'Opt-out', classBy: 'rule' })
+    expect(reply.handledAt).not.toBeNull()
+    expect(await ds.getRepository(DoNotContact).find()).toEqual([expect.objectContaining({ xUserId: '201', source: 'reply', reason: 'Replied: Opt-out' })])
+  })
+
+  it('keeps an Interested reply open and off the list', async () => {
+    llmAnswer = { class: 'Interested', probability: 0.9 }
+    const reply = await replyWith('Would love to talk')
+    expect(reply).toMatchObject({ replyClass: 'Interested', classBy: 'llm', handledAt: null })
+    expect(await ds.getRepository(DoNotContact).count()).toBe(0)
+  })
+
+  it('puts Not interested on the list and only records Not now', async () => {
+    llmAnswer = { class: 'Not interested', probability: 0.9 }
+    expect((await replyWith('Not for me, thanks')).handledAt).not.toBeNull()
+    expect(await ds.getRepository(DoNotContact).findOneBy({ xUserId: '201' })).toMatchObject({ reason: 'Replied: Not interested' })
+
+    llmAnswer = { class: 'Not now', probability: 0.9 }
+    const { contactId } = await seedSent('202', new Date('2026-11-14T00:00:00Z'))
+    x.priorMessage('202', 'Maybe next quarter', new Date('2026-11-14T00:40:00Z'))
+    await replies.read(contactId, new Date('2026-11-14T01:00:00Z'))
+    expect((await ds.getRepository(Reply).findOneByOrFail({ contactId })).handledAt).not.toBeNull()
+    expect(await ds.getRepository(DoNotContact).existsBy({ xUserId: '202' })).toBe(false)
   })
 })
 

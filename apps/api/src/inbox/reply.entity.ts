@@ -1,4 +1,5 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
+import type { ClassBy, ReplyClass } from './reply-class'
 
 // A reply to one of our sends. source=operator: they replied in an encrypted chat the API can't read, so there is no text.
 @Entity('replies')
@@ -28,4 +29,10 @@ export class Reply {
 
   @Column({ type: 'datetime', precision: 3, nullable: true })
   handledAt!: Date | null
+
+  @Column({ type: 'varchar', length: 16, nullable: true })
+  replyClass!: ReplyClass | null
+
+  @Column({ type: 'varchar', length: 8, nullable: true })
+  classBy!: ClassBy | null
 }

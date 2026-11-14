@@ -1,13 +1,25 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { CheckItem, DeliveredItem, InboxChecks, ReplyItem } from '../../api/src/inbox/contract'
+import { ENDS_CONTACT, REPLY_CLASSES, type ClassBy, type ReplyClass } from '../../api/src/inbox/reply-class'
 import { getJson, postJson } from './api'
 import { XLogo } from './icons'
-import { btnApprove, btnSecondary, btnToolbar, card, chip, money, tone } from './ui'
+import { btnApprove, btnSecondary, btnToolbar, card, chip, money, tone, type Tone } from './ui'
 
 const REASON: Record<CheckItem['reason'], string> = {
   sent_by_hand: "You marked this as sent in X. X's API can't see messages in encrypted chats, so check it there.",
   not_confirmed: "X didn't confirm this send. Check the chat in X before anything is sent again.",
 }
+
+const CLASS_TONE: Record<ReplyClass, Tone> = {
+  Interested: 'ok',
+  Question: 'warn',
+  'Not now': 'done',
+  'Not interested': 'stop',
+  'Opt-out': 'stop',
+  Unclear: 'done',
+}
+
+const CLASS_BY: Record<ClassBy, string> = { rule: 'They asked to stop', llm: 'Sorted automatically', operator: 'Set by you' }
 
 export default function Inbox({ campaignId }: { campaignId: number }) {
   const checks = useQuery<InboxChecks>({ queryKey: ['inbox-checks', campaignId], queryFn: () => getJson(`/inbox/checks?campaignId=${campaignId}`) })
@@ -110,11 +122,23 @@ function ReplyCard({ item, campaignId }: { item: ReplyItem; campaignId: number }
     mutationFn: () => postJson(`/replies/${item.replyId}/handled`, {}),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['inbox-checks', campaignId] }),
   })
+  const setClass = useMutation({
+    mutationFn: (replyClass: ReplyClass) => postJson(`/replies/${item.replyId}/class`, { replyClass }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['inbox-checks', campaignId] }),
+  })
   return (
     <li className={`${card} p-5 ${item.handled ? 'opacity-60' : ''}`} aria-label={`Reply from @${item.handle}`}>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Person item={item} />
-        {item.handled && <span className={`${chip} ${tone.done.chip}`}>Handled</span>}
+        <span className="flex flex-wrap items-center gap-2">
+          {item.replyClass && (
+            <span className={`${chip} ${tone[CLASS_TONE[item.replyClass]].chip}`} title={item.classBy ? CLASS_BY[item.classBy] : undefined}>
+              {item.replyClass}
+            </span>
+          )}
+          {item.doNotContact && <span className={`${chip} ${tone.stop.chip}`}>Do not contact</span>}
+          {item.handled && <span className={`${chip} ${tone.done.chip}`}>Handled</span>}
+        </span>
       </div>
       {item.theirText === null ? (
         <p className="mt-3 text-sm">They replied in an encrypted chat. Read it in X.</p>
@@ -133,10 +157,26 @@ function ReplyCard({ item, campaignId }: { item: ReplyItem; campaignId: number }
             Mark handled
           </button>
         )}
+        <label className="ml-auto flex items-center gap-2 text-sm text-muted">
+          Class
+          <select
+            className="rounded-lg border border-rule bg-raised px-2 py-1.5 text-sm text-ink"
+            value={item.replyClass ?? ''}
+            disabled={setClass.isPending}
+            onChange={(e) => setClass.mutate(e.target.value as ReplyClass)}
+          >
+            {item.replyClass === null && <option value="">Not sorted</option>}
+            {REPLY_CLASSES.map((c) => (
+              <option key={c} value={c}>
+                {ENDS_CONTACT.includes(c) ? `${c} (Do not contact)` : c}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
-      {handled.error && (
+      {(handled.error ?? setClass.error) && (
         <p role="alert" className="mt-2 text-sm font-medium text-block">
-          {handled.error.message}
+          {(handled.error ?? setClass.error)?.message}
         </p>
       )}
     </li>

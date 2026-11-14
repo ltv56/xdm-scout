@@ -3,8 +3,10 @@ import { DataSource } from 'typeorm'
 import { ApiUsage, Prospect } from '../discovery/entities'
 import { PRICES } from '../discovery/pricing'
 import { JobsService } from '../jobs/jobs.service'
-import { Contact, Draft, SendAttempt } from '../sending/entities'
+import { LLM_CLIENT, LlmClient } from '../llm/llm-client'
+import { Contact, DoNotContact, Draft, SendAttempt } from '../sending/entities'
 import { X_CLIENT, XClient } from '../x/x-client'
+import { classifyReply, ENDS_CONTACT, NO_ACTION } from './reply-class'
 import { Reply } from './reply.entity'
 
 const MIN = 60_000
@@ -23,6 +25,7 @@ export class RepliesService {
     private readonly ds: DataSource,
     @Inject(X_CLIENT) private readonly x: XClient,
     private readonly jobs: JobsService,
+    @Inject(LLM_CLIENT) private readonly llm: LlmClient,
   ) {}
 
   async due(now: Date): Promise<number[]> {
@@ -69,13 +72,19 @@ export class RepliesService {
     const [newest] = await this.x.getConversation(p.xUserId, 1)
     if (newest) await this.ds.getRepository(ApiUsage).save({ campaignId: p.campaignId, kind: 'dm_event', count: 1, costMicros: PRICES.dm_event })
     if (newest && !newest.fromMe && newest.createdAt >= p.sentAt) {
-      await this.ds
-        .createQueryBuilder()
-        .insert()
-        .into(Reply)
-        .values({ contactId, attemptId: p.attemptId, xEventId: newest.eventId, text: newest.text, source: 'api', at: newest.createdAt })
-        .orIgnore()
-        .execute()
+      const { replyClass, classBy } = await classifyReply(this.llm, newest.text)
+      await this.ds.transaction(async (em) => {
+        const res = await em
+          .createQueryBuilder()
+          .insert()
+          .into(Reply)
+          .values({ contactId, attemptId: p.attemptId, xEventId: newest.eventId, text: newest.text, source: 'api', at: newest.createdAt, replyClass, classBy, handledAt: NO_ACTION.includes(replyClass) ? now : null })
+          .orIgnore()
+          .execute()
+        if (res.raw.affectedRows && ENDS_CONTACT.includes(replyClass)) {
+          await em.createQueryBuilder().insert().into(DoNotContact).values({ xUserId: p.xUserId, reason: `Replied: ${replyClass}`, source: 'reply' }).orIgnore().execute()
+        }
+      })
     }
     await this.ds.getRepository(Contact).update(contactId, { repliesReadAt: now })
   }

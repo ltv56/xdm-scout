@@ -1,9 +1,10 @@
 import { BadRequestException, Body, Controller, Get, NotFoundException, Param, ParseIntPipe, Post, Query } from '@nestjs/common'
 import { DataSource } from 'typeorm'
 import { Campaign } from '../discovery/entities'
-import { confirmBody } from './contract'
+import { confirmBody, replyClassBody } from './contract'
 import { InboxService } from './inbox.service'
 import { RepliesService } from './replies.service'
+import { REPLY_CLASSES } from './reply-class'
 
 @Controller()
 export class InboxController {
@@ -26,6 +27,14 @@ export class InboxController {
   @Post('replies/:id/handled')
   async handled(@Param('id', ParseIntPipe) id: number) {
     await this.inbox.markHandled(id)
+    return { ok: true }
+  }
+
+  @Post('replies/:id/class')
+  async setClass(@Param('id', ParseIntPipe) id: number, @Body() body: unknown) {
+    const r = replyClassBody.safeParse(body)
+    if (!r.success) throw new BadRequestException(`replyClass must be one of: ${REPLY_CLASSES.join(', ')}`)
+    await this.inbox.setClass(id, r.data.replyClass)
     return { ok: true }
   }
 

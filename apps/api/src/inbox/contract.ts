@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { REPLY_CLASSES } from './reply-class'
 
 // sent_by_hand: the operator said they sent it, the API can't see it. not_confirmed: an API send X never confirmed.
 export const checkReason = z.enum(['sent_by_hand', 'not_confirmed'])
@@ -16,11 +17,17 @@ export const replyItem = z.object({
   ourText: z.string(),
   at: z.string(),
   handled: z.boolean(),
+  // null: not sorted yet (operator replies have no text to sort).
+  replyClass: z.enum(REPLY_CLASSES).nullable(),
+  classBy: z.enum(['rule', 'llm', 'operator']).nullable(),
+  doNotContact: z.boolean(),
   openInX: z.string(),
 })
 export const inboxChecks = z.object({ replies: z.array(replyItem), toCheck: z.array(checkItem), delivered: z.array(deliveredItem) })
 
-export const confirmBody = z.object({ outcome: z.enum(['sent', 'not_sent']) })
+export const replyClassBody = z.object({ replyClass: z.enum(REPLY_CLASSES) })
+
+export const confirmBody =z.object({ outcome: z.enum(['sent', 'not_sent']) })
 
 export type CheckItem = z.infer<typeof checkItem>
 export type DeliveredItem = z.infer<typeof deliveredItem>
