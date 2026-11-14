@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { DataSource } from 'typeorm'
+import { HealthDetailsController, PreflightController } from './preflight/preflight.controller'
+import { PreflightService } from './preflight/preflight.service'
 import { AuthController } from './auth/auth.controller'
 import { AuthService, X_AUTH_CONFIG, XAuthConfig } from './auth/auth.service'
 import { dataSourceOptions } from './data-source'
@@ -49,6 +52,8 @@ const aiEnv = (config: ConfigService) => Object.fromEntries(AI_VARS.map((k) => [
     AuthController,
     CampaignsController,
     InboxController,
+    PreflightController,
+    HealthDetailsController,
   ],
   providers: [
     JobsService,
@@ -74,6 +79,11 @@ const aiEnv = (config: ConfigService) => Object.fromEntries(AI_VARS.map((k) => [
     RetentionService,
     InboxService,
     RepliesService,
+    {
+      provide: PreflightService,
+      inject: [DataSource, AuthService, ConfigService],
+      useFactory: (ds: DataSource, auth: AuthService, config: ConfigService) => new PreflightService(ds, auth, config),
+    },
     {
       provide: LLM_CLIENT,
       inject: [ConfigService],
