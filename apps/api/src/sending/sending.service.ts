@@ -139,7 +139,7 @@ export class SendingService {
     // Outside the try: if saving fails after X accepted, the attempt stays `sending` and recovery reconciles it.
     await this.ds
       .getRepository(SendAttempt)
-      .update(attemptId, { status: 'sent', xConversationId: sent.conversationId, xEventId: sent.eventId })
+      .update(attemptId, { status: 'sent', verifiedBy: 'api', xConversationId: sent.conversationId, xEventId: sent.eventId })
   }
 
   async recoverStale(now: Date): Promise<void> {
@@ -157,7 +157,7 @@ export class SendingService {
     const messages = await this.x.getConversation(contact.xUserId, RECONCILE_READ_MAX)
     const since = Math.floor(attempt.createdAt.getTime() / 1000) * 1000
     const found = messages.find((m) => m.fromMe && m.text === draft.content && m.createdAt.getTime() >= since)
-    if (found) await this.ds.getRepository(SendAttempt).update(attemptId, { status: 'sent', xConversationId: found.conversationId, xEventId: found.eventId })
+    if (found) await this.ds.getRepository(SendAttempt).update(attemptId, { status: 'sent', verifiedBy: 'api', xConversationId: found.conversationId, xEventId: found.eventId })
   }
 
   async reconcile(attemptId: number, now: Date): Promise<void> {
@@ -173,7 +173,7 @@ export class SendingService {
     if (found) {
       await this.ds
         .getRepository(SendAttempt)
-        .update(attemptId, { status: 'sent', xConversationId: found.conversationId, xEventId: found.eventId })
+        .update(attemptId, { status: 'sent', verifiedBy: 'api', xConversationId: found.conversationId, xEventId: found.eventId })
       return
     }
     const waited = now.getTime() - (attempt.unknownAt ?? now).getTime()

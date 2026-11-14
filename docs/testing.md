@@ -182,9 +182,42 @@ curl -XPOST $B/drafts/1/approve -H "$J" -d '{"contentHash":"<contentHash from th
 - A stale `contentHash` answers `409`; a draft with a blocking check answers `409` until it is edited.
 - Skip, dismiss, approve, regenerate and Do not contact add a row to `review_signals` (no handle).
 
+## Inbox: Check in X
+
+After approving drafts as above:
+
+```
+curl -XPOST $B/drafts/1/manual -H "$J" -d '{"outcome":"sent"}'  # "I sent it": the send waits in Check in X
+curl "$B/inbox/checks?campaignId=1"                               # {"toCheck":[...],"delivered":[...]}
+curl -XPOST $B/send-attempts/1/confirm -H "$J" -d '{"outcome":"sent"}'      # Delivered, verifiedBy "operator"
+curl -XPOST $B/send-attempts/2/confirm -H "$J" -d '{"outcome":"not_sent"}'  # draft goes back to Review
+```
+
+- Check in X lists sends marked as sent by hand that the API has not seen, and API sends X never confirmed (`needs_decision`).
+- Confirming a send that is not waiting for a check answers `409`.
+
+## Inbox: replies
+
+The worker reads each delivered chat: every 30 min for the first 6 h after the send, then every 3 h, and stops after 3 days or at the first reply. It queues at most one read per minute. Each read asks X for the newest message only and adds one `dm_event` row to `api_usage`.
+
+```
+curl "$B/inbox/checks?campaignId=1"            # "replies":[{replyId, theirText, ourText, handled, replyClass, classBy, doNotContact, openInX}], delivered[].replied
+curl -XPOST $B/replies/1/handled               # handled; 409 the second time
+curl -XPOST $B/replies/1/class -H 'content-type: application/json' -d '{"replyClass":"Opt-out"}'   # classBy operator; Not interested / Opt-out add do_not_contact; 400 unknown class, 404 unknown reply
+curl -XPOST "$B/inbox/check-now?campaignId=1"  # {"queued":N,"estimatedMicros":N*10000}; the worker reads those chats now
+curl -XPOST $B/send-attempts/1/replied         # "They replied": reply without text for an encrypted chat; 409 if not delivered or already replied
+docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT id, repliesReadAt FROM contacts; SELECT * FROM jobs WHERE type = 'read_replies'"
+docker exec xdm-scout-db-1 mysql -uxdm -pxdm xdm -e "SELECT id, replyClass, classBy, handledAt FROM replies; SELECT * FROM do_not_contact"
+```
+
+- Each reply with text gets a class when it is stored. A stop phrase (stop messaging, unsubscribe, remove me, don't message, leave me alone) is `Opt-out` by rule, with no LLM call. Anything else goes to the LLM (task `reply`). Below 0.7, or bad JSON twice, it is `Unclear`. In fake mode with no LLM key, every reply the rule does not catch is `Unclear`.
+- `Not interested` and `Opt-out` add the person to `do_not_contact` (source `reply`) and close the reply. `Not now` closes it. Open replies list Interested first, then Question.
+- The operator can change the class on the card. Moving a reply out of `Not interested` or `Opt-out` keeps the person in `do_not_contact`.
+- The fake X keeps its messages in the worker's memory, so a fake reply cannot be sent from outside. The browser test writes a row into `replies` instead.
+
 ## Browser walkthroughs (web)
 
-Playwright in `apps/web/e2e` with its own `package.json` and `node_modules`: New campaign, Candidates, Review, a phone-sized screen, and the error and empty states. It drives the installed Edge, so no browser is downloaded. The API and the worker run in fake mode on the database `xdm_e2e`:
+Playwright in `apps/web/e2e` with its own `package.json` and `node_modules`: New campaign, Candidates, Review, Inbox, a phone-sized screen, and the error and empty states. It drives the installed Edge, so no browser is downloaded. The API and the worker run in fake mode on the database `xdm_e2e`:
 
 ```
 docker exec xdm-scout-db-1 mysql -uxdm -pxdm -e "CREATE DATABASE IF NOT EXISTS xdm_e2e"   # once
@@ -200,7 +233,8 @@ E2E_API_URL=http://localhost:3021 npm run e2e
 
 - Before the tests, `global-setup.ts` empties every table of `E2E_DATABASE_URL` (default `xdm_e2e`) except `migrations`. It refuses a database whose name does not end in `_e2e`.
 - The tests create the `robotics demo` campaign through the API and wait for discovery and scoring on the fake X.
-- Review and the phone-sized test each create their own campaign, connect the fake sender (`POST /api/auth/x/fake`) and wait for the worker to write the drafts.
+- Review, Inbox and the phone-sized test each create their own campaign, connect the fake sender (`POST /api/auth/x/fake`) and wait for the worker to write the drafts.
+- Inbox empties the database again when it ends: it marks people as sent, and the fake X has only three people to draft for. Its reply tests write rows into `replies` and `do_not_contact` directly.
 - Vite starts on port 3020 (`E2E_WEB_PORT`) and proxies `/api` to `E2E_API_URL`.
 
 ## Automated tests

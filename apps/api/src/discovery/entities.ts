@@ -79,7 +79,7 @@ export class ApiUsage {
   campaignId!: number
 
   @Column({ type: 'varchar', length: 16 })
-  kind!: 'profile' | 'post' | 'following' | 'search'
+  kind!: 'profile' | 'post' | 'following' | 'search' | 'dm_event'
 
   @Column({ type: 'int' })
   count!: number

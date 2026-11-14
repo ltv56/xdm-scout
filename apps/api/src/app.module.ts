@@ -9,6 +9,9 @@ import { CampaignsController } from './discovery/campaigns.controller'
 import { DiscoveryService } from './discovery/discovery.service'
 import { ProspectsService } from './discovery/prospects.service'
 import { FitService } from './fit/fit.service'
+import { InboxController } from './inbox/inbox.controller'
+import { InboxService } from './inbox/inbox.service'
+import { RepliesService } from './inbox/replies.service'
 import { JobsService } from './jobs/jobs.service'
 import { DECISION_CLIENT } from './decisions/review-decisions'
 import { createDecisionClient, createLlmClient } from './llm/ai-config'
@@ -45,6 +48,7 @@ const aiEnv = (config: ConfigService) => Object.fromEntries(AI_VARS.map((k) => [
     ReviewController,
     AuthController,
     CampaignsController,
+    InboxController,
   ],
   providers: [
     JobsService,
@@ -68,6 +72,8 @@ const aiEnv = (config: ConfigService) => Object.fromEntries(AI_VARS.map((k) => [
     ReviewService,
     ReviewActionsService,
     RetentionService,
+    InboxService,
+    RepliesService,
     {
       provide: LLM_CLIENT,
       inject: [ConfigService],
