@@ -17,6 +17,13 @@ export type XAuthConfig = {
 
 export type XSession = { userId: string; token: string }
 
+export type XAccountStatus = {
+  connected: boolean
+  handle: string | null
+  tokenExpiresAt: Date | null
+  missingScopes: string[]
+}
+
 const SCOPE = 'dm.read dm.write tweet.read users.read follows.read offline.access'
 const REFRESH_MARGIN_MS = 120_000
 const FAKE_SENDER_ID = '1000000000000000001'
@@ -78,6 +85,20 @@ export class AuthService {
   async connectFake(): Promise<SenderAccount> {
     const repo = this.ds.getRepository(SenderAccount)
     return (await repo.findOneBy({ xUserId: FAKE_SENDER_ID })) ?? repo.save({ xUserId: FAKE_SENDER_ID, handle: 'sandbox_sender' })
+  }
+
+  async status(mode: string): Promise<XAccountStatus> {
+    const account = await this.ds.getRepository(SenderAccount).findOne({ where: {}, order: { id: 'ASC' } })
+    const none = { connected: false, handle: null, tokenExpiresAt: null, missingScopes: [] }
+    if (!account) return none
+    if (!account.accessTokenEnc) return mode === 'fake' ? { ...none, connected: true, handle: account.handle } : none
+    const granted = (account.scope ?? '').split(' ')
+    return {
+      connected: true,
+      handle: account.handle,
+      tokenExpiresAt: account.tokenExpiresAt,
+      missingScopes: SCOPE.split(' ').filter((s) => !granted.includes(s)),
+    }
   }
 
   async session(now = new Date()): Promise<XSession> {

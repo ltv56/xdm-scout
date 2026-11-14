@@ -19,3 +19,23 @@ describe('AuthController fake login', () => {
     await expect(new AuthController(auth, mode('live')).fake()).rejects.toBeInstanceOf(NotFoundException)
   })
 })
+
+describe('AuthController status', () => {
+  it('adds the mode to the account status', async () => {
+    const seen: string[] = []
+    const auth = {
+      status: async (m: string) => {
+        seen.push(m)
+        return { connected: true, handle: 'sandbox_sender', tokenExpiresAt: null, missingScopes: [] }
+      },
+    } as unknown as AuthService
+    expect(await new AuthController(auth, mode('fake')).status()).toEqual({
+      mode: 'fake',
+      connected: true,
+      handle: 'sandbox_sender',
+      tokenExpiresAt: null,
+      missingScopes: [],
+    })
+    expect(seen).toEqual(['fake'])
+  })
+})

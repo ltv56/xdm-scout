@@ -15,6 +15,12 @@ export class AuthController {
     return { url: this.auth.loginUrl() }
   }
 
+  @Get('status')
+  async status() {
+    const mode = this.config.get<string>('X_MODE', 'fake')
+    return { mode, ...(await this.auth.status(mode)) }
+  }
+
   @Get('callback')
   async callback(@Query('code') code?: string, @Query('state') state?: string) {
     if (!code || !state) throw new BadRequestException('Missing code or state')

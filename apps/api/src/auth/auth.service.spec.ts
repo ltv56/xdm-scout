@@ -113,4 +113,24 @@ describe('AuthService', () => {
     expect(rows[0]).toMatchObject({ handle: 'sandbox_sender', accessTokenEnc: null })
     expect(calls).toHaveLength(0)
   })
+
+  describe('status', () => {
+    it('reports no account', async () => {
+      expect(await service.status('live')).toEqual({ connected: false, handle: null, tokenExpiresAt: null, missingScopes: [] })
+    })
+
+    it('counts the made-up sender as connected only in fake mode', async () => {
+      await service.connectFake()
+      expect(await service.status('fake')).toMatchObject({ connected: true, handle: 'sandbox_sender' })
+      expect(await service.status('live')).toMatchObject({ connected: false })
+    })
+
+    it('lists scopes the stored token lacks', async () => {
+      await connect()
+      const s = await service.status('live')
+      expect(s).toMatchObject({ connected: true, handle: 'leviath' })
+      expect(s.tokenExpiresAt).toBeInstanceOf(Date)
+      expect(s.missingScopes).toEqual(['tweet.read', 'users.read', 'follows.read', 'offline.access'])
+    })
+  })
 })

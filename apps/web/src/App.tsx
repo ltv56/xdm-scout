@@ -3,6 +3,7 @@ import { useState } from 'react'
 import type { CampaignSummary, ReviewQueue as Queue, SenderProfile as Profile } from '../../api/src/review/contract'
 import { getJson } from './api'
 import Account from './Account'
+import AccountMenu from './AccountMenu'
 import CampaignPicker from './CampaignPicker'
 import { User as UserIcon } from './icons'
 import Inbox from './Inbox'
@@ -10,6 +11,7 @@ import NewCampaign from './NewCampaign'
 import Overview from './Overview'
 import Prospects, { type Filter as CandidateFilter } from './Prospects'
 import ReviewQueue from './review/ReviewQueue'
+import Settings from './Settings'
 
 interface Health {
   status: string
@@ -21,7 +23,8 @@ const TABS = [
   { id: 'review', label: 'Review' },
   { id: 'inbox', label: 'Inbox' },
   { id: 'prospects', label: 'Candidates' },
-  { id: 'profile', label: 'Account' },
+  { id: 'profile', label: 'Profile' },
+  { id: 'settings', label: 'Settings' },
 ] as const
 type Tab = (typeof TABS)[number]['id']
 
@@ -60,7 +63,7 @@ export default function App() {
       <header className="mx-auto flex w-full max-w-[1280px] shrink-0 flex-wrap items-center gap-x-10 gap-y-2 px-6 py-5 text-sm">
         <span className="text-base font-bold tracking-tight text-ink">xdm-scout</span>
         <nav aria-label="Sections" className="flex flex-wrap gap-x-6">
-          {TABS.filter((t) => t.id !== 'profile').map((t) => (
+          {TABS.filter((t) => t.id !== 'profile' && t.id !== 'settings').map((t) => (
             <button
               key={t.id}
               type="button"
@@ -83,38 +86,32 @@ export default function App() {
             onSelect={(id) => {
               setCampaignId(id)
               setCreating(false)
-              if (tab === 'profile') setTab('overview')
+              if (tab === 'profile' || tab === 'settings') setTab('overview')
             }}
             onNew={() => {
-              if (tab === 'profile') setTab('overview')
+              if (tab === 'profile' || tab === 'settings') setTab('overview')
               setCreating(true)
             }}
           />
           <div className="flex items-center gap-4">
             {(health.error || (health.data && health.data.status !== 'ok')) && <span className="text-xs font-medium text-block">API unreachable</span>}
-            <button
-              type="button"
-              aria-label="Account"
-              title="Account"
-              onClick={() => {
-                setTab('profile')
+            <AccountMenu
+              current={tab === 'profile' || tab === 'settings' ? tab : null}
+              onSelect={(page) => {
+                setTab(page)
                 setCreating(false)
               }}
-              aria-current={tab === 'profile' ? 'page' : undefined}
-              className={`flex size-9 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-ink transition-shadow hover:bg-accent-hover ${tab === 'profile' ? 'ring-2 ring-accent ring-offset-2 ring-offset-paper' : ''}`}
             >
               {initials || <UserIcon className="size-4" />}
-            </button>
+            </AccountMenu>
           </div>
         </div>
       </header>
 
       <main id="main" className="mx-auto w-full max-w-[1280px] px-6 pb-6 lg:min-h-0 lg:flex-1">
         <div className="overflow-hidden rounded-3xl bg-raised shadow-soft lg:h-full lg:min-h-[460px]">
-          {tab === 'profile' ? (
-            <div className={scroll}>
-              <Account />
-            </div>
+          {tab === 'profile' || tab === 'settings' ? (
+            <div className={scroll}>{tab === 'profile' ? <Account /> : <Settings />}</div>
           ) : creating || active === null ? (
             <div className={scroll}>
               <NewCampaign

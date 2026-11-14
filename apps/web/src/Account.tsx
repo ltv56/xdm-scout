@@ -1,10 +1,37 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { getJson, postJson } from './api'
 import SenderProfile from './SenderProfile'
 import { XLogo } from './icons'
 import { btnSecondary } from './ui'
 
-// Static for now: nothing here reads the connection yet. Connecting goes through /api/auth/x/login (docs/testing.md);
-// a status call and a button that starts it are still to build.
+interface XStatus {
+  mode: 'fake' | 'live'
+  connected: boolean
+  handle: string | null
+  tokenExpiresAt: string | null
+  missingScopes: string[]
+}
+
 function XAccount() {
+  const qc = useQueryClient()
+  const status = useQuery<XStatus>({ queryKey: ['x-status'], queryFn: () => getJson('/auth/x/status') })
+  const useSandbox = useMutation({
+    mutationFn: () => postJson('/auth/x/fake'),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['x-status'] }),
+  })
+  const s = status.data
+  const needsReconnect = !!s?.connected && s.missingScopes.length > 0
+  const title = !s ? 'Checking…' : !s.connected ? 'Not connected' : `@${s.handle}`
+  const note = !s
+    ? ''
+    : !s.connected
+      ? 'Sending replies from here is switched off.'
+      : needsReconnect
+        ? `Reconnect to grant: ${s.missingScopes.join(', ')}.`
+        : s.mode === 'fake'
+          ? 'Sandbox sender. No real X account is used.'
+          : 'Connected. Replies to people who messaged first go out from this account.'
+
   return (
     <section aria-label="X account" className="max-w-xl">
       <h3 className="text-xl font-bold">X account</h3>
@@ -13,14 +40,23 @@ function XAccount() {
         <div className="flex items-center gap-3">
           <XLogo className="size-5" />
           <div>
-            <p className="text-sm font-semibold">Not connected</p>
-            <p className="text-xs text-muted">Sending replies from here is switched off.</p>
+            <p className="text-sm font-semibold">{title}</p>
+            <p className="text-xs text-muted">{note}</p>
           </div>
         </div>
-        <button type="button" className={btnSecondary} disabled title="Not built into the app yet">
-          Connect X account
-        </button>
+        {s?.mode === 'live' ? (
+          <a className={btnSecondary} href="/api/auth/x/login">
+            {s.connected ? 'Reconnect X account' : 'Connect X account'}
+          </a>
+        ) : (
+          s && !s.connected && (
+            <button type="button" className={btnSecondary} disabled={useSandbox.isPending} onClick={() => useSandbox.mutate()}>
+              Use sandbox account
+            </button>
+          )
+        )}
       </div>
+      {status.error && <p className="mt-2 text-xs text-block">Could not read the connection: {status.error.message}</p>}
     </section>
   )
 }
@@ -28,7 +64,7 @@ function XAccount() {
 export default function Account() {
   return (
     <div className="space-y-12">
-      <h2 className="text-[28px] font-semibold leading-tight">Account</h2>
+      <h2 className="text-[28px] font-semibold leading-tight">Profile</h2>
       <XAccount />
       <SenderProfile />
     </div>
