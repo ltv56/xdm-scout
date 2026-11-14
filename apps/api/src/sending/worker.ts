@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { DiscoveryService } from '../discovery/discovery.service'
 import { FitService } from '../fit/fit.service'
+import { RepliesService } from '../inbox/replies.service'
 import { JobsService } from '../jobs/jobs.service'
 import { DraftService } from '../review/draft.service'
 import { XRateLimitError } from '../x/x-client'
@@ -14,6 +15,7 @@ export class Worker {
     private readonly discovery: DiscoveryService,
     private readonly fit: FitService,
     private readonly drafts: DraftService,
+    private readonly replies: RepliesService,
   ) {}
 
   async tick(now = new Date()): Promise<boolean> {
@@ -26,6 +28,7 @@ export class Worker {
       else if (job.type === 'score') await this.fit.score(job.payload.prospectId, now)
       else if (job.type === 'verify_manual') await this.sending.verifyManual(job.payload.attemptId)
       else if (job.type === 'draft') await this.drafts.generate(job.payload.prospectId, now)
+      else if (job.type === 'read_replies') await this.replies.read(job.payload.contactId, now)
       else throw new Error(`Unknown job type: ${job.type}`)
       await this.jobs.finish(job.id)
     } catch (err) {

@@ -10,6 +10,7 @@ import { createTestDataSource } from '../test/db'
 import { seedDraft, sha } from '../test/seed'
 import { FakeXClient } from '../x/fake-x-client'
 import { InboxService } from './inbox.service'
+import { Reply } from './reply.entity'
 
 let ds: DataSource
 let x: FakeXClient
@@ -55,6 +56,38 @@ describe('checks', () => {
     ])
     expect(res.toCheck[0]).toMatchObject({ handle: 'u201', text: 'Hi 201', openInX: 'https://x.com/messages/compose?recipient_id=201' })
     expect(res.delivered.map((d) => [d.handle, d.verifiedBy])).toEqual([['u203', 'api']])
+  })
+})
+
+describe('replies', () => {
+  it('lists replies with our sent message, newest first, and flags delivered sends that got one', async () => {
+    const a = await seedAttempt(1, '201', 'sent', 'api')
+    const b = await seedAttempt(1, '202', 'sent', 'api')
+    await seedAttempt(1, '203', 'sent', 'api')
+    await ds.getRepository(Reply).save([
+      { contactId: a.draft.contactId, attemptId: a.attempt.id, xEventId: 'e1', text: 'Tell me more', source: 'api', at: new Date('2026-11-14T01:00:00Z') },
+      { contactId: b.draft.contactId, attemptId: b.attempt.id, source: 'operator', at: new Date('2026-11-14T02:00:00Z') },
+    ])
+
+    const res = await inbox.checks(1)
+
+    expect(res.replies).toEqual([
+      expect.objectContaining({ handle: 'u202', theirText: null, ourText: 'Hi 202', handled: false, openInX: 'https://x.com/messages/compose?recipient_id=202' }),
+      expect.objectContaining({ handle: 'u201', theirText: 'Tell me more', ourText: 'Hi 201', at: '2026-11-14T01:00:00.000Z', handled: false }),
+    ])
+    expect(res.delivered.map((d) => [d.handle, d.replied])).toEqual([
+      ['u203', false],
+      ['u202', true],
+      ['u201', true],
+    ])
+  })
+
+  it('"Mark handled" keeps the reply but marks it done, once', async () => {
+    const a = await seedAttempt(1, '201', 'sent', 'api')
+    const reply = await ds.getRepository(Reply).save({ contactId: a.draft.contactId, attemptId: a.attempt.id, xEventId: 'e1', text: 'Hi', source: 'api', at: new Date() })
+    await inbox.markHandled(reply.id)
+    expect((await inbox.checks(1)).replies.map((r) => r.handled)).toEqual([true])
+    await expect(inbox.markHandled(reply.id)).rejects.toBeInstanceOf(ConflictException)
   })
 })
 

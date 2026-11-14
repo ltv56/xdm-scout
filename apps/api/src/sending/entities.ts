@@ -86,6 +86,9 @@ export class Contact {
 
   @Column({ type: 'int', nullable: true })
   activeAttemptId!: number | null
+
+  @Column({ type: 'datetime', precision: 3, nullable: true })
+  repliesReadAt!: Date | null
 }
 
 export type DraftStatus = 'pending' | 'approved' | 'skipped' | 'superseded'

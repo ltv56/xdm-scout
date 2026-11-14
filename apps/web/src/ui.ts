@@ -18,3 +18,5 @@ export const tone: Record<Tone, { chip: string; text: string }> = {
   stop: { chip: 'bg-block-bg text-block', text: 'text-block' },
   done: { chip: 'bg-rail text-muted', text: 'text-ink' },
 }
+
+export const money = (micros: number) => `$${(micros / 1_000_000).toFixed(2)}`

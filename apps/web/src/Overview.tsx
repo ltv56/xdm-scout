@@ -5,7 +5,7 @@ import { getJson, postJson } from './api'
 import FitBadge from './FitBadge'
 import type { Filter as CandidateFilter, Prospect } from './Prospects'
 import { verdict } from './review/labels'
-import { btnLink, btnPrimary, btnSecondary } from './ui'
+import { btnLink, btnPrimary, btnSecondary, money } from './ui'
 
 interface DiscoveryRun {
   at: string
@@ -26,7 +26,6 @@ interface Campaign extends CampaignLane {
   budgetMicros: number
 }
 
-const money = (micros: number) => `$${(micros / 1_000_000).toFixed(2)}`
 
 function ago(iso: string) {
   const mins = Math.round((Date.now() - new Date(iso).getTime()) / 60_000)
