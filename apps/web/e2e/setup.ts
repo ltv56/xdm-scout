@@ -23,7 +23,7 @@ export async function ensureCampaign(request: APIRequestContext): Promise<number
 }
 
 // A new campaign with drafts written by the worker, so each spec file gets its own pending drafts.
-// Discovery skips people an earlier run approved, so the database must be new for every run.
+// Discovery skips people an earlier run approved; global-setup empties the database so none are left.
 export async function draftCampaign(request: APIRequestContext): Promise<string> {
   if ((await (await request.get('/api/sender-profile')).text()) === '') await request.put('/api/sender-profile', { data: PROFILE })
   expect((await request.post('/api/auth/x/fake')).ok()).toBe(true)
@@ -31,7 +31,7 @@ export async function draftCampaign(request: APIRequestContext): Promise<string>
   const { id } = await (await request.post('/api/campaigns', { data: { ...CAMPAIGN, name } })).json()
   await waitForScoredPeople(request, id)
   const people = await (await request.get(`/api/campaigns/${id}/prospects`)).json()
-  expect(people.length, 'People were approved by an earlier run: recreate the e2e database (docs/testing.md)').toBeGreaterThanOrEqual(3)
+  expect(people.length, 'People were approved by an earlier run: does the API use the database in E2E_DATABASE_URL?').toBeGreaterThanOrEqual(3)
   await request.post(`/api/campaigns/${id}/drafts`, { data: { limit: 10 } })
   await expect(async () => {
     const queue = await (await request.get(`/api/review-queue?campaignId=${id}`)).json()

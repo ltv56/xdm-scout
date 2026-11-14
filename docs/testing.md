@@ -184,10 +184,10 @@ curl -XPOST $B/drafts/1/approve -H "$J" -d '{"contentHash":"<contentHash from th
 
 ## Browser walkthroughs (web)
 
-Playwright in `apps/web/e2e` with its own `package.json` and `node_modules`: New campaign, Candidates, Review, a phone-sized screen, and the error and empty states. It drives the installed Edge, so no browser is downloaded. The API and the worker run in fake mode on a new database `xdm_e2e` for every run:
+Playwright in `apps/web/e2e` with its own `package.json` and `node_modules`: New campaign, Candidates, Review, a phone-sized screen, and the error and empty states. It drives the installed Edge, so no browser is downloaded. The API and the worker run in fake mode on the database `xdm_e2e`:
 
 ```
-docker exec xdm-scout-db-1 mysql -uxdm -pxdm -e "DROP DATABASE IF EXISTS xdm_e2e; CREATE DATABASE xdm_e2e"
+docker exec xdm-scout-db-1 mysql -uxdm -pxdm -e "CREATE DATABASE IF NOT EXISTS xdm_e2e"   # once
 cd apps/api
 export DATABASE_URL='mysql://xdm:xdm@127.0.0.1:3306/xdm_e2e?allowPublicKeyRetrieval=true'
 npx typeorm -d dist/data-source.js migration:run
@@ -198,9 +198,9 @@ npm install                         # once
 E2E_API_URL=http://localhost:3021 npm run e2e
 ```
 
-- The tests create the `robotics demo` campaign through the API when it is missing and wait for discovery and scoring on the fake X.
+- Before the tests, `global-setup.ts` empties every table of `E2E_DATABASE_URL` (default `xdm_e2e`) except `migrations`. It refuses a database whose name does not end in `_e2e`.
+- The tests create the `robotics demo` campaign through the API and wait for discovery and scoring on the fake X.
 - Review and the phone-sized test each create their own campaign, connect the fake sender (`POST /api/auth/x/fake`) and wait for the worker to write the drafts.
-- Discovery skips people an earlier run approved, so a second run on the same database fails with "recreate the e2e database". Run the first four commands again.
 - Vite starts on port 3020 (`E2E_WEB_PORT`) and proxies `/api` to `E2E_API_URL`.
 
 ## Automated tests
