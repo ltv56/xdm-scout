@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import type { SenderProfile as Profile } from '../../api/src/review/contract'
+import type { FramePreview, SenderProfile as Profile } from '../../api/src/review/contract'
 import { Plus } from './icons'
-import { getJson, putJson } from './api'
+import { getJson, postJson, putJson } from './api'
 import { btnPrimary, btnSecondary, field as baseField } from './ui'
 
 const field = `${baseField} mt-1`
@@ -21,12 +21,45 @@ type Draft = { id: number; name: string; description: string; link: string; dead
 const MAX_PROGRAMS = 8
 const isLink = (s: string) => /^https?:\/\/\S+$/.test(s)
 
+// The frame filled in by the API on a sample person called Mai, so what you see is what the code builds.
+function FramePreviewBox({ profile, greeting, optOut, contactLine }: { profile: Profile; greeting: string; optOut: string; contactLine: string }) {
+  const frame = { greeting: greeting || null, optOut: optOut || null, contactLine: contactLine || null }
+  const valid = !greeting || greeting.includes('{name}')
+  const { data, error } = useQuery<FramePreview>({
+    queryKey: ['frame-preview', frame],
+    queryFn: () => postJson('/sender-profile/preview', { ...profile, frame }),
+    enabled: valid,
+    retry: false,
+    placeholderData: (previous) => previous,
+  })
+  return (
+    <div className="mt-4">
+      <p className="text-xs font-semibold text-muted">Preview on a sample person</p>
+      {!valid ? (
+        <p className="mt-1 text-sm text-muted">Put {'{name}'} in the greeting to see the preview.</p>
+      ) : error ? (
+        <p role="alert" className="mt-1 text-sm font-medium text-block">
+          {error.message}
+        </p>
+      ) : (
+        <p aria-live="polite" className="mt-1 rounded-2xl border border-rule bg-paper p-4 text-sm leading-snug whitespace-pre-wrap [overflow-wrap:anywhere]">
+          {data?.text ?? 'Loading…'}
+        </p>
+      )}
+    </div>
+  )
+}
+
 function ProfileForm({ profile }: { profile: Profile }) {
   const qc = useQueryClient()
   const [intro, setIntro] = useState(profile.intro)
   const [programs, setPrograms] = useState<Draft[]>(profile.programs.map((p) => ({ ...p, deadline: p.deadline ?? '' })))
   const [signer, setSigner] = useState(profile.signer)
   const [samples, setSamples] = useState<string[]>([0, 1, 2].map((i) => profile.sampleMessages[i] ?? ''))
+
+  const [greeting, setGreeting] = useState(profile.frame?.greeting ?? '')
+  const [optOut, setOptOut] = useState(profile.frame?.optOut ?? '')
+  const [contactLine, setContactLine] = useState(profile.frame?.contactLine ?? '')
 
   const [missing, setMissing] = useState<string | null>(null)
   const change = (id: number, patch: Partial<Draft>) => setPrograms(programs.map((p) => (p.id === id ? { ...p, ...patch } : p)))
@@ -39,6 +72,7 @@ function ProfileForm({ profile }: { profile: Profile }) {
         programs: programs.map((p) => ({ id: p.id, name: p.name.trim(), description: p.description.trim(), link: p.link.trim(), deadline: p.deadline || null })),
         signer: signer.trim(),
         sampleMessages: samples.map((s) => s.trim()).filter(Boolean),
+        frame: { greeting: greeting.trim() || null, optOut: optOut.trim() || null, contactLine: contactLine.trim() || null },
       }),
     onSuccess: (saved) => qc.setQueryData(['sender-profile'], saved),
   })
@@ -54,7 +88,9 @@ function ProfileForm({ profile }: { profile: Profile }) {
             ? 'Give every program a link that starts with https://.'
             : !signer.trim()
           ? 'Say who signs the message.'
-          : null
+          : greeting.trim() && !greeting.includes('{name}')
+            ? 'The greeting needs {name} where their name goes.'
+            : null
     setMissing(gap)
     if (!gap) save.mutate()
   }
@@ -126,6 +162,25 @@ function ProfileForm({ profile }: { profile: Profile }) {
         </label>
         <input id="signer" value={signer} maxLength={64} onChange={(e) => setSigner(e.target.value)} className={field} />
       </div>
+
+      <fieldset>
+        <legend className="text-sm font-medium">Around the message (optional)</legend>
+        <p className="mt-1 text-xs text-muted">The model writes only the middle. Leave a box empty to keep the built-in wording.</p>
+        <label htmlFor="frame-greeting" className="mt-3 block text-sm font-medium">
+          Greeting
+        </label>
+        <input id="frame-greeting" value={greeting} maxLength={80} placeholder="Hi {name}!" onChange={(e) => setGreeting(e.target.value)} className={field} />
+        <p className="mt-1 text-xs text-muted">{'{name}'} becomes their first name. Used for English drafts, and only when we have a usable name.</p>
+        <label htmlFor="frame-optout" className="mt-3 block text-sm font-medium">
+          Line that lets them say no
+        </label>
+        <input id="frame-optout" value={optOut} maxLength={160} onChange={(e) => setOptOut(e.target.value)} className={field} />
+        <label htmlFor="frame-contact" className="mt-3 block text-sm font-medium">
+          Contact line, last in the message
+        </label>
+        <input id="frame-contact" value={contactLine} maxLength={160} placeholder="Write to me at name@example.com" onChange={(e) => setContactLine(e.target.value)} className={field} />
+        <FramePreviewBox profile={profile} greeting={greeting.trim()} optOut={optOut.trim()} contactLine={contactLine.trim()} />
+      </fieldset>
 
       <fieldset>
         <legend className="text-sm font-medium">Messages in your own voice (optional, up to 3)</legend>

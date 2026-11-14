@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { ReviewQueue } from '../../api/src/review/contract'
+import type { ReviewQueue, SkipReason } from '../../api/src/review/contract'
 import { getJson, postJson } from './api'
 import FitBadge from './FitBadge'
-import { RELATIONSHIP_LABEL } from './review/labels'
+import { RELATIONSHIP_LABEL, SKIP_LABEL, SKIP_REASONS } from './review/labels'
 import { btnLink, btnSecondary, field } from './ui'
 
 interface Claim {
@@ -76,6 +76,49 @@ function DraftControl({ p, campaignId, inReview, onReview }: { p: Prospect; camp
         </span>
       )}
     </div>
+  )
+}
+
+// "Dismiss": take one person off the candidate list with a reason. They stay in All, marked Dismissed, and are never drafted.
+function DismissControl({ p, campaignId }: { p: Prospect; campaignId: number }) {
+  const qc = useQueryClient()
+  const [open, setOpen] = useState(false)
+  const [reason, setReason] = useState<SkipReason>('not_fit')
+  const dismiss = useMutation({
+    mutationFn: () => postJson(`/campaigns/${campaignId}/prospects/${p.id}/dismiss`, { reason }),
+    onSuccess: () => Promise.all([qc.invalidateQueries({ queryKey: ['prospects', campaignId] }), qc.invalidateQueries({ queryKey: ['ready'] })]),
+  })
+  if (!open) {
+    return (
+      <button type="button" className={btnLink} onClick={() => setOpen(true)}>
+        Dismiss
+      </button>
+    )
+  }
+  return (
+    <span className="flex flex-wrap items-center gap-2">
+      <label className="flex items-center gap-2 text-sm">
+        <span className="text-muted">Reason</span>
+        <select value={reason} onChange={(e) => setReason(e.target.value as SkipReason)} className={`${field} py-1.5`}>
+          {SKIP_REASONS.map((r) => (
+            <option key={r} value={r}>
+              {SKIP_LABEL[r]}
+            </option>
+          ))}
+        </select>
+      </label>
+      <button type="button" className={btnSecondary} disabled={dismiss.isPending} onClick={() => dismiss.mutate()}>
+        {dismiss.isPending ? 'Dismissing…' : 'Dismiss'}
+      </button>
+      <button type="button" className={btnLink} onClick={() => setOpen(false)}>
+        Cancel
+      </button>
+      {dismiss.error && (
+        <span role="alert" className="text-sm font-medium text-block">
+          {dismiss.error.message}
+        </span>
+      )}
+    </span>
   )
 }
 
@@ -152,7 +195,7 @@ export default function Prospects({ campaignId, onReview, initialFilter = 'all' 
   if (!data?.length) return <p className="text-sm text-muted">No candidates in this campaign yet. Run a search from the Overview.</p>
 
   // Ready: could get a draft now. Same rule as the Overview and the Write drafts button.
-  const isReady = (p: Prospect) => (p.fit === 'strong' || p.fit === 'possible') && !!p.opening && p.opening.freshness !== 'expired' && !inReview.has(p.handle)
+  const isReady = (p: Prospect) => p.status !== 'dismissed' && (p.fit === 'strong' || p.fit === 'possible') && !!p.opening && p.opening.freshness !== 'expired' && !inReview.has(p.handle)
   const matches: Record<Filter, (p: Prospect) => boolean> = {
     all: () => true,
     ready: isReady,
@@ -250,7 +293,18 @@ export default function Prospects({ campaignId, onReview, initialFilter = 'all' 
               </p>
             )}
 
-            <DraftControl p={p} campaignId={campaignId} inReview={inReview.has(p.handle)} onReview={onReview} />
+            {p.status === 'dismissed' ? (
+              <p className="mt-3 text-sm font-semibold text-muted">Dismissed</p>
+            ) : (
+              <>
+                <DraftControl p={p} campaignId={campaignId} inReview={inReview.has(p.handle)} onReview={onReview} />
+                {!inReview.has(p.handle) && (
+                  <div className="mt-2">
+                    <DismissControl p={p} campaignId={campaignId} />
+                  </div>
+                )}
+              </>
+            )}
 
             {p.criteria.length > 0 && (
               <ul className="mt-3 flex flex-wrap gap-2 text-xs">
