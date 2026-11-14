@@ -7,6 +7,7 @@
     "start:worker": "nest build && node dist/worker-main.js",
     "build": "nest build",
     "typecheck": "tsc --noEmit",
+    "eval": "tsc -p tsconfig.build.json && node scripts/eval.cjs",
     "lint": "oxlint",
     "test": "vitest run",
     "typeorm": "typeorm-ts-node-commonjs -d src/data-source.ts",

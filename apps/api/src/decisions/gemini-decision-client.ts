@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { DecisionAnswer, DecisionAsk, DecisionClient } from './decision-client'
+import { errorCode } from './http-error'
 import { QUESTIONS } from './questions'
 
 const response = z.object({ answers: z.record(z.string(), z.object({ type: z.string(), noul: z.number().min(0).max(1).optional() })) })
@@ -36,15 +37,6 @@ export class GeminiDecisionClient implements DecisionClient {
     const answer = parsed.success ? parsed.data.answers[ask.code] : undefined
     if (!answer || answer.type !== 'noul' || answer.noul === undefined) throw new Error(`invalid decision answer for ${ask.code}`)
     // Same value as the System One client: a decision model answered, so the UI shows its figure.
-    return { ...ask, probability: answer.noul, answeredBy: 'jev' }
-  }
-}
-
-async function errorCode(res: Response): Promise<string> {
-  try {
-    const body = (await res.json()) as { error?: { code?: string | number } }
-    return body.error?.code === undefined ? '' : ` (${body.error.code})`
-  } catch {
-    return ''
+    return { ...ask, probability: answer.noul, answeredBy: 'jev', model: this.model }
   }
 }

@@ -22,7 +22,7 @@ describe('SystemOneDecisionClient', () => {
   it('posts the pinned model, the input as state and the question as a yes/no, and marks the answer jev', async () => {
     const { calls, fetchFn } = fakeFetch(recorded)
     const [a] = await make(fetchFn).decide([ask])
-    expect(a).toEqual({ ...ask, probability: 0.96, answeredBy: 'jev' })
+    expect(a).toEqual({ ...ask, probability: 0.96, answeredBy: 'jev', model: 'typesafe/jev-1.14' })
     expect(calls[0].url).toBe('https://openrouter.ai/api/v1/systemone')
     expect((calls[0].init.headers as Record<string, string>).Authorization).toBe('Bearer k')
     expect(JSON.parse(calls[0].init.body as string)).toEqual({

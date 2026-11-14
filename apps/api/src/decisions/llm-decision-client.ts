@@ -11,7 +11,10 @@ Answer with one JSON object: {"probability": a number from 0 to 1, the probabili
 
 // The fallback when Jev is off. Its figure is not calibrated, so the app shows only its band.
 export class LlmDecisionClient implements DecisionClient {
-  constructor(private readonly llm: LlmClient) {}
+  constructor(
+    private readonly llm: LlmClient,
+    private readonly model?: string,
+  ) {}
 
   async decide(asks: DecisionAsk[]): Promise<DecisionAnswer[]> {
     return Promise.all(
@@ -19,7 +22,7 @@ export class LlmDecisionClient implements DecisionClient {
         const raw = await this.llm.completeJson({ task: 'decide', system: QUESTIONS[ask.code].instructions + SUFFIX, user: JSON.stringify({ input: ask.input }) })
         const parsed = answer.safeParse(raw)
         if (!parsed.success) throw new Error(`invalid decision answer for ${ask.code}`)
-        return { ...ask, probability: parsed.data.probability, answeredBy: 'llm' as const }
+        return { ...ask, probability: parsed.data.probability, answeredBy: 'llm' as const, model: this.model }
       }),
     )
   }

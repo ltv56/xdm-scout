@@ -1,7 +1,7 @@
 import { DecisionCode } from './decision-client'
 
 // Changing any wording bumps the version and reruns the eval: thresholds hold only for the wording they were measured on.
-export const QUESTION_SET_VERSION = 1
+export const QUESTION_SET_VERSION = 2
 
 export const QUESTIONS: Record<DecisionCode, { label: string; instructions: string }> = {
   invitation: {
@@ -24,9 +24,15 @@ export const QUESTIONS: Record<DecisionCode, { label: string; instructions: stri
     instructions:
       'Does every mention of a past interaction or relationship (met before, "as we discussed", "great to reconnect", "long-time follower") appear in the evidence provided? Yes if there is no such mention, or every one is in the evidence.',
   },
+  no_loaded_question: {
+    label: 'No loaded questions',
+    instructions:
+      'Does every question in the draft avoid assuming something negative or unproven about the recipient (for example "Are you failing on your launch?" or "Is your team falling apart?")? A question that assumes only what the evidence shows, or nothing, is fine. Yes if no question assumes such a thing.',
+  },
   claim_backed: {
     label: 'Backed by the evidence',
-    instructions: 'Does this evidence support this sentence?',
+    instructions:
+      'Does the evidence support everything this sentence says about the person or their work? Yes if the sentence says nothing about them, such as a greeting, a question, or a line about the fund.',
   },
   own_account: {
     label: 'Looks like their own account',

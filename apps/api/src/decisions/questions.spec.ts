@@ -7,12 +7,13 @@ const LABELS = {
   no_sensitive: 'No sensitive guesses',
   no_familiarity: 'No made-up familiarity',
   claim_backed: 'Backed by the evidence',
+  no_loaded_question: 'No loaded questions',
   own_account: 'Looks like their own account',
 }
 
-describe('question set v1', () => {
+describe('question set v2', () => {
   it('has a version and every question the contract knows', () => {
-    expect(QUESTION_SET_VERSION).toBe(1)
+    expect(QUESTION_SET_VERSION).toBe(2)
     expect(Object.keys(QUESTIONS).sort()).toEqual(Object.keys(LABELS).sort())
   })
 
@@ -22,7 +23,7 @@ describe('question set v1', () => {
 
   it('gives the model full instructions, each asked so that yes is the good answer except the invitation', () => {
     for (const q of Object.values(QUESTIONS)) expect(q.instructions.length).toBeGreaterThan(30)
-    expect(QUESTIONS.claim_backed.instructions).toBe('Does this evidence support this sentence?')
+    expect(QUESTIONS.claim_backed.instructions).toMatch(/^Does the evidence support everything this sentence says about the person/)
     expect(QUESTIONS.invitation.instructions).toMatch(/^Does this message ask the fund to reply/)
   })
 })

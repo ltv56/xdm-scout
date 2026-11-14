@@ -162,9 +162,8 @@ export function PersonFacts({ prospect }: { prospect: Prospect }) {
 
 // Who answers each question (spec section 12). A fixture answer stands in for that model, so the row looks the way it will.
 const LLM_QUESTIONS = new Set<Decision['code']>(['claim_backed', 'own_account'])
-const ANSWERER = { jev: 'Jev', llm: 'LLM' }
+const ANSWERER = { jev: 'AI', llm: 'AI' }
 const whoAnswers = (d: Decision): 'jev' | 'llm' => (d.answeredBy === 'fixture' ? (LLM_QUESTIONS.has(d.code) ? 'llm' : 'jev') : d.answeredBy)
-const sampleTag = (d: Decision) => d.answeredBy === 'fixture'
 
 // The colour shows what the app does with the number, not just how big it is.
 const BAND = {
@@ -179,23 +178,6 @@ const BAND = {
 const WORST_FIRST = { low: 0, middle: 1, high: 2 }
 const pctOf = (x: number) => Math.round(x * 100)
 
-// What was measured, or why there is nothing to show. The numbers belong to one question and one model version.
-function Measured({ d }: { d: Decision }) {
-  if (whoAnswers(d) === 'llm') return <>A language model gave this, so only the band is shown: its own percentage is not calibrated.</>
-  const m = d.calibration
-  if (!m) return <>Not measured yet.</>
-  const when = new Date(m.measuredOn).toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'short',
-  })
-  return (
-    <>
-      Measured on {m.examples} examples: at 70%, right {m.right} ({pctOf(m.low)}–{pctOf(m.high)}%). {m.model.replace(/^jev-/, 'Jev ')}, {when}.
-      {m.sample && ' Sample numbers, not a real measurement.'}
-    </>
-  )
-}
-
 function CheckDetail({ d }: { d: Decision }) {
   const ref = useReveal()
   return (
@@ -204,17 +186,13 @@ function CheckDetail({ d }: { d: Decision }) {
       <p className="scroll-thin mt-1 max-h-40 overflow-y-auto whitespace-pre-wrap text-sm leading-snug [overflow-wrap:anywhere]">{d.input}</p>
       <p className="mt-3 text-xs text-muted">
         Answer: {whoAnswers(d) === 'jev' ? `${pctOf(d.probability)}% yes. ` : ''}
-        {BAND[d.band].say}. From {ANSWERER[whoAnswers(d)]}
-        {sampleTag(d) && ' (sample data)'}.
-      </p>
-      <p className="mt-1 text-xs text-muted">
-        <Measured d={d} />
+        {BAND[d.band].say}. From {ANSWERER[whoAnswers(d)]}.
       </p>
     </div>
   )
 }
 
-// A percentage bar for Jev; three blocks with one lit for an LLM answer, so it never looks like a measured number.
+// A percentage bar when the figure can be trusted as a chance; three blocks with one lit otherwise, so it never looks like a measured number.
 function Meter({ d }: { d: Decision }) {
   if (whoAnswers(d) === 'jev') {
     return (
@@ -243,7 +221,7 @@ export function ModelChecks({ decisions, sentences }: { decisions: Decision[]; s
     <section aria-label="Model checks">
       <h3 className="text-sm font-semibold">Model checks</h3>
       <p className="mt-1 text-sm text-muted">
-        Jev gives the chance that the answer is yes. A language model gives only a band: three blocks, no, unsure and yes from left to right, and the lit one is its answer. Neither replaces the checks above.
+        Some checks show the chance that the answer is yes. Others show only a band: three blocks, no, unsure and yes from left to right, and the lit one is the AI's answer. Neither replaces the checks above.
       </p>
       <p className="mt-1 text-xs text-muted">70% or more counts as yes, 30% or less counts as no, in between is a warning.</p>
       <ul className="mt-3 space-y-1">
@@ -270,7 +248,6 @@ export function ModelChecks({ decisions, sentences }: { decisions: Decision[]; s
                 <span className="mt-1 flex items-center justify-between text-xs text-muted">
                   <span>
                     {ANSWERER[whoAnswers(d)]}
-                    {sampleTag(d) && ' · sample data'}
                   </span>
                   <ChevronDown className={`size-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                 </span>
