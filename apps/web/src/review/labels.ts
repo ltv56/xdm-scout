@@ -89,7 +89,7 @@ export function verdict(item: ReviewItem): Verdict {
 
 export const blockers = (checks: CheckResult[]) => checks.filter((c) => c.level === 'block')
 
-const PROFILE_FIELD = { intro: 'who you are', program: 'the program this campaign offers', signer: 'who signs', contact: 'how to reach you' }
+const PROFILE_FIELD = { intro: 'who you are', program: 'the program this campaign offers', signer: 'who signs', contact: 'the contact line in the draft frame' }
 
 export const LANGUAGE_NAME = { en: 'English', vi: 'Vietnamese', th: 'Thai', id: 'Indonesian' }
 
